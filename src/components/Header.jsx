@@ -12,6 +12,7 @@ const navLinks = [
 export default function Header({ activeSection, theme, onToggleTheme }) {
   const [open, setOpen] = useState(false);
   const baseUrl = import.meta.env.BASE_URL || '/';
+  const logoSrc = `${baseUrl}assets/containers/khushi_logo.svg`;
 
   useEffect(() => {
     if (!open) return;
@@ -28,7 +29,7 @@ export default function Header({ activeSection, theme, onToggleTheme }) {
     <header className={styles.header}>
       <div className={`container ${styles.inner}`}>
         <a href="#home" className={styles.logo} aria-label="Khushi home">
-          <img src={`${baseUrl}assets/containers/khushi_logo.svg`} alt="khüshi" />
+          <img src={logoSrc} alt="khüshi" />
           <span className={styles.brand}>Khushi Containers</span>
         </a>
 

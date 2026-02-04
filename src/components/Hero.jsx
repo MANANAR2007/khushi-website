@@ -3,13 +3,14 @@ import styles from './Hero.module.css';
 
 export default function Hero() {
   const baseUrl = import.meta.env.BASE_URL || '/';
+  const logoSrc = `${baseUrl}assets/containers/khushi_logo.svg`;
 
   return (
     <section className={styles.hero} id="home">
       <div className={`container ${styles.inner}`}>
         <div className={styles.centerpiece}>
           <img
-            src={`${baseUrl}assets/containers/khushi_logo.svg`}
+            src={logoSrc}
             alt="khüshi"
             className={styles.logo}
           />
