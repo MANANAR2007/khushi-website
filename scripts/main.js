@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initMobileNav();
     initScrollReveal();
     initStickyNav();
+    initCounters();
 });
 
 /**
@@ -187,12 +188,21 @@ function initStickyNav() {
  */
 function initScrollReveal() {
     const targets = document.querySelectorAll(
-        '.size-card, .about-intro, .about-manufacturing, .about-expertise, .about-thinwall, .about-features, .about-values, .sustainability-card, .contact-item'
+        '.size-card, .about-intro, .about-manufacturing, .about-expertise, .about-thinwall, .about-features, .about-values, .sustainability-card, .contact-item, .stat-card, .value-item'
     );
 
     if (!targets.length) return;
 
-    targets.forEach(target => target.classList.add('reveal'));
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+        targets.forEach(target => target.classList.add('is-visible'));
+        return;
+    }
+
+    targets.forEach((target, index) => {
+        target.classList.add('reveal');
+        target.style.transitionDelay = `${Math.min(index * 40, 320)}ms`;
+    });
 
     const observer = new IntersectionObserver(
         entries => {
@@ -207,6 +217,56 @@ function initScrollReveal() {
     );
 
     targets.forEach(target => observer.observe(target));
+}
+
+/**
+ * Animate manufacturing stats on reveal
+ */
+function initCounters() {
+    const stats = document.querySelectorAll('.stat-number');
+    if (!stats.length) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const animateValue = (el) => {
+        const original = el.textContent.trim();
+        const match = original.match(/([~≈]?)([0-9]+(?:\\.[0-9]+)?)/);
+        if (!match) return;
+
+        const prefix = match[1] || '';
+        const targetValue = parseFloat(match[2]);
+        const decimals = match[2].includes('.') ? match[2].split('.')[1].length : 0;
+        const duration = 900;
+        const start = performance.now();
+
+        const step = (now) => {
+            const progress = Math.min((now - start) / duration, 1);
+            const current = targetValue * progress;
+            el.textContent = `${prefix}${current.toFixed(decimals)}`;
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            } else {
+                el.textContent = original;
+            }
+        };
+
+        requestAnimationFrame(step);
+    };
+
+    const observer = new IntersectionObserver(
+        entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateValue(entry.target);
+                    observer.unobserve(entry.target);
+                }
+            });
+        },
+        { threshold: 0.4 }
+    );
+
+    stats.forEach(stat => observer.observe(stat));
 }
 
 /**

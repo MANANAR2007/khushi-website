@@ -585,22 +585,6 @@ section h3 {
     gap: var(--spacing-xl);
     align-items: center;
     margin-bottom: var(--spacing-2xl);
-    padding: var(--spacing-xl);
-    background: var(--paper-200);
-    border-radius: 22px;
-    border: 1px solid var(--line-200);
-    position: relative;
-}
-
-.about-intro::before {
-    content: '';
-    position: absolute;
-    top: var(--spacing-lg);
-    bottom: var(--spacing-lg);
-    left: var(--spacing-lg);
-    width: 3px;
-    border-radius: 999px;
-    background: linear-gradient(180deg, var(--accent-600), transparent);
 }
 
 .about-intro-content p {
@@ -687,11 +671,13 @@ section h3 {
     gap: var(--spacing-xl);
     align-items: center;
     margin-bottom: var(--spacing-2xl);
-    background: var(--paper-200);
-    padding: var(--spacing-xl);
-    border-radius: 22px;
-    border: 1px solid var(--line-200);
-    box-shadow: var(--shadow-soft);
+    padding: 0;
+}
+
+.about-expertise,
+.about-values {
+    padding-top: var(--spacing-xl);
+    border-top: 1px solid var(--line-200);
 }
 
 .expertise-content p {
@@ -727,10 +713,9 @@ section h3 {
 .about-features {
     text-align: center;
     margin-bottom: var(--spacing-2xl);
-    padding: var(--spacing-xl);
-    background: var(--paper-200);
-    border-radius: 22px;
-    border: 1px solid var(--line-200);
+    padding: var(--spacing-xl) 0;
+    border-top: 1px solid var(--line-200);
+    border-bottom: 1px solid var(--line-200);
 }
 
 .features-intro {
@@ -777,11 +762,7 @@ section h3 {
     grid-template-columns: 1fr 1fr;
     gap: var(--spacing-xl);
     align-items: center;
-    background: var(--paper-200);
-    padding: var(--spacing-xl);
-    border-radius: 22px;
-    border: 1px solid var(--line-200);
-    box-shadow: var(--shadow-soft);
+    padding: 0;
 }
 
 .values-content > p {
@@ -1211,6 +1192,23 @@ section h3 {
 
     .contact-address span {
         text-align: center;
+    }
+}
+
+@media (max-width: 640px) {
+    .size-card {
+        width: min(78vw, 320px);
+    }
+
+    .about {
+        padding: var(--spacing-2xl) var(--spacing-md);
+    }
+
+    .products,
+    .sustainability,
+    .contact {
+        padding-left: var(--spacing-md);
+        padding-right: var(--spacing-md);
     }
 }
 
