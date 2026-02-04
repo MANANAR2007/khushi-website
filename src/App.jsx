@@ -15,24 +15,39 @@ function useScrollSpy() {
   const [active, setActive] = useState('home');
 
   useEffect(() => {
-    const targets = sections
-      .map((id) => document.getElementById(id))
-      .filter(Boolean);
-
+    const targets = sections.map((id) => document.getElementById(id)).filter(Boolean);
     if (!targets.length) return undefined;
+
+    const ratioMap = new Map();
+
+    const updateActive = () => {
+      if (window.scrollY < 40) {
+        setActive('home');
+        return;
+      }
+      let bestId = 'home';
+      let bestRatio = 0;
+      ratioMap.forEach((ratio, id) => {
+        if (ratio > bestRatio) {
+          bestRatio = ratio;
+          bestId = id;
+        }
+      });
+      setActive(bestId);
+    };
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActive(entry.target.id);
-          }
+          ratioMap.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0);
         });
+        updateActive();
       },
-      { rootMargin: '-35% 0px -55% 0px', threshold: 0.01 }
+      { rootMargin: '-20% 0px -55% 0px', threshold: [0, 0.2, 0.4, 0.6, 0.8] }
     );
 
     targets.forEach((target) => observer.observe(target));
+    updateActive();
     return () => observer.disconnect();
   }, []);
 

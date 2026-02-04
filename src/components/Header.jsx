@@ -29,7 +29,6 @@ export default function Header({ activeSection, theme, onToggleTheme }) {
       <div className={`container ${styles.inner}`}>
         <a href="#home" className={styles.logo} aria-label="Khushi home">
           <img src={logoUrl} alt="khüshi" />
-          <span className={styles.brand}>Khushi Containers</span>
         </a>
 
         <nav className={`${styles.nav} ${open ? styles.open : ''}`} aria-label="Primary">
