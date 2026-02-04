@@ -15,23 +15,25 @@ function useScrollSpy() {
   const [active, setActive] = useState('home');
 
   useEffect(() => {
-    const handler = () => {
-      const offset = 140;
-      let current = 'home';
-      sections.forEach((id) => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        const top = el.getBoundingClientRect().top + window.scrollY;
-        if (window.scrollY + offset >= top) {
-          current = id;
-        }
-      });
-      setActive(current);
-    };
+    const targets = sections
+      .map((id) => document.getElementById(id))
+      .filter(Boolean);
 
-    handler();
-    window.addEventListener('scroll', handler, { passive: true });
-    return () => window.removeEventListener('scroll', handler);
+    if (!targets.length) return undefined;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActive(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: '-35% 0px -55% 0px', threshold: 0.01 }
+    );
+
+    targets.forEach((target) => observer.observe(target));
+    return () => observer.disconnect();
   }, []);
 
   return active;
@@ -51,6 +53,34 @@ export default function App() {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('khushi-theme', theme);
   }, [theme]);
+
+  useEffect(() => {
+    let ticking = false;
+
+    const updateProgress = () => {
+      const { scrollHeight, clientHeight } = document.documentElement;
+      const max = scrollHeight - clientHeight;
+      const progress = max > 0 ? (window.scrollY / max) * 100 : 0;
+      document.documentElement.style.setProperty('--scroll-progress', `${progress}%`);
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateProgress);
+        ticking = true;
+      }
+    };
+
+    updateProgress();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', updateProgress);
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', updateProgress);
+    };
+  }, []);
 
   useEffect(() => {
     const sectionsToReveal = document.querySelectorAll('section');

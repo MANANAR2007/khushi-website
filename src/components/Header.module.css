@@ -52,7 +52,6 @@
 
 .nav a {
   padding-bottom: 0.3rem;
-  border-bottom: 2px solid transparent;
   position: relative;
   transition: color 0.2s ease;
 }
@@ -66,7 +65,7 @@
   content: '';
   position: absolute;
   left: 0;
-  bottom: -0.45rem;
+  bottom: -0.2rem;
   width: 0;
   height: 2px;
   border-radius: 999px;
@@ -77,6 +76,17 @@
 .nav a:hover::after,
 .active::after {
   width: 100%;
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: var(--scroll-progress);
+  background: var(--color-accent);
+  transition: width 0.1s ease;
 }
 
 .cta {

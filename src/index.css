@@ -19,6 +19,7 @@
   --font-body: 'Manrope', sans-serif;
   --font-heading: 'Playfair Display', serif;
   --header-height: 78px;
+  --scroll-progress: 0%;
 }
 
 [data-theme="dark"] {
