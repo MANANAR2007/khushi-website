@@ -43,9 +43,6 @@ export default function Header({ activeSection, theme, onToggleTheme }) {
               {link.label}
             </a>
           ))}
-          <a href="#contact" className={styles.cta} onClick={() => setOpen(false)}>
-            Get a Quote
-          </a>
         </nav>
 
         <div className={styles.actions}>

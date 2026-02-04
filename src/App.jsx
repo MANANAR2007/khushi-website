@@ -53,6 +53,27 @@ export default function App() {
   }, [theme]);
 
   useEffect(() => {
+    const sectionsToReveal = document.querySelectorAll('section');
+    sectionsToReveal.forEach((section) => section.classList.add('reveal'));
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('reveal-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.18, rootMargin: '0px 0px -10% 0px' }
+    );
+
+    sectionsToReveal.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
     const onKey = (event) => {
       if (event.key === 'Escape') {
         setLightbox({ open: false, src: '', caption: '' });
