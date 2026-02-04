@@ -43,8 +43,26 @@ function initColorSelectors() {
             if (targetImage) {
                 targetImage.classList.add('active');
             }
+
+            updateCardColorState(card, selectedColor);
         });
     });
+
+    // Initialize background state based on default active buttons
+    const cards = document.querySelectorAll('.size-card');
+    cards.forEach(card => {
+        const activeButton = card.querySelector('.color-btn.active');
+        if (activeButton) {
+            updateCardColorState(card, activeButton.dataset.color);
+        }
+    });
+}
+
+function updateCardColorState(card, color) {
+    card.classList.remove('color-white', 'color-black', 'color-transparent');
+    if (color) {
+        card.classList.add(`color-${color}`);
+    }
 }
 
 /**

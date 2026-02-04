@@ -423,6 +423,16 @@ section h3 {
     border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
+    transition: background var(--transition-fast);
+}
+
+.size-card.color-white .container-image,
+.size-card.color-transparent .container-image {
+    background: #0b0c10;
+}
+
+.size-card.color-black .container-image {
+    background: #ffffff;
 }
 
 .product-img {
