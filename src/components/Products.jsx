@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Products.module.css';
 import { productCategories } from '../data.js';
 
@@ -9,6 +9,13 @@ function ProductCard({ categoryTitle, item, onOpen }) {
   const imageSrc = item.colors[color];
   const surfaceClass = color === 'black' ? styles.surfaceLight : styles.surfaceDark;
 
+  useEffect(() => {
+    Object.values(item.colors).forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, [item.colors]);
+
   return (
     <div className={styles.card}>
       <button
@@ -17,7 +24,12 @@ function ProductCard({ categoryTitle, item, onOpen }) {
         onClick={() => onOpen(imageSrc, `${categoryTitle} · ${item.size} (${color})`)}
       >
         <div className={`${styles.imageSurface} ${surfaceClass}`}>
-          <img src={imageSrc} alt={`${categoryTitle} ${item.size}`} />
+          <img
+            key={imageSrc}
+            src={imageSrc}
+            alt={`${categoryTitle} ${item.size}`}
+            className={styles.productImage}
+          />
         </div>
       </button>
       <div className={styles.sizeInfo}>
