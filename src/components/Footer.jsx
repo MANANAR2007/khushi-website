@@ -7,7 +7,7 @@ export default function Footer() {
   return (
     <footer className={styles.footer}>
       <div className={`container ${styles.inner}`}>
-        <img src={`${baseUrl}assets/containers/khushi_logo.png`} alt="khüshi" className={styles.logo} />
+        <img src={`${baseUrl}assets/containers/khushi_logo.svg`} alt="khüshi" className={styles.logo} />
         <div className={styles.details}>
           <span>shreeindustries@gmail.com</span>
           <span>+91 94483 76318</span>

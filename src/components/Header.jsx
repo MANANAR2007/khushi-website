@@ -28,7 +28,7 @@ export default function Header({ activeSection, theme, onToggleTheme }) {
     <header className={styles.header}>
       <div className={`container ${styles.inner}`}>
         <a href="#home" className={styles.logo} aria-label="Khushi home">
-          <img src={`${baseUrl}assets/containers/khushi_logo.png`} alt="khüshi" />
+          <img src={`${baseUrl}assets/containers/khushi_logo.svg`} alt="khüshi" />
           <span className={styles.brand}>Khushi Containers</span>
         </a>
 
