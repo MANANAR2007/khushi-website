@@ -39,6 +39,8 @@ function useScrollSpy() {
 
 export default function App() {
   const activeSection = useScrollSpy();
+  const [showSplash, setShowSplash] = useState(true);
+  const [splashFade, setSplashFade] = useState(false);
   const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem('khushi-theme');
     if (saved) return saved;
@@ -51,6 +53,22 @@ export default function App() {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('khushi-theme', theme);
   }, [theme]);
+
+  useEffect(() => {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) {
+      setShowSplash(false);
+      return undefined;
+    }
+
+    const fadeTimer = setTimeout(() => setSplashFade(true), 1200);
+    const removeTimer = setTimeout(() => setShowSplash(false), 1800);
+
+    return () => {
+      clearTimeout(fadeTimer);
+      clearTimeout(removeTimer);
+    };
+  }, []);
 
   useEffect(() => {
     const onKey = (event) => {
@@ -79,8 +97,22 @@ export default function App() {
     document.body.style.overflow = '';
   };
 
+  const handleSkipSplash = () => {
+    setSplashFade(true);
+    setTimeout(() => setShowSplash(false), 300);
+  };
+
   return (
     <>
+      {showSplash && (
+        <div
+          className={`splash ${splashFade ? 'splash--hide' : ''}`}
+          onClick={handleSkipSplash}
+          role="presentation"
+        >
+          <span>khüshi</span>
+        </div>
+      )}
       <Header activeSection={activeSection} theme={theme} onToggleTheme={handleToggleTheme} />
       <main>
         <Hero />

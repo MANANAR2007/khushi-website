@@ -52,6 +52,32 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+.splash {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--color-primary);
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  z-index: 2000;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.splash span {
+  display: inline-block;
+  transform: translateY(0);
+}
+
+.splash--hide {
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+}
+
 a {
   color: inherit;
   text-decoration: none;
