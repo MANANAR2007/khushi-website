@@ -1,16 +1,14 @@
 import React from 'react';
 import styles from './Hero.module.css';
+import logoUrl from '../assets/khushi_logo.svg';
 
 export default function Hero() {
-  const baseUrl = import.meta.env.BASE_URL || '/';
-  const logoSrc = `${baseUrl}assets/containers/khushi_logo.svg`;
-
   return (
     <section className={styles.hero} id="home">
       <div className={`container ${styles.inner}`}>
         <div className={styles.centerpiece}>
           <img
-            src={logoSrc}
+            src={logoUrl}
             alt="khüshi"
             className={styles.logo}
           />
