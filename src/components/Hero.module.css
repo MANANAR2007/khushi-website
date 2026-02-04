@@ -3,9 +3,7 @@
   display: grid;
   place-items: center;
   padding: clamp(4rem, 8vw, 6rem) 0;
-  background: radial-gradient(circle at 20% 20%, rgba(224, 109, 63, 0.2), transparent 50%),
-    radial-gradient(circle at 80% 0%, rgba(31, 111, 120, 0.18), transparent 45%),
-    var(--color-primary);
+  background: #ffffff;
 }
 
 .inner {
@@ -25,7 +23,7 @@
 }
 
 .tagline {
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--color-muted);
   font-size: clamp(0.9rem, 1.4vw, 1.1rem);
   letter-spacing: 0.32em;
   text-transform: uppercase;
@@ -33,7 +31,7 @@
 }
 
 .scrollHint {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-muted);
   font-size: 0.75rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
