@@ -7,14 +7,14 @@ export default function About() {
     <section className={styles.about} id="about">
       <div className="container">
         <header className={styles.header}>
-          <h2 className="section-title">About Khushi Containers</h2>
+          <h2 className="section-title fade-up">About Khushi Containers</h2>
           <p className="section-subtitle">
             We manufacture food-grade plastic containers with consistent wall thickness, high-strength performance, and reliable delivery schedules.
           </p>
           <div className="section-divider" />
         </header>
 
-        <div className={styles.grid}>
+        <div className={`${styles.grid} fade-right`}>
           <article className={styles.card}>
             <h3>Who We Serve</h3>
             <p>

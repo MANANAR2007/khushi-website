@@ -6,12 +6,12 @@ export default function Sustainability() {
     <section className={styles.section} id="sustainability">
       <div className="container">
         <header className={styles.header}>
-          <h2 className="section-title">Sustainability</h2>
+          <h2 className="section-title fade-up">Sustainability</h2>
           <p className="section-subtitle">Committed to responsible manufacturing and a greener future.</p>
           <div className="section-divider" />
         </header>
 
-        <div className={styles.grid}>
+        <div className={`${styles.grid} fade-up`}>
           <article className={styles.card}>
             <div className={styles.icon}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">

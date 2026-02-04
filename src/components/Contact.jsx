@@ -6,14 +6,14 @@ export default function Contact() {
     <section className={styles.contact} id="contact">
       <div className="container">
         <header className={styles.header}>
-          <h2 className="section-title">Get a Quote</h2>
+          <h2 className="section-title fade-up">Get a Quote</h2>
           <p className="section-subtitle">
             Tell us your volume requirements and packaging specifications. We respond with pricing and lead times.
           </p>
           <div className="section-divider" />
         </header>
 
-        <div className={styles.grid}>
+        <div className={`${styles.grid} fade-up`}>
           <div className={styles.item}>
             <div className={styles.icon}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">

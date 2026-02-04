@@ -71,16 +71,6 @@
   width: 100%;
 }
 
-.header::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 2px;
-  width: var(--scroll-progress);
-  background: var(--color-accent);
-  transition: width 0.1s ease;
-}
 
 .cta {
   padding: 0.6rem 1.4rem;

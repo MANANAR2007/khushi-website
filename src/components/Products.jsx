@@ -44,28 +44,30 @@ export default function Products({ onOpen }) {
     <section className={styles.products} id="products">
       <div className="container">
         <header className={styles.header}>
-          <h2 className="section-title">Our Products</h2>
+          <h2 className="section-title fade-up">Our Products</h2>
           <p className="section-subtitle">Quality containers for every need</p>
           <div className="section-divider" />
         </header>
       </div>
-      {productCategories.map((category) => (
-        <div className={styles.category} key={category.title}>
-          <h3 className={styles.categoryTitle}>{category.title}</h3>
-          <div className={styles.scroll}>
-            <div className={styles.track}>
-              {category.items.map((item) => (
-                <ProductCard
-                  key={`${category.title}-${item.size}`}
-                  categoryTitle={category.title}
-                  item={item}
-                  onOpen={onOpen}
-                />
-              ))}
+      <div className="fade-up">
+        {productCategories.map((category) => (
+          <div className={styles.category} key={category.title}>
+            <h3 className={styles.categoryTitle}>{category.title}</h3>
+            <div className={styles.scroll}>
+              <div className={styles.track}>
+                {category.items.map((item) => (
+                  <ProductCard
+                    key={`${category.title}-${item.size}`}
+                    categoryTitle={category.title}
+                    item={item}
+                    onOpen={onOpen}
+                  />
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </section>
   );
 }
