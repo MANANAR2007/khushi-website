@@ -8,7 +8,7 @@ export default function Features() {
       <div className="container">
         <header className={styles.header}>
           <h2 className="section-title">Product Quality</h2>
-          <p className="section-subtitle">Our products are recognized for their functional designs, excellent material strength, and long-term durability.</p>
+          <p className="section-subtitle">Engineered for strength, hygiene, and repeatable performance.</p>
           <div className="section-divider" />
         </header>
         <div className={styles.grid}>

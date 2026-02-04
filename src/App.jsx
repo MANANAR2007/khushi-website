@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import Header from './components/Header.jsx';
 import Hero from './components/Hero.jsx';
 import About from './components/About.jsx';
-import Features from './components/Features.jsx';
 import Products from './components/Products.jsx';
+import Manufacturing from './components/Manufacturing.jsx';
+import Features from './components/Features.jsx';
 import Sustainability from './components/Sustainability.jsx';
 import Contact from './components/Contact.jsx';
 import Footer from './components/Footer.jsx';
 
-const sections = ['home', 'about', 'products', 'sustainability', 'contact'];
+const sections = ['home', 'about', 'products', 'manufacturing', 'sustainability', 'contact'];
 
 function useScrollSpy() {
   const [active, setActive] = useState('home');
@@ -84,8 +85,9 @@ export default function App() {
       <main>
         <Hero />
         <About />
-        <Features />
         <Products onOpen={handleOpenLightbox} />
+        <Manufacturing />
+        <Features />
         <Sustainability />
         <Contact />
       </main>

@@ -5,7 +5,7 @@ const navLinks = [
   { href: '#home', label: 'Home' },
   { href: '#about', label: 'About' },
   { href: '#products', label: 'Products' },
-  { href: '#sustainability', label: 'Sustainability' },
+  { href: '#manufacturing', label: 'Manufacturing' },
   { href: '#contact', label: 'Contact' }
 ];
 
@@ -29,6 +29,7 @@ export default function Header({ activeSection, theme, onToggleTheme }) {
       <div className={`container ${styles.inner}`}>
         <a href="#home" className={styles.logo} aria-label="Khushi home">
           <img src={`${baseUrl}assets/containers/khushi_logo.svg.svg`} alt="khüshi" />
+          <span className={styles.brand}>Khushi Containers</span>
         </a>
 
         <nav className={`${styles.nav} ${open ? styles.open : ''}`} aria-label="Primary">
@@ -42,6 +43,9 @@ export default function Header({ activeSection, theme, onToggleTheme }) {
               {link.label}
             </a>
           ))}
+          <a href="#contact" className={styles.cta} onClick={() => setOpen(false)}>
+            Get a Quote
+          </a>
         </nav>
 
         <div className={styles.actions}>
@@ -66,7 +70,14 @@ export default function Header({ activeSection, theme, onToggleTheme }) {
           </button>
         </div>
       </div>
-      {open && <button className={styles.backdrop} type="button" aria-label="Close menu" onClick={() => setOpen(false)} />}
+      {open && (
+        <button
+          className={styles.backdrop}
+          type="button"
+          aria-label="Close menu"
+          onClick={() => setOpen(false)}
+        />
+      )}
     </header>
   );
 }

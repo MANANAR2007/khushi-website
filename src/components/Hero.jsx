@@ -8,13 +8,24 @@ export default function Hero() {
     <section className={styles.hero} id="home">
       <div className={`container ${styles.inner}`}>
         <div className={styles.content}>
-          <img src={`${baseUrl}assets/containers/khushi_logo.svg.svg`} alt="khüshi" className={styles.logo} />
-          <p className={styles.tagline}>Food-grade. Recyclable. Reliable.</p>
+          <span className={styles.kicker}>Food-Grade Packaging Specialists</span>
+          <h1>Reliable Plastic Container Manufacturing for High-Volume Brands</h1>
+          <p>
+            Khushi Containers supplies food-safe, recyclable packaging engineered for consistency,
+            leak-proof performance, and large-scale production.
+          </p>
+          <div className={styles.actions}>
+            <a className={styles.primary} href="#contact">
+              Get a Quote
+            </a>
+            <a className={styles.secondary} href="#products">
+              View Products
+            </a>
+          </div>
         </div>
         <div className={styles.visual} aria-hidden="true">
-          <div className={styles.visualRing} />
-          <div className={styles.visualCard} />
-          <div className={styles.visualBadge}>Food-Grade</div>
+          <img src={`${baseUrl}assets/containers/round/750ml_black.jpg`} alt="" />
+          <div className={styles.visualBadge}>ISO-Compliant</div>
         </div>
       </div>
     </section>

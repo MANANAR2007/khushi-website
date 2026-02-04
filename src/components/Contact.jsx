@@ -6,8 +6,10 @@ export default function Contact() {
     <section className={styles.contact} id="contact">
       <div className="container">
         <header className={styles.header}>
-          <h2 className="section-title">Get in Touch</h2>
-          <p className="section-subtitle">For inquiries and wholesale orders</p>
+          <h2 className="section-title">Get a Quote</h2>
+          <p className="section-subtitle">
+            Tell us your volume requirements and packaging specifications. We respond with pricing and lead times.
+          </p>
           <div className="section-divider" />
         </header>
 
