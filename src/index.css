@@ -69,7 +69,7 @@ button {
 }
 
 main {
-  padding-top: var(--header-height);
+  padding-top: 0;
 }
 
 section {
