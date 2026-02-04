@@ -100,6 +100,23 @@
   font-weight: 600;
 }
 
+.machinePlaceholder {
+  margin-top: 1.5rem;
+  min-height: 190px;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--color-border);
+  background: linear-gradient(135deg, rgba(15, 45, 63, 0.08), rgba(31, 111, 120, 0.08));
+  display: grid;
+  place-items: center;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  text-align: center;
+  padding: 1rem;
+}
+
 @media (max-width: 980px) {
   .layout {
     grid-template-columns: 1fr;
