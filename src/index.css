@@ -67,9 +67,10 @@ body {
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
-.splash span {
-  display: inline-block;
-  transform: translateY(0);
+.splash-logo {
+  width: min(280px, 70vw);
+  height: auto;
+  filter: brightness(0) invert(1);
 }
 
 .splash--hide {

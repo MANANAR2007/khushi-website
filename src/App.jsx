@@ -41,6 +41,7 @@ export default function App() {
   const activeSection = useScrollSpy();
   const [showSplash, setShowSplash] = useState(true);
   const [splashFade, setSplashFade] = useState(false);
+  const baseUrl = import.meta.env.BASE_URL || '/';
   const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem('khushi-theme');
     if (saved) return saved;
@@ -110,7 +111,11 @@ export default function App() {
           onClick={handleSkipSplash}
           role="presentation"
         >
-          <span>khüshi</span>
+          <img
+            src={`${baseUrl}assets/containers/khushi_logo.svg.svg`}
+            alt="khüshi"
+            className="splash-logo"
+          />
         </div>
       )}
       <Header activeSection={activeSection} theme={theme} onToggleTheme={handleToggleTheme} />
