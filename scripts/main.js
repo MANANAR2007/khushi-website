@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initSmoothScrolling();
     initNavHighlight();
     initLightbox();
+    initMobileNav();
+    initScrollReveal();
+    initStickyNav();
 });
 
 /**
@@ -72,6 +75,47 @@ function initSmoothScrolling() {
 }
 
 /**
+ * Initialize mobile navigation toggle
+ */
+function initMobileNav() {
+    const navToggle = document.querySelector('.nav-toggle');
+    const navOverlay = document.querySelector('.nav-overlay');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    if (!navToggle || !navOverlay) {
+        return;
+    }
+
+    const closeMenu = () => {
+        document.body.classList.remove('nav-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+    };
+
+    navToggle.addEventListener('click', () => {
+        const isOpen = document.body.classList.toggle('nav-open');
+        navToggle.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    navOverlay.addEventListener('click', closeMenu);
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', closeMenu);
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeMenu();
+        }
+    });
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 900) {
+            closeMenu();
+        }
+    });
+}
+
+/**
  * Initialize navigation highlight based on scroll position
  */
 function initNavHighlight() {
@@ -111,6 +155,58 @@ function initNavHighlight() {
     
     // Initial check
     updateActiveLink();
+}
+
+/**
+ * Initialize sticky nav styling
+ */
+function initStickyNav() {
+    const nav = document.querySelector('.nav');
+    if (!nav) return;
+
+    let ticking = false;
+    const updateNav = () => {
+        nav.classList.toggle('is-scrolled', window.scrollY > 10);
+    };
+
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                updateNav();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+
+    updateNav();
+}
+
+/**
+ * Initialize scroll reveal animations
+ */
+function initScrollReveal() {
+    const targets = document.querySelectorAll(
+        '.size-card, .about-intro, .about-manufacturing, .about-expertise, .about-thinwall, .about-features, .about-values, .sustainability-card, .contact-item'
+    );
+
+    if (!targets.length) return;
+
+    targets.forEach(target => target.classList.add('reveal'));
+
+    const observer = new IntersectionObserver(
+        entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        },
+        { threshold: 0.15 }
+    );
+
+    targets.forEach(target => observer.observe(target));
 }
 
 /**
