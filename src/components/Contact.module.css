@@ -1,0 +1,46 @@
+.contact {
+  padding: clamp(4rem, 8vw, 6rem) 0;
+  background: var(--color-surface-alt);
+}
+
+.header {
+  margin-bottom: 2.5rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
+}
+
+.item {
+  display: flex;
+  gap: 0.8rem;
+  align-items: flex-start;
+  color: var(--color-text);
+}
+
+.icon {
+  width: 22px;
+  height: 22px;
+  color: var(--color-accent);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.address {
+  display: grid;
+  gap: 0.4rem;
+  color: var(--color-muted);
+}
+
+.address a {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+@media (max-width: 720px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
