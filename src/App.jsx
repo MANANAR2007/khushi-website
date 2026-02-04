@@ -99,6 +99,7 @@ function ProductCard({ categoryTitle, item, onOpen }) {
 }
 
 export default function App() {
+  const baseUrl = import.meta.env.BASE_URL || '/';
   const active = useScrollSpy();
   const [lightbox, setLightbox] = useState({ open: false, src: '', caption: '' });
 
@@ -127,7 +128,7 @@ export default function App() {
       <nav className="nav">
         <div className="nav-container">
           <a href="#home" className="nav-logo">
-            <img src="/assets/containers/khushi_logo.svg.svg" alt="khüshi" className="logo-img nav-logo-img" />
+            <img src={`${baseUrl}assets/containers/khushi_logo.svg.svg`} alt="khüshi" className="logo-img nav-logo-img" />
           </a>
           <ul className="nav-links">
             <li><a href="#home" className={active === 'home' ? 'active' : ''}>Home</a></li>
@@ -143,7 +144,7 @@ export default function App() {
         <div className="hero-shell">
           <Reveal className="hero-content">
             <h1 className="hero-title">
-              <img src="/assets/containers/khushi_logo.svg.svg" alt="khüshi" className="logo-img hero-logo-img" />
+              <img src={`${baseUrl}assets/containers/khushi_logo.svg.svg`} alt="khüshi" className="logo-img hero-logo-img" />
             </h1>
             <p className="hero-tagline">Food-grade. Recyclable. Reliable.</p>
           </Reveal>
@@ -360,7 +361,7 @@ export default function App() {
       <footer className="footer">
         <div className="footer-container">
           <span className="footer-logo">
-            <img src="/assets/containers/khushi_logo.svg.svg" alt="khüshi" className="logo-img footer-logo-img" />
+            <img src={`${baseUrl}assets/containers/khushi_logo.svg.svg`} alt="khüshi" className="logo-img footer-logo-img" />
           </span>
           <p>© 2026 khüshi. All rights reserved.</p>
         </div>

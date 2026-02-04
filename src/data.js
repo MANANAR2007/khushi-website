@@ -1,3 +1,6 @@
+const baseUrl = import.meta.env.BASE_URL || '/';
+const asset = (path) => `${baseUrl}${path.replace(/^\\//, '')}`;
+
 export const productCategories = [
   {
     title: 'ROUND CONTAINERS',
@@ -5,79 +8,79 @@ export const productCategories = [
       {
         size: '100ml',
         colors: {
-          white: '/assets/containers/round/100ml_white.jpg',
-          black: '/assets/containers/round/100ml_black.jpg',
-          transparent: '/assets/containers/round/100ml_transparent.jpg'
+          white: asset('assets/containers/round/100ml_white.jpg'),
+          black: asset('assets/containers/round/100ml_black.jpg'),
+          transparent: asset('assets/containers/round/100ml_transparent.jpg')
         }
       },
       {
         size: '200ml',
         colors: {
-          white: '/assets/containers/round/200ml_white.jpg',
-          black: '/assets/containers/round/200ml_black.jpg'
+          white: asset('assets/containers/round/200ml_white.jpg'),
+          black: asset('assets/containers/round/200ml_black.jpg')
         }
       },
       {
         size: '250ml',
         colors: {
-          white: '/assets/containers/round/250ml_white.jpg',
-          black: '/assets/containers/round/250ml_black.jpg',
-          transparent: '/assets/containers/round/250ml_transparent.jpg'
+          white: asset('assets/containers/round/250ml_white.jpg'),
+          black: asset('assets/containers/round/250ml_black.jpg'),
+          transparent: asset('assets/containers/round/250ml_transparent.jpg')
         }
       },
       {
         size: '300ml',
         colors: {
-          white: '/assets/containers/round/300ml_white.jpg',
-          black: '/assets/containers/round/300ml_black.jpg',
-          transparent: '/assets/containers/round/300ml_transparent.jpg'
+          white: asset('assets/containers/round/300ml_white.jpg'),
+          black: asset('assets/containers/round/300ml_black.jpg'),
+          transparent: asset('assets/containers/round/300ml_transparent.jpg')
         }
       },
       {
         size: '500g',
         colors: {
-          white: '/assets/containers/round/500g_white.jpg',
-          black: '/assets/containers/round/500g_black.jpg',
-          transparent: '/assets/containers/round/500g_transparent.jpg'
+          white: asset('assets/containers/round/500g_white.jpg'),
+          black: asset('assets/containers/round/500g_black.jpg'),
+          transparent: asset('assets/containers/round/500g_transparent.jpg')
         }
       },
       {
         size: '500ml',
         colors: {
-          white: '/assets/containers/round/500ml_white.jpg',
-          black: '/assets/containers/round/500ml_black.jpg',
-          transparent: '/assets/containers/round/500ml_transparent.jpg'
+          white: asset('assets/containers/round/500ml_white.jpg'),
+          black: asset('assets/containers/round/500ml_black.jpg'),
+          transparent: asset('assets/containers/round/500ml_transparent.jpg')
         }
       },
       {
         size: '600ml',
         colors: {
-          white: '/assets/containers/round/600ml_white.jpg',
-          black: '/assets/containers/round/600ml_black.jpg',
-          transparent: '/assets/containers/round/600ml_transparent.jpg'
+          white: asset('assets/containers/round/600ml_white.jpg'),
+          black: asset('assets/containers/round/600ml_black.jpg'),
+          transparent: asset('assets/containers/round/600ml_transparent.jpg')
         }
       },
       {
         size: '750ml',
         colors: {
-          white: '/assets/containers/round/750ml_white.jpg',
-          black: '/assets/containers/round/750ml_black.jpg',
-          transparent: '/assets/containers/round/750ml_transparent.jpg'
+          white: asset('assets/containers/round/750ml_white.jpg'),
+          black: asset('assets/containers/round/750ml_black.jpg'),
+          transparent: asset('assets/containers/round/750ml_transparent.jpg')
         }
       },
       {
         size: '1000ml',
         colors: {
-          white: '/assets/containers/round/1000ml_white.jpg',
-          black: '/assets/containers/round/1000ml_black.jpg',
-          transparent: '/assets/containers/round/1000ml_transparent.jpg'
+          white: asset('assets/containers/round/1000ml_white.jpg'),
+          black: asset('assets/containers/round/1000ml_black.jpg'),
+          transparent: asset('assets/containers/round/1000ml_transparent.jpg')
         }
       },
       {
         size: '2500ml',
         colors: {
-          white: '/assets/containers/round/2500ml_white.jpg',
-          black: '/assets/containers/round/2500ml_black.jpg'
+          white: asset('assets/containers/round/2500ml_white.jpg'),
+          black: asset('assets/containers/round/2500ml_black.jpg')
         }
       }
     ]
@@ -88,25 +91,25 @@ export const productCategories = [
       {
         size: '500ml',
         colors: {
-          white: '/assets/containers/rectangle/500ml_rect_white.jpg',
-          black: '/assets/containers/rectangle/500ml_rect_black.jpg',
-          transparent: '/assets/containers/rectangle/500ml_rect_transparent.jpg'
+          white: asset('assets/containers/rectangle/500ml_rect_white.jpg'),
+          black: asset('assets/containers/rectangle/500ml_rect_black.jpg'),
+          transparent: asset('assets/containers/rectangle/500ml_rect_transparent.jpg')
         }
       },
       {
         size: '750ml',
         colors: {
-          white: '/assets/containers/rectangle/750ml_rect_white.jpg',
-          black: '/assets/containers/rectangle/750ml_rect_black.jpg',
-          transparent: '/assets/containers/rectangle/750ml_rect_transparent.jpg'
+          white: asset('assets/containers/rectangle/750ml_rect_white.jpg'),
+          black: asset('assets/containers/rectangle/750ml_rect_black.jpg'),
+          transparent: asset('assets/containers/rectangle/750ml_rect_transparent.jpg')
         }
       },
       {
         size: '1000ml',
         colors: {
-          white: '/assets/containers/rectangle/1000ml_rect_white.jpg',
-          black: '/assets/containers/rectangle/1000ml_rect_black.jpg',
-          transparent: '/assets/containers/rectangle/1000ml_rect_transparent.jpg'
+          white: asset('assets/containers/rectangle/1000ml_rect_white.jpg'),
+          black: asset('assets/containers/rectangle/1000ml_rect_black.jpg'),
+          transparent: asset('assets/containers/rectangle/1000ml_rect_transparent.jpg')
         }
       }
     ]
@@ -117,7 +120,7 @@ export const productCategories = [
       {
         size: '650ml',
         colors: {
-          black: '/assets/containers/bowl/650ml_bowl_black.jpg'
+          black: asset('assets/containers/bowl/650ml_bowl_black.jpg')
         }
       }
     ]
