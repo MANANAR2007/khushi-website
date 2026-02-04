@@ -9,7 +9,7 @@ export default function Hero() {
       <div className={`container ${styles.inner}`}>
         <div className={styles.centerpiece}>
           <img
-            src={`${baseUrl}assets/containers/khushi_logo.svg.svg`}
+            src={`${baseUrl}assets/containers/khushi_logo.png`}
             alt="khüshi"
             className={styles.logo}
           />
