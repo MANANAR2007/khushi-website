@@ -3,7 +3,9 @@
   display: grid;
   place-items: center;
   padding: clamp(4rem, 8vw, 6rem) 0;
-  background: #ffffff;
+  background: radial-gradient(circle at 20% 20%, rgba(224, 109, 63, 0.2), transparent 50%),
+    radial-gradient(circle at 80% 0%, rgba(31, 111, 120, 0.18), transparent 45%),
+    var(--color-primary);
 }
 
 .inner {
@@ -20,10 +22,11 @@
 
 .logo {
   width: min(360px, 80vw);
+  filter: brightness(0) invert(1);
 }
 
 .tagline {
-  color: var(--color-muted);
+  color: rgba(255, 255, 255, 0.85);
   font-size: clamp(0.9rem, 1.4vw, 1.1rem);
   letter-spacing: 0.32em;
   text-transform: uppercase;
@@ -31,7 +34,7 @@
 }
 
 .scrollHint {
-  color: var(--color-muted);
+  color: rgba(255, 255, 255, 0.6);
   font-size: 0.75rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;

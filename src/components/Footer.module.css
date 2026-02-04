@@ -1,8 +1,7 @@
 .footer {
   padding: 3rem 0;
-  background: #ffffff;
-  color: var(--color-text);
-  border-top: 1px solid var(--color-border);
+  background: var(--color-primary);
+  color: #ffffff;
 }
 
 .inner {
@@ -14,11 +13,12 @@
 
 .logo {
   height: 46px;
+  filter: brightness(0) invert(1);
 }
 
 .details {
   display: grid;
   gap: 0.35rem;
   font-size: 0.9rem;
-  color: var(--color-muted);
+  color: rgba(255, 255, 255, 0.8);
 }
