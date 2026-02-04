@@ -1,88 +1,44 @@
-# Khüshi Website - Image Setup Guide
+# khüshi Website (React + Vite)
 
-## Adding Your Product Images
+This project is now a React + Vite rebuild with a bold, premium layout while keeping the same content and product container data.
 
-The website is set up to display your actual product photos. You need to add your images to the following folder structure:
+## Project Structure
 
 ```
-khushi-website/
-└── assets/
-    └── containers/
-        ├── round/
-        │   ├── 250ml-white.png
-        │   ├── 250ml-black.png
-        │   ├── 250ml-transparent.png
-        │   ├── 500ml-white.png
-        │   ├── 500ml-black.png
-        │   ├── 500ml-transparent.png
-        │   ├── 750ml-white.png
-        │   ├── 750ml-black.png
-        │   ├── 750ml-transparent.png
-        │   ├── 1000ml-white.png
-        │   ├── 1000ml-black.png
-        │   ├── 1000ml-transparent.png
-        │   ├── 1500ml-white.png
-        │   ├── 1500ml-black.png
-        │   └── 1500ml-transparent.png
-        │
-        ├── rectangle/
-        │   ├── 300ml-white.png
-        │   ├── 300ml-black.png
-        │   ├── 300ml-transparent.png
-        │   ├── 500ml-white.png
-        │   ├── 500ml-black.png
-        │   ├── 500ml-transparent.png
-        │   ├── 750ml-white.png
-        │   ├── 750ml-black.png
-        │   ├── 750ml-transparent.png
-        │   ├── 1000ml-white.png
-        │   ├── 1000ml-black.png
-        │   ├── 1000ml-transparent.png
-        │   ├── 1500ml-white.png
-        │   ├── 1500ml-black.png
-        │   ├── 1500ml-transparent.png
-        │   ├── 2000ml-white.png
-        │   ├── 2000ml-black.png
-        │   └── 2000ml-transparent.png
-        │
-        └── bowl/
-            ├── 200ml-white.png
-            ├── 200ml-black.png
-            ├── 200ml-transparent.png
-            ├── 400ml-white.png
-            ├── 400ml-black.png
-            ├── 400ml-transparent.png
-            ├── 650ml-white.png
-            ├── 650ml-black.png
-            ├── 650ml-transparent.png
-            ├── 900ml-white.png
-            ├── 900ml-black.png
-            ├── 900ml-transparent.png
-            ├── 1200ml-white.png
-            ├── 1200ml-black.png
-            └── 1200ml-transparent.png
+public/
+  assets/containers/...
+src/
+  App.jsx
+  data.js
+  main.jsx
+  styles.css
 ```
 
-## Image Requirements
-
-- **Format**: PNG (recommended for transparent backgrounds) or JPG
-- **Size**: Recommended 400x400px or larger (square aspect ratio works best)
-- **Background**: Transparent or neutral grey background
-- **Naming**: Must match exactly: `{size}-{color}.png`
-  - Size examples: `250ml`, `500ml`, `1000ml`
-  - Colors: `white`, `black`, `transparent`
-
-## How It Works
-
-1. When a user clicks a color button (white/black/transparent), the corresponding image is displayed
-2. Only the active image is visible, others are hidden
-3. Images swap instantly without page reload
-
-## Running the Website
+## Run Locally
 
 ```bash
-cd khushi-website
-npx serve -l 3000
+npm install
+npm run dev
 ```
 
-Then open http://localhost:3000 in your browser.
+## Build for Production
+
+```bash
+npm run build
+npm run preview
+```
+
+## Updating Product Images
+
+Replace images inside:
+
+```
+public/assets/containers/
+```
+
+Keep filenames the same (e.g. `500ml_white.jpg`, `750ml_black.jpg`). The app reads these paths from `src/data.js`.
+
+## Notes
+
+- The site uses a scrollable product rail with selectable colors.
+- Clicking a product image opens a lightbox view.
