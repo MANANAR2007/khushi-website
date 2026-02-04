@@ -22,7 +22,7 @@
 
 .logo {
   width: min(360px, 80vw);
-  filter: brightness(0) invert(1);
+  filter: invert(1);
 }
 
 .tagline {

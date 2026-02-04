@@ -13,7 +13,7 @@
 
 .logo {
   height: 46px;
-  filter: brightness(0) invert(1);
+  filter: invert(1);
 }
 
 .details {
