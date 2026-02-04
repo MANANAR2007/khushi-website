@@ -62,6 +62,19 @@
   color: var(--color-muted);
 }
 
+:global([data-theme='dark']) .statCard {
+  background: rgba(18, 30, 43, 0.8);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+:global([data-theme='dark']) .statNumber {
+  color: #f6c4ad;
+}
+
+:global([data-theme='dark']) .statLabel {
+  color: rgba(255, 255, 255, 0.7);
+}
+
 .panelAlt ul {
   list-style: none;
   display: grid;
