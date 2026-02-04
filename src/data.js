@@ -1,5 +1,5 @@
 const baseUrl = import.meta.env.BASE_URL || '/';
-const asset = (path) => `${baseUrl}${path.replace(/^\\//, '')}`;
+const asset = (path) => `${baseUrl}${path.startsWith('/') ? path.slice(1) : path}`;
 
 export const productCategories = [
   {
