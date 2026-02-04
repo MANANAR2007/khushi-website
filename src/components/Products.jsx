@@ -5,6 +5,7 @@ import { productCategories } from '../data.js';
 function ProductCard({ categoryTitle, item, onOpen }) {
   const colorKeys = Object.keys(item.colors);
   const [color, setColor] = useState(colorKeys[0]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const imageSrc = item.colors[color];
   const surfaceClass = color === 'black' ? styles.surfaceLight : styles.surfaceDark;
@@ -16,6 +17,10 @@ function ProductCard({ categoryTitle, item, onOpen }) {
     });
   }, [item.colors]);
 
+  useEffect(() => {
+    setIsLoaded(false);
+  }, [imageSrc]);
+
   return (
     <div className={styles.card}>
       <button
@@ -25,10 +30,10 @@ function ProductCard({ categoryTitle, item, onOpen }) {
       >
         <div className={`${styles.imageSurface} ${surfaceClass}`}>
           <img
-            key={imageSrc}
             src={imageSrc}
             alt={`${categoryTitle} ${item.size}`}
-            className={styles.productImage}
+            className={`${styles.productImage} ${isLoaded ? styles.loaded : ''}`}
+            onLoad={() => setIsLoaded(true)}
           />
         </div>
       </button>
