@@ -335,17 +335,18 @@ section h3 {
 
 .product-category {
     margin-bottom: var(--spacing-2xl);
+    text-align: center;
 }
 
 .category-title {
-    width: 100%;
+    width: fit-content;
     text-align: center;
     font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: 0.36em;
     color: var(--slate-500);
     margin-bottom: var(--spacing-lg);
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 0.5rem 1.2rem;
@@ -592,7 +593,7 @@ section h3 {
     color: var(--slate-600);
     font-size: 1.05rem;
     line-height: 1.9;
-    margin-bottom: var(--spacing-lg);
+    margin: 0 auto var(--spacing-lg);
 }
 
 .about-intro-content strong {
