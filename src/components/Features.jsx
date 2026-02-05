@@ -7,13 +7,13 @@ export default function Features() {
     <section className={styles.features}>
       <div className="container">
         <header className={styles.header}>
-          <h2 className="section-title fade-up">Product Quality</h2>
+          <h2 className="section-title reveal">Product Quality</h2>
           <p className="section-subtitle">Engineered for strength, hygiene, and repeatable performance.</p>
           <div className="section-divider" />
         </header>
-        <div className={`${styles.grid} fade-up`}>
+        <div className={`${styles.grid} reveal-group`}>
           {features.map((feature) => (
-            <div className={styles.card} key={feature}>
+            <div className={`${styles.card} reveal`} key={feature}>
               <span className={styles.check}>✓</span>
               <h3>{feature}</h3>
             </div>

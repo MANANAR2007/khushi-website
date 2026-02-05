@@ -27,8 +27,8 @@ export default function App() {
   }, [theme]);
 
   useEffect(() => {
-    // Single IntersectionObserver for subtle fades + section highlighting.
-    const animatedElements = document.querySelectorAll('.fade-up, .fade-left, .fade-right');
+    // Single IntersectionObserver for scroll reveals + section highlighting.
+    const animatedElements = document.querySelectorAll('.reveal');
     const sectionElements = sections
       .map((id) => document.getElementById(id))
       .filter(Boolean);
@@ -36,6 +36,11 @@ export default function App() {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) {
       animatedElements.forEach((el) => el.classList.add('in-view'));
+      document.documentElement.classList.add('hero-loaded');
+    } else {
+      requestAnimationFrame(() => {
+        document.documentElement.classList.add('hero-loaded');
+      });
     }
 
     const sectionRatios = new Map();
@@ -45,9 +50,7 @@ export default function App() {
       (entries) => {
         entries.forEach((entry) => {
           const target = entry.target;
-          const isAnimated = target.classList.contains('fade-up') ||
-            target.classList.contains('fade-left') ||
-            target.classList.contains('fade-right');
+          const isAnimated = target.classList.contains('reveal');
 
           if (isAnimated && entry.isIntersecting) {
             target.classList.add('in-view');
@@ -71,7 +74,7 @@ export default function App() {
           setActiveSection(bestId);
         }
       },
-      { threshold: [0.2, 0.4, 0.6, 0.8] }
+      { threshold: 0.2 }
     );
 
     sectionElements.forEach((el) => observer.observe(el));

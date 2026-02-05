@@ -21,6 +21,12 @@
   box-shadow: var(--shadow-soft);
   display: grid;
   gap: 0.6rem;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card);
 }
 
 .card h3 {

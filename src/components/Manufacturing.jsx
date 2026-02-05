@@ -7,7 +7,7 @@ export default function Manufacturing() {
     <section className={styles.section} id="manufacturing">
       <div className="container">
         <header className={styles.header}>
-          <h2 className="section-title fade-up">Manufacturing & Quality</h2>
+          <h2 className="section-title reveal">Manufacturing & Quality</h2>
           <p className="section-subtitle">
             Precision injection moulding, ISO-aligned processes, and rigorous QC ensure reliable performance for every batch.
           </p>
@@ -42,7 +42,7 @@ export default function Manufacturing() {
               <span>HACCP Ready</span>
               <span>Recyclable Materials</span>
             </div>
-            <div className={`${styles.machinePlaceholder} fade-up`}>Machine Image</div>
+            <div className={`${styles.machinePlaceholder} reveal`}>Machine Image</div>
           </div>
         </div>
       </div>

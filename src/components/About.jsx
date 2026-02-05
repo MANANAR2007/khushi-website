@@ -7,27 +7,27 @@ export default function About() {
     <section className={styles.about} id="about">
       <div className="container">
         <header className={styles.header}>
-          <h2 className="section-title fade-up">About Khushi Containers</h2>
+          <h2 className="section-title reveal">About Khushi Containers</h2>
           <p className="section-subtitle">
             We manufacture food-grade plastic containers with consistent wall thickness, high-strength performance, and reliable delivery schedules.
           </p>
           <div className="section-divider" />
         </header>
 
-        <div className={`${styles.grid} fade-right`}>
-          <article className={styles.card}>
+        <div className={`${styles.grid} reveal-group`}>
+          <article className={`${styles.card} reveal`}>
             <h3>Who We Serve</h3>
             <p>
               Our packaging supports QSRs, dairies, dessert brands, catering services, and FMCG manufacturers looking for dependable, scalable food packaging.
             </p>
           </article>
-          <article className={styles.card}>
+          <article className={`${styles.card} reveal`}>
             <h3>Material Standards</h3>
             <p>
               We use BPA-free, food-safe polymers and maintain strict hygiene controls to meet ISO-aligned quality requirements.
             </p>
           </article>
-          <article className={styles.card}>
+          <article className={`${styles.card} reveal`}>
             <h3>Custom Manufacturing</h3>
             <p>
               From tooling to bulk production, we provide custom moulding for high-volume orders with consistent quality and quick turnaround.

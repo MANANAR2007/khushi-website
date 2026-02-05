@@ -22,7 +22,7 @@ function ProductCard({ categoryTitle, item, onOpen }) {
   }, [imageSrc]);
 
   return (
-    <div className={styles.card}>
+    <div className={`${styles.card} reveal`}>
       <button
         type="button"
         className={styles.imageButton}
@@ -61,17 +61,17 @@ export default function Products({ onOpen }) {
     <section className={styles.products} id="products">
       <div className="container">
         <header className={styles.header}>
-          <h2 className="section-title fade-up">Our Products</h2>
+          <h2 className="section-title reveal">Our Products</h2>
           <p className="section-subtitle">Quality containers for every need</p>
           <div className="section-divider" />
         </header>
       </div>
-      <div className="fade-up">
+      <div>
         {productCategories.map((category) => (
           <div className={styles.category} key={category.title}>
             <h3 className={styles.categoryTitle}>{category.title}</h3>
             <div className={styles.scroll}>
-              <div className={styles.track}>
+              <div className={`${styles.track} reveal-group`}>
                 {category.items.map((item) => (
                   <ProductCard
                     key={`${category.title}-${item.size}`}
