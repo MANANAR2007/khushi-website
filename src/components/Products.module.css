@@ -114,11 +114,11 @@
 }
 
 .surfaceDark {
-  background: radial-gradient(circle at center, #0f1216 0%, #070a0d 100%);
+  background: #0b0c10;
 }
 
 .surfaceLight {
-  background: radial-gradient(circle at center, #f3f5f7 0%, #e6eaee 100%);
+  background: #ffffff;
 }
 
 .productImageFrame {

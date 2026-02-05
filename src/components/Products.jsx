@@ -24,7 +24,7 @@ function ProductCard({ categoryTitle, item, onOpen }) {
   const hasPreloaded = useRef(false);
 
   const imageData = item.colors[color];
-  const surfaceClass = color === 'black' ? styles.surfaceDark : styles.surfaceLight;
+  const surfaceClass = color === 'black' ? styles.surfaceLight : styles.surfaceDark;
 
   const prefersReducedMotion = useMemo(
     () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
