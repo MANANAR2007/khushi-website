@@ -100,6 +100,7 @@
   place-items: center;
   position: relative;
   overflow: hidden;
+  height: 200px;
 }
 
 .surfaceDark {
@@ -212,5 +213,9 @@
 
   .card {
     width: min(80vw, 320px);
+  }
+
+  .imageSurface {
+    height: 180px;
   }
 }
