@@ -114,14 +114,14 @@
 }
 
 .productImage {
-  opacity: 0;
-  transform: translateY(8px);
+  opacity: 1;
+  transform: translateY(0);
   transition: opacity 0.35s ease-out, transform 0.35s ease-out;
 }
 
-.productImage.loaded {
-  opacity: 1;
-  transform: translateY(0);
+.productImage.switching {
+  opacity: 0;
+  transform: translateY(8px);
 }
 
 .sizeInfo {
