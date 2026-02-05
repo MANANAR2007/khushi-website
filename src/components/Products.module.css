@@ -135,7 +135,7 @@
   max-height: 100%;
   object-fit: contain;
   opacity: 1;
-  transition: opacity 180ms ease;
+  transition: opacity 250ms ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -169,37 +169,53 @@
 }
 
 .colorButton {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  border: 2px solid var(--color-border);
+  width: 44px;
+  height: 44px;
+  border: none;
   cursor: pointer;
   position: relative;
   background: transparent;
 }
 
+.colorButton::before {
+  content: '';
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--color-border);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+}
+
 .colorButton::after {
   content: '';
   position: absolute;
-  inset: -4px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   border: 1.5px solid transparent;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .active::after {
   border-color: var(--color-accent);
 }
 
-.white {
+.white::before {
   background: #ffffff;
 }
 
-.black {
+.black::before {
   background: #0b0c10;
   border-color: #0b0c10;
 }
 
-.transparent {
+.transparent::before {
   background: linear-gradient(135deg, #ffffff, #d6d6d6);
   border-style: dashed;
 }

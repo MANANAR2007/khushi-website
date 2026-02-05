@@ -63,15 +63,22 @@ function ProductCard({ categoryTitle, item, onOpen }) {
     }
 
     if (prefersReducedMotion) {
-      setDisplayImage(nextImage);
+      imgEl.src = nextImage.src;
+      imgEl.srcset = nextImage.srcSet;
+      imgEl.sizes = nextImage.sizes;
+      imgEl.style.opacity = 1;
       return;
     }
 
     imgEl.style.opacity = 0;
     imgEl.onload = () => {
-      imgEl.style.opacity = 1;
+      requestAnimationFrame(() => {
+        imgEl.style.opacity = 1;
+      });
     };
-    setDisplayImage(nextImage);
+    imgEl.src = nextImage.src;
+    imgEl.srcset = nextImage.srcSet;
+    imgEl.sizes = nextImage.sizes;
   };
 
   const handleColorChange = (key) => {
