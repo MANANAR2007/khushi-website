@@ -35,6 +35,11 @@
   color: var(--color-muted);
 }
 
+.phoneList {
+  display: grid;
+  gap: 0.2rem;
+}
+
 .address a {
   color: var(--color-text);
   font-weight: 600;
