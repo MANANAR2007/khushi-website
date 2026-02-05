@@ -98,6 +98,8 @@
   padding: 1rem;
   display: grid;
   place-items: center;
+  position: relative;
+  overflow: hidden;
 }
 
 .surfaceDark {
@@ -114,15 +116,33 @@
   object-fit: contain;
 }
 
-.productImage {
+.productImageBase,
+.productImageNext {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.productImageBase {
   opacity: 1;
-  transform: translateY(0);
+  transition: opacity 0.35s ease-out;
+}
+
+.productImageNext {
+  position: absolute;
+  inset: 1rem;
+  opacity: 0;
+  transform: translateY(8px);
   transition: opacity 0.35s ease-out, transform 0.35s ease-out;
 }
 
-.productImage.switching {
+.swap.swapActive .productImageBase {
   opacity: 0;
-  transform: translateY(8px);
+}
+
+.swap.swapActive .productImageNext {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .sizeInfo {

@@ -5,7 +5,9 @@ import { productCategories } from '../data.js';
 function ProductCard({ categoryTitle, item, onOpen }) {
   const colorKeys = Object.keys(item.colors);
   const [color, setColor] = useState(colorKeys[0]);
-  const [isSwitching, setIsSwitching] = useState(false);
+  const [currentSrc, setCurrentSrc] = useState(item.colors[colorKeys[0]]);
+  const [nextSrc, setNextSrc] = useState('');
+  const [swapReady, setSwapReady] = useState(false);
 
   const imageSrc = item.colors[color];
   const surfaceClass = color === 'black' ? styles.surfaceLight : styles.surfaceDark;
@@ -17,10 +19,31 @@ function ProductCard({ categoryTitle, item, onOpen }) {
     });
   }, [item.colors]);
 
+  useEffect(() => {
+    setCurrentSrc(item.colors[colorKeys[0]]);
+    setNextSrc('');
+    setSwapReady(false);
+    setColor(colorKeys[0]);
+  }, [item.colors, colorKeys]);
+
   const handleColorChange = (key) => {
     if (key === color) return;
-    setIsSwitching(true);
     setColor(key);
+    const nextImage = item.colors[key];
+    if (nextImage === currentSrc) return;
+    setNextSrc(nextImage);
+    setSwapReady(false);
+  };
+
+  const handleNextLoad = () => {
+    setSwapReady(true);
+  };
+
+  const handleSwapEnd = () => {
+    if (!nextSrc) return;
+    setCurrentSrc(nextSrc);
+    setNextSrc('');
+    setSwapReady(false);
   };
 
   return (
@@ -30,13 +53,23 @@ function ProductCard({ categoryTitle, item, onOpen }) {
         className={styles.imageButton}
         onClick={() => onOpen(imageSrc, `${categoryTitle} · ${item.size} (${color})`)}
       >
-        <div className={`${styles.imageSurface} ${surfaceClass}`}>
+        <div className={`${styles.imageSurface} ${surfaceClass} ${nextSrc ? styles.swap : ''} ${swapReady ? styles.swapActive : ''}`}>
           <img
-            src={imageSrc}
+            src={currentSrc}
             alt={`${categoryTitle} ${item.size}`}
-            className={`${styles.productImage} ${isSwitching ? styles.switching : ''}`}
-            onLoad={() => setIsSwitching(false)}
+            className={styles.productImageBase}
+            draggable="false"
           />
+          {nextSrc && (
+            <img
+              src={nextSrc}
+              alt={`${categoryTitle} ${item.size}`}
+              className={styles.productImageNext}
+              onLoad={handleNextLoad}
+              onTransitionEnd={handleSwapEnd}
+              draggable="false"
+            />
+          )}
         </div>
       </button>
       <div className={styles.sizeInfo}>
