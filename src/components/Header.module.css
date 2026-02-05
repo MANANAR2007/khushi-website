@@ -47,11 +47,17 @@
   padding-bottom: 0.3rem;
   position: relative;
   transition: color 0.2s ease;
+  opacity: 0.7;
 }
 
-.nav a:hover,
+.nav a:hover {
+  opacity: 0.9;
+}
+
 .active {
   color: var(--color-text);
+  opacity: 1;
+  font-weight: 700;
 }
 
 .nav a::after {
@@ -69,6 +75,10 @@
 .nav a:hover::after,
 .active::after {
   width: 100%;
+}
+
+.active::after {
+  height: 3px;
 }
 
 
