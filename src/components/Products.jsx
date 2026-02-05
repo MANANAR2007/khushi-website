@@ -19,13 +19,6 @@ function ProductCard({ categoryTitle, item, onOpen }) {
     });
   }, [item.colors]);
 
-  useEffect(() => {
-    setCurrentSrc(item.colors[colorKeys[0]]);
-    setNextSrc('');
-    setSwapReady(false);
-    setColor(colorKeys[0]);
-  }, [item.colors, colorKeys]);
-
   const handleColorChange = (key) => {
     if (key === color) return;
     setColor(key);
