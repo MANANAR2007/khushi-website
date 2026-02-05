@@ -7,11 +7,6 @@ export default function Footer() {
     <footer className={styles.footer}>
       <div className={`container ${styles.inner}`}>
         <img src={logoUrl} alt="khüshi" className={styles.logo} />
-        <div className={styles.details}>
-          <span>shreeindustries@gmail.com</span>
-          <span>+91 94483 76318</span>
-          <span>Bengaluru, Karnataka, India</span>
-        </div>
         <p>© 2026 khüshi. All rights reserved.</p>
       </div>
     </footer>

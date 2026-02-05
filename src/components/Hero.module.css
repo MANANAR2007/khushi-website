@@ -32,6 +32,8 @@
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.7);
   font-weight: 600;
+  width: min(320px, 80vw);
+  text-align: center;
 }
 
 .tagline {
