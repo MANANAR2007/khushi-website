@@ -1,68 +1,106 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './Products.module.css';
 import { productCategories } from '../data.js';
+
+const parseSrcSet = (srcSet) =>
+  srcSet
+    .split(',')
+    .map((entry) => entry.trim().split(' ')[0])
+    .filter(Boolean);
+
+const preloadImages = (srcList) => {
+  srcList.forEach((src) => {
+    const img = new Image();
+    img.src = src;
+  });
+};
 
 function ProductCard({ categoryTitle, item, onOpen }) {
   const colorKeys = Object.keys(item.colors);
   const [color, setColor] = useState(colorKeys[0]);
-  const [currentSrc, setCurrentSrc] = useState(item.colors[colorKeys[0]]);
-  const [nextSrc, setNextSrc] = useState('');
-  const [swapReady, setSwapReady] = useState(false);
+  const [displayImage, setDisplayImage] = useState(item.colors[colorKeys[0]]);
+  const imgRef = useRef(null);
+  const cardRef = useRef(null);
+  const hasPreloaded = useRef(false);
 
-  const imageSrc = item.colors[color];
+  const imageData = item.colors[color];
   const surfaceClass = color === 'black' ? styles.surfaceLight : styles.surfaceDark;
 
+  const prefersReducedMotion = useMemo(
+    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    []
+  );
+
   useEffect(() => {
-    Object.values(item.colors).forEach((src) => {
-      const img = new Image();
-      img.src = src;
-    });
+    const card = cardRef.current;
+    if (!card) return undefined;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting || hasPreloaded.current) return;
+          const sources = Object.values(item.colors).flatMap((img) => [
+            img.src,
+            ...parseSrcSet(img.srcSet)
+          ]);
+          preloadImages(sources);
+          hasPreloaded.current = true;
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(card);
+    return () => observer.disconnect();
   }, [item.colors]);
+
+  const switchProductImage = (nextImage) => {
+    const imgEl = imgRef.current;
+    if (!imgEl) {
+      setDisplayImage(nextImage);
+      return;
+    }
+
+    if (prefersReducedMotion) {
+      setDisplayImage(nextImage);
+      return;
+    }
+
+    imgEl.style.opacity = 0;
+    imgEl.onload = () => {
+      imgEl.style.opacity = 1;
+    };
+    setDisplayImage(nextImage);
+  };
 
   const handleColorChange = (key) => {
     if (key === color) return;
     setColor(key);
-    const nextImage = item.colors[key];
-    if (nextImage === currentSrc) return;
-    setNextSrc(nextImage);
-    setSwapReady(false);
-  };
-
-  const handleNextLoad = () => {
-    setSwapReady(true);
-  };
-
-  const handleSwapEnd = () => {
-    if (!nextSrc) return;
-    setCurrentSrc(nextSrc);
-    setNextSrc('');
-    setSwapReady(false);
+    switchProductImage(item.colors[key]);
   };
 
   return (
-    <div className={`${styles.card} reveal`}>
+    <div className={`${styles.card} reveal`} ref={cardRef}>
       <button
         type="button"
         className={styles.imageButton}
-        onClick={() => onOpen(imageSrc, `${categoryTitle} · ${item.size} (${color})`)}
+        onClick={() => onOpen(imageData.srcLarge, `${categoryTitle} · ${item.size} (${color})`)}
       >
-        <div className={`${styles.imageSurface} ${surfaceClass} ${nextSrc ? styles.swap : ''} ${swapReady ? styles.swapActive : ''}`}>
-          <img
-            src={currentSrc}
-            alt={`${categoryTitle} ${item.size}`}
-            className={styles.productImageBase}
-            draggable="false"
-          />
-          {nextSrc && (
+        <div className={`${styles.imageSurface} ${surfaceClass}`}>
+          <div className={styles.productImageFrame}>
             <img
-              src={nextSrc}
-              alt={`${categoryTitle} ${item.size}`}
-              className={styles.productImageNext}
-              onLoad={handleNextLoad}
-              onTransitionEnd={handleSwapEnd}
+              ref={imgRef}
+              src={displayImage.src}
+              srcSet={displayImage.srcSet}
+              sizes={displayImage.sizes}
+              loading="lazy"
+              decoding="async"
+              alt=""
+              className={styles.productImage}
               draggable="false"
             />
-          )}
+          </div>
         </div>
       </button>
       <div className={styles.sizeInfo}>
