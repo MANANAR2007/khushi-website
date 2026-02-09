@@ -7,9 +7,9 @@ export default function About() {
     <section className={styles.about} id="about">
       <div className="container">
         <header className={styles.header}>
-          <h2 className="section-title reveal">Our Philosophy</h2>
+          <h2 className="section-title reveal">About Khushi Containers</h2>
           <p className="section-subtitle">
-            We build food-grade containers with a focus on consistency, hygiene, and dependable supply for high-volume food brands.
+            We manufacture food-grade plastic containers with consistent wall thickness, high-strength performance, and reliable delivery schedules.
           </p>
           <div className="section-divider" />
         </header>
@@ -18,19 +18,19 @@ export default function About() {
           <article className={`${styles.card} reveal`}>
             <h3>Who We Serve</h3>
             <p>
-              QSRs, dairies, dessert brands, caterers, and FMCG manufacturers who need dependable packaging at scale.
+              Our packaging supports QSRs, dairies, dessert brands, catering services, and FMCG manufacturers looking for dependable, scalable food packaging.
             </p>
           </article>
           <article className={`${styles.card} reveal`}>
             <h3>Material Standards</h3>
             <p>
-              BPA-free, food-safe polymers with cleanroom-grade handling and ISO-aligned process controls.
+              We use BPA-free, food-safe polymers and maintain strict hygiene controls to meet ISO-aligned quality requirements.
             </p>
           </article>
           <article className={`${styles.card} reveal`}>
             <h3>Custom Manufacturing</h3>
             <p>
-              From tooling to bulk production, we deliver custom moulding with consistent quality and tight lead times.
+              From tooling to bulk production, we provide custom moulding for high-volume orders with consistent quality and quick turnaround.
             </p>
           </article>
         </div>
@@ -39,7 +39,7 @@ export default function About() {
           <div>
             <h3>Our Values</h3>
             <p>
-              We prioritize on-time delivery, ethical partnerships, and long-term customer success.
+              We prioritize on-time delivery, ethical partnerships, and long-term customer success through efficient logistics and dependable service.
             </p>
           </div>
           <div className={styles.valuesGrid}>
