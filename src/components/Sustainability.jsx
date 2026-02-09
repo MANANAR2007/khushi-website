@@ -7,10 +7,10 @@ export default function Sustainability() {
     <section className={`${styles.section} ambient`} id="sustainability">
       <div className="container">
         <header className={`${styles.header} reveal-group`}>
-          <h2 className="section-title reveal reveal-slow">
+          <h2 className="section-title reveal reveal-slow cursor-distort">
             <RevealText text="Sustainability" />
           </h2>
-          <p className="section-subtitle reveal reveal-delay-1">
+          <p className="section-subtitle reveal reveal-delay-1 cursor-distort">
             Committed to responsible manufacturing and a greener future.
           </p>
           <div className="section-divider reveal reveal-delay-2" />

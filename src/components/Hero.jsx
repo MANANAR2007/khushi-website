@@ -12,10 +12,10 @@ export default function Hero() {
             alt="khüshi"
             className={`${styles.logo} hero-title`}
           />
-          <span className={`${styles.subBrand} hero-subtext`}>Containers</span>
-          <p className={`${styles.tagline} hero-tagline`}>Food-grade. Recyclable. Reliable.</p>
+          <span className={`${styles.subBrand} hero-subtext cursor-distort`}>Containers</span>
+          <p className={`${styles.tagline} hero-tagline cursor-distort`}>Food-grade. Recyclable. Reliable.</p>
         </div>
-        <div className={`${styles.placeholder} parallax-slow`} aria-hidden="true">
+        <div className={`${styles.placeholder} parallax-slow tilt-surface`} aria-hidden="true">
           Manufacturing Visual
         </div>
       </div>
