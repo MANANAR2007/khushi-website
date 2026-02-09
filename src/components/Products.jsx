@@ -162,15 +162,10 @@ export default function Products({ onOpen }) {
 
     let rafId;
     const update = () => {
-      const track = roundTrackRef.current;
-      if (!track) return;
-      const rect = track.getBoundingClientRect();
-      const viewport = window.innerHeight;
-      const start = rect.top + window.scrollY - viewport * 0.6;
-      const span = Math.max(cards.length * 220, viewport * 0.6);
-      const end = start + span;
-      const scrollY = window.scrollY;
-      const progress = Math.min(Math.max((scrollY - start) / (end - start), 0), 1);
+      const scroller = roundTrackRef.current;
+      if (!scroller) return;
+      const maxScroll = scroller.scrollWidth - scroller.clientWidth;
+      const progress = maxScroll > 0 ? Math.min(Math.max(scroller.scrollLeft / maxScroll, 0), 1) : 0;
 
       cards.forEach((card, index) => {
         const segment = 1 / cards.length;
@@ -198,11 +193,14 @@ export default function Products({ onOpen }) {
     };
 
     update();
-    window.addEventListener('scroll', onScroll, { passive: true });
+    const scroller = roundTrackRef.current;
+    if (scroller) {
+      scroller.addEventListener('scroll', onScroll, { passive: true });
+    }
     window.addEventListener('resize', onScroll);
 
     return () => {
-      window.removeEventListener('scroll', onScroll);
+      if (scroller) scroller.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
       if (rafId) cancelAnimationFrame(rafId);
     };
