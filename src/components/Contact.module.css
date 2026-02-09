@@ -9,8 +9,75 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 2rem;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 2.5rem;
+}
+
+.form {
+  display: grid;
+  gap: 1.2rem;
+  padding: 2rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+}
+
+.field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.fieldRow {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.field label {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.field input,
+.field textarea {
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+  padding: 0.6rem 0;
+  font-size: 1rem;
+  background: transparent;
+  color: var(--color-text);
+  outline: none;
+}
+
+.field input:focus,
+.field textarea:focus {
+  border-color: var(--color-text);
+}
+
+.submit {
+  justify-self: flex-start;
+  padding: 0.75rem 1.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-text);
+  background: var(--color-text);
+  color: #ffffff;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+.submit:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.info {
+  display: grid;
+  gap: 1.5rem;
+  align-content: start;
 }
 
 .item {
@@ -24,7 +91,7 @@
 .icon {
   width: 22px;
   height: 22px;
-  color: var(--color-accent);
+  color: var(--color-text);
   flex-shrink: 0;
   margin-top: 2px;
 }

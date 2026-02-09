@@ -1,59 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React from 'react';
 import styles from './Manufacturing.module.css';
 import { stats } from '../data.js';
 
 export default function Manufacturing() {
-  const gridRef = useRef(null);
-  const [counts, setCounts] = useState(stats.map(() => 0));
-  const hasAnimated = useRef(false);
-
-  const statMeta = useMemo(
-    () =>
-      stats.map((stat) => {
-        const numeric = parseFloat(String(stat.value).replace(/[^0-9.]/g, '')) || 0;
-        const hasApprox = String(stat.value).includes('~');
-        return { numeric, hasApprox, raw: stat.value };
-      }),
-    []
-  );
-
-  useEffect(() => {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) {
-      setCounts(statMeta.map((meta) => meta.numeric));
-      return undefined;
-    }
-
-    const target = gridRef.current;
-    if (!target) return undefined;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting || hasAnimated.current) return;
-          hasAnimated.current = true;
-          const duration = 1200;
-          const start = performance.now();
-
-          const tick = (now) => {
-            const progress = Math.min((now - start) / duration, 1);
-            const nextCounts = statMeta.map((meta) => meta.numeric * progress);
-            setCounts(nextCounts);
-            if (progress < 1) {
-              requestAnimationFrame(tick);
-            }
-          };
-
-          requestAnimationFrame(tick);
-        });
-      },
-      { threshold: 0.2 }
-    );
-
-    observer.observe(target);
-    return () => observer.disconnect();
-  }, [statMeta]);
-
   return (
     <section className={styles.section} id="manufacturing">
       <div className="container">
@@ -71,20 +20,13 @@ export default function Manufacturing() {
             <p>
               Our facility runs 7 Toshiba injection moulding machines (125T–180T) to deliver thin-wall packaging with tight tolerances and consistent output.
             </p>
-            <div className={styles.statsGrid} ref={gridRef}>
-              {stats.map((stat, index) => {
-                const meta = statMeta[index];
-                const value = meta.numeric < 1
-                  ? counts[index].toFixed(2)
-                  : Math.round(counts[index]).toString();
-                const display = meta.hasApprox ? `~${value}` : value;
-                return (
+            <div className={styles.statsGrid}>
+              {stats.map((stat) => (
                 <div className={styles.statCard} key={stat.label}>
-                  <span className={styles.statNumber}>{display}</span>
+                  <span className={styles.statNumber}>{stat.value}</span>
                   <span className={styles.statLabel}>{stat.label}</span>
                 </div>
-                );
-              })}
+              ))}
             </div>
           </div>
           <div className={styles.panelAlt}>

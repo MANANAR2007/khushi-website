@@ -7,7 +7,7 @@ export default function Sustainability() {
       <div className="container">
         <header className={styles.header}>
           <h2 className="section-title reveal">Sustainability</h2>
-          <p className="section-subtitle">Committed to responsible manufacturing and a greener future.</p>
+          <p className="section-subtitle">Responsible materials, efficient cycles, and lower waste.</p>
           <div className="section-divider" />
         </header>
 

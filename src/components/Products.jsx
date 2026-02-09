@@ -112,7 +112,7 @@ function ProductCard({ categoryTitle, item, onOpen }) {
       </button>
       <div className={styles.sizeInfo}>
         <span className={styles.size}>{item.size}</span>
-        <span className={styles.price}>₹ —</span>
+        <span className={styles.price}>Custom</span>
       </div>
       <div className={styles.colors}>
         {colorKeys.map((key) => (
@@ -143,17 +143,15 @@ export default function Products({ onOpen }) {
         {productCategories.map((category) => (
           <div className={styles.category} key={category.title}>
             <h3 className={styles.categoryTitle}>{category.title}</h3>
-            <div className={styles.scroll}>
-              <div className={`${styles.track} reveal-group`}>
-                {category.items.map((item) => (
-                  <ProductCard
-                    key={`${category.title}-${item.size}`}
-                    categoryTitle={category.title}
-                    item={item}
-                    onOpen={onOpen}
-                  />
-                ))}
-              </div>
+            <div className={`${styles.grid} reveal-group`}>
+              {category.items.map((item) => (
+                <ProductCard
+                  key={`${category.title}-${item.size}`}
+                  categoryTitle={category.title}
+                  item={item}
+                  onOpen={onOpen}
+                />
+              ))}
             </div>
           </div>
         ))}

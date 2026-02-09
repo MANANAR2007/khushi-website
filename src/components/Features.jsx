@@ -7,8 +7,8 @@ export default function Features() {
     <section className={styles.features}>
       <div className="container">
         <header className={styles.header}>
-          <h2 className="section-title reveal">Product Quality</h2>
-          <p className="section-subtitle">Engineered for strength, hygiene, and repeatable performance.</p>
+          <h2 className="section-title reveal">Quality Assurance</h2>
+          <p className="section-subtitle">Engineered for hygiene, durability, and repeatable performance.</p>
           <div className="section-divider" />
         </header>
         <div className={`${styles.grid} reveal-group`}>

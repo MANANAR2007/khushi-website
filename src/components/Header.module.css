@@ -57,7 +57,7 @@
 .active {
   color: var(--color-text);
   opacity: 1;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .nav a::after {
