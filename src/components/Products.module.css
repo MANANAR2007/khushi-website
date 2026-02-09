@@ -90,11 +90,6 @@
   background: linear-gradient(90deg, var(--color-accent), var(--color-secondary));
 }
 
-.roundCard {
-  opacity: 0;
-  transform: translateY(18px) scale(0.94) rotate(-3deg);
-  will-change: transform, opacity;
-}
 
 .imageButton {
   border: none;
