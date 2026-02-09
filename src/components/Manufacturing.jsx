@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './Manufacturing.module.css';
 import { stats } from '../data.js';
+import RevealText from './RevealText.jsx';
 
 export default function Manufacturing() {
   const gridRef = useRef(null);
@@ -55,18 +56,20 @@ export default function Manufacturing() {
   }, [statMeta]);
 
   return (
-    <section className={styles.section} id="manufacturing">
+    <section className={`${styles.section} ambient`} id="manufacturing">
       <div className="container">
-        <header className={styles.header}>
-          <h2 className="section-title reveal">Manufacturing & Quality</h2>
-          <p className="section-subtitle">
+        <header className={`${styles.header} reveal-group`}>
+          <h2 className="section-title reveal reveal-slow">
+            <RevealText text="Manufacturing & Quality" />
+          </h2>
+          <p className="section-subtitle reveal reveal-delay-1">
             Precision injection moulding, ISO-aligned processes, and rigorous QC ensure reliable performance for every batch.
           </p>
-          <div className="section-divider" />
+          <div className="section-divider reveal reveal-delay-2" />
         </header>
 
-        <div className={styles.layout}>
-          <div className={styles.panel}>
+        <div className={`${styles.layout} reveal-group`}>
+          <div className={`${styles.panel} reveal`}>
             <h3>Production Capability</h3>
             <p>
               Our facility runs 7 Toshiba injection moulding machines (125T–180T) to deliver thin-wall packaging with tight tolerances and consistent output.
@@ -87,7 +90,7 @@ export default function Manufacturing() {
               })}
             </div>
           </div>
-          <div className={styles.panelAlt}>
+          <div className={`${styles.panelAlt} reveal`}>
             <h3>Quality Assurance</h3>
             <ul>
               <li>Food-grade, BPA-free polymers</li>
@@ -100,7 +103,7 @@ export default function Manufacturing() {
               <span>HACCP Ready</span>
               <span>Recyclable Materials</span>
             </div>
-            <div className={`${styles.machinePlaceholder} reveal`}>Machine Image</div>
+            <div className={`${styles.machinePlaceholder} parallax-slow`}>Machine Image</div>
           </div>
         </div>
       </div>

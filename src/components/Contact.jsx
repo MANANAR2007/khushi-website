@@ -1,16 +1,19 @@
 import React from 'react';
 import styles from './Contact.module.css';
+import RevealText from './RevealText.jsx';
 
 export default function Contact() {
   return (
-    <section className={styles.contact} id="contact">
+    <section className={`${styles.contact} ambient`} id="contact">
       <div className="container">
-        <header className={styles.header}>
-          <h2 className="section-title reveal">Get a Quote</h2>
-          <p className="section-subtitle">
+        <header className={`${styles.header} reveal-group`}>
+          <h2 className="section-title reveal reveal-fast">
+            <RevealText text="Get a Quote" />
+          </h2>
+          <p className="section-subtitle reveal reveal-delay-1">
             Tell us your volume requirements and packaging specifications. We respond with pricing and lead times.
           </p>
-          <div className="section-divider" />
+          <div className="section-divider reveal reveal-delay-2" />
         </header>
 
         <div className={`${styles.grid} reveal`}>

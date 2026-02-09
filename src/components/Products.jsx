@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './Products.module.css';
 import { productCategories } from '../data.js';
+import RevealText from './RevealText.jsx';
 
 const parseSrcSet = (srcSet) =>
   srcSet
@@ -133,10 +134,12 @@ export default function Products({ onOpen }) {
   return (
     <section className={styles.products} id="products">
       <div className="container">
-        <header className={styles.header}>
-          <h2 className="section-title reveal">Our Products</h2>
-          <p className="section-subtitle">Quality containers for every need</p>
-          <div className="section-divider" />
+        <header className={`${styles.header} reveal-group`}>
+          <h2 className="section-title reveal reveal-fast">
+            <RevealText text="Our Products" />
+          </h2>
+          <p className="section-subtitle reveal reveal-delay-1">Quality containers for every need</p>
+          <div className="section-divider reveal reveal-delay-2" />
         </header>
       </div>
       <div>

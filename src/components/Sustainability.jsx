@@ -1,14 +1,19 @@
 import React from 'react';
 import styles from './Sustainability.module.css';
+import RevealText from './RevealText.jsx';
 
 export default function Sustainability() {
   return (
-    <section className={styles.section} id="sustainability">
+    <section className={`${styles.section} ambient`} id="sustainability">
       <div className="container">
-        <header className={styles.header}>
-          <h2 className="section-title reveal">Sustainability</h2>
-          <p className="section-subtitle">Committed to responsible manufacturing and a greener future.</p>
-          <div className="section-divider" />
+        <header className={`${styles.header} reveal-group`}>
+          <h2 className="section-title reveal reveal-slow">
+            <RevealText text="Sustainability" />
+          </h2>
+          <p className="section-subtitle reveal reveal-delay-1">
+            Committed to responsible manufacturing and a greener future.
+          </p>
+          <div className="section-divider reveal reveal-delay-2" />
         </header>
 
         <div className={`${styles.grid} reveal-group`}>

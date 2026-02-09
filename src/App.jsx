@@ -29,6 +29,7 @@ export default function App() {
   useEffect(() => {
     // Single IntersectionObserver for scroll reveals + section highlighting.
     const animatedElements = document.querySelectorAll('.reveal');
+    const textElements = document.querySelectorAll('.reveal-text');
     const sectionElements = sections
       .map((id) => document.getElementById(id))
       .filter(Boolean);
@@ -36,6 +37,7 @@ export default function App() {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) {
       animatedElements.forEach((el) => el.classList.add('in-view'));
+      textElements.forEach((el) => el.classList.add('in-view'));
       document.documentElement.classList.add('hero-loaded');
     } else {
       requestAnimationFrame(() => {
@@ -51,8 +53,13 @@ export default function App() {
         entries.forEach((entry) => {
           const target = entry.target;
           const isAnimated = target.classList.contains('reveal');
+          const isText = target.classList.contains('reveal-text');
 
           if (isAnimated && entry.isIntersecting) {
+            target.classList.add('in-view');
+            observer.unobserve(target);
+          }
+          if (isText && entry.isIntersecting) {
             target.classList.add('in-view');
             observer.unobserve(target);
           }
@@ -80,9 +87,30 @@ export default function App() {
     sectionElements.forEach((el) => observer.observe(el));
     if (!prefersReducedMotion) {
       animatedElements.forEach((el) => observer.observe(el));
+      textElements.forEach((el) => observer.observe(el));
     }
 
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return undefined;
+
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const offset = window.scrollY * -0.06;
+        document.documentElement.style.setProperty('--parallax-offset', `${offset}px`);
+        ticking = false;
+      });
+    };
+
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   useEffect(() => {

@@ -1,17 +1,20 @@
 import React from 'react';
 import styles from './About.module.css';
 import { values } from '../data.js';
+import RevealText from './RevealText.jsx';
 
 export default function About() {
   return (
-    <section className={styles.about} id="about">
+    <section className={`${styles.about} ambient`} id="about">
       <div className="container">
-        <header className={styles.header}>
-          <h2 className="section-title reveal">About Khushi Containers</h2>
-          <p className="section-subtitle">
+        <header className={`${styles.header} reveal-group`}>
+          <h2 className="section-title reveal reveal-slow">
+            <RevealText text="About Khushi Containers" />
+          </h2>
+          <p className="section-subtitle reveal reveal-delay-1">
             We manufacture food-grade plastic containers with consistent wall thickness, high-strength performance, and reliable delivery schedules.
           </p>
-          <div className="section-divider" />
+          <div className="section-divider reveal reveal-delay-2" />
         </header>
 
         <div className={`${styles.grid} reveal-group`}>
