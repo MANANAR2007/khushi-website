@@ -13,15 +13,10 @@ export default function Hero() {
             className={`${styles.logo} hero-title`}
           />
           <span className={`${styles.subBrand} hero-subtext`}>Containers</span>
-          <h1 className={`${styles.headline} hero-headline`}>Food-Grade Packaging Built for Scale.</h1>
           <p className={`${styles.tagline} hero-tagline`}>Food-grade. Recyclable. Reliable.</p>
-          <div className={styles.ctaRow}>
-            <a className={styles.cta} href="#contact">Get a Quote</a>
-            <span className={styles.ctaNote}>Custom moulding • Bulk orders • ISO-aligned QC</span>
-          </div>
         </div>
         <div className={styles.placeholder} aria-hidden="true">
-          Production Line Visual
+          Manufacturing Visual
         </div>
       </div>
     </section>
