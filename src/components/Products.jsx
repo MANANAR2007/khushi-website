@@ -160,19 +160,29 @@ export default function Products({ onOpen }) {
       return undefined;
     }
 
+    const initialVisible = 3;
+    const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+    cards.forEach((card, index) => {
+      if (index < initialVisible) {
+        card.style.opacity = '1';
+        card.style.transform = 'none';
+      }
+    });
+
     let rafId;
     const update = () => {
       const scroller = roundTrackRef.current;
       if (!scroller) return;
       const maxScroll = scroller.scrollWidth - scroller.clientWidth;
-      const progress = maxScroll > 0 ? Math.min(Math.max(scroller.scrollLeft / maxScroll, 0), 1) : 0;
+      const progress = maxScroll > 0 ? clamp(scroller.scrollLeft / maxScroll, 0, 1) : 0;
 
       cards.forEach((card, index) => {
-        const segment = 1 / cards.length;
-        const localProgress = Math.min(
-          Math.max((progress - segment * index) / segment, 0),
-          1
-        );
+        if (index < initialVisible) return;
+        const adjustedIndex = index - initialVisible;
+        const remaining = Math.max(cards.length - initialVisible, 1);
+        const segment = 1 / remaining;
+        const localProgress = clamp((progress - segment * adjustedIndex) / segment, 0, 1);
         const opacity = localProgress;
         const translateY = (1 - localProgress) * 18;
         const scale = 0.94 + localProgress * 0.06;
