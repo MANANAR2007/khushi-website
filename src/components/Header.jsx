@@ -36,7 +36,7 @@ export default function Header({ activeSection, theme, onToggleTheme }) {
             <a
               key={link.href}
               href={link.href}
-              className={`${activeSection === link.href.slice(1) ? styles.active : ''} magnetic`}
+              className={activeSection === link.href.slice(1) ? styles.active : ''}
               onClick={() => setOpen(false)}
             >
               {link.label}
@@ -47,7 +47,7 @@ export default function Header({ activeSection, theme, onToggleTheme }) {
         <div className={styles.actions}>
           <button
             type="button"
-            className={`${styles.themeToggle} magnetic`}
+            className={styles.themeToggle}
             onClick={onToggleTheme}
             aria-label="Toggle color theme"
           >

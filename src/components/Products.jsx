@@ -16,7 +16,7 @@ const preloadImages = (srcList) => {
   });
 };
 
-function ProductCard({ categoryTitle, item, onOpen, disableReveal }) {
+function ProductCard({ categoryTitle, item, onOpen }) {
   const colorKeys = Object.keys(item.colors);
   const [color, setColor] = useState(colorKeys[0]);
   const [displayImage, setDisplayImage] = useState(item.colors[colorKeys[0]]);
@@ -88,18 +88,14 @@ function ProductCard({ categoryTitle, item, onOpen, disableReveal }) {
     switchProductImage(item.colors[key]);
   };
 
-  const cardClasses = [styles.card, 'tilt-card'];
-  if (!disableReveal) cardClasses.push('reveal');
-  if (disableReveal) cardClasses.push('round-card');
-
   return (
-    <div className={cardClasses.join(' ')} ref={cardRef}>
+    <div className={`${styles.card} reveal`} ref={cardRef}>
       <button
         type="button"
-        className={`${styles.imageButton} magnetic`}
+        className={styles.imageButton}
         onClick={() => onOpen(imageData.srcLarge, `${categoryTitle} · ${item.size} (${color})`)}
       >
-        <div className={`${styles.imageSurface} ${surfaceClass} tilt-surface liquid-frame`}>
+        <div className={`${styles.imageSurface} ${surfaceClass}`}>
           <div className={styles.productImageFrame}>
             <img
               ref={imgRef}
@@ -124,7 +120,7 @@ function ProductCard({ categoryTitle, item, onOpen, disableReveal }) {
           <button
             key={key}
             type="button"
-            className={`${styles.colorButton} ${styles[key]} ${color === key ? styles.active : ''} magnetic`}
+            className={`${styles.colorButton} ${styles[key]} ${color === key ? styles.active : ''}`}
             aria-label={key}
             onClick={() => handleColorChange(key)}
           />
@@ -139,10 +135,10 @@ export default function Products({ onOpen }) {
     <section className={styles.products} id="products">
       <div className="container">
         <header className={`${styles.header} reveal-group`}>
-          <h2 className="section-title reveal reveal-fast cursor-distort">
+          <h2 className="section-title reveal reveal-fast">
             <RevealText text="Our Products" />
           </h2>
-          <p className="section-subtitle reveal reveal-delay-1 cursor-distort">Quality containers for every need</p>
+          <p className="section-subtitle reveal reveal-delay-1">Quality containers for every need</p>
           <div className="section-divider reveal reveal-delay-2" />
         </header>
       </div>
@@ -150,17 +146,14 @@ export default function Products({ onOpen }) {
         {productCategories.map((category) => (
           <div className={styles.category} key={category.title}>
             <h3 className={styles.categoryTitle}>{category.title}</h3>
-            <div className={`${styles.scroll} ${category.title === 'ROUND CONTAINERS' ? 'round-scroller' : ''}`}>
-              <div
-                className={`${styles.track} reveal-group ${category.title === 'ROUND CONTAINERS' ? 'round-track' : ''}`}
-              >
+            <div className={styles.scroll}>
+              <div className={`${styles.track} reveal-group`}>
                 {category.items.map((item) => (
                   <ProductCard
                     key={`${category.title}-${item.size}`}
                     categoryTitle={category.title}
                     item={item}
                     onOpen={onOpen}
-                    disableReveal={category.title === 'ROUND CONTAINERS'}
                   />
                 ))}
               </div>

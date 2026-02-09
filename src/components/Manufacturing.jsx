@@ -59,10 +59,10 @@ export default function Manufacturing() {
     <section className={`${styles.section} ambient`} id="manufacturing">
       <div className="container">
         <header className={`${styles.header} reveal-group`}>
-          <h2 className="section-title reveal reveal-slow cursor-distort">
+          <h2 className="section-title reveal reveal-slow">
             <RevealText text="Manufacturing & Quality" />
           </h2>
-          <p className="section-subtitle reveal reveal-delay-1 cursor-distort">
+          <p className="section-subtitle reveal reveal-delay-1">
             Precision injection moulding, ISO-aligned processes, and rigorous QC ensure reliable performance for every batch.
           </p>
           <div className="section-divider reveal reveal-delay-2" />

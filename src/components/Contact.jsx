@@ -7,10 +7,10 @@ export default function Contact() {
     <section className={`${styles.contact} ambient`} id="contact">
       <div className="container">
         <header className={`${styles.header} reveal-group`}>
-          <h2 className="section-title reveal reveal-fast cursor-distort">
+          <h2 className="section-title reveal reveal-fast">
             <RevealText text="Get a Quote" />
           </h2>
-          <p className="section-subtitle reveal reveal-delay-1 cursor-distort">
+          <p className="section-subtitle reveal reveal-delay-1">
             Tell us your volume requirements and packaging specifications. We respond with pricing and lead times.
           </p>
           <div className="section-divider reveal reveal-delay-2" />
@@ -51,7 +51,6 @@ export default function Contact() {
                 href="https://www.google.com/maps/place/Khushi+Containers+(Shree+Industries)/@12.9913546,77.5055003,17z/data=!3m1!4b1!4m6!3m5!1s0x3bae3dd99633bdd1:0xc8fc0e16e7624444!8m2!3d12.9913494!4d77.5080752!16s%2Fg%2F11vc2kqk5r?entry=ttu&g_ep=EgoyMDI2MDEwNy4wIKXMDSoASAFQAw%3D%3D"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="magnetic"
               >
                 Get Directions →
               </a>

@@ -8,10 +8,10 @@ export default function Features() {
     <section className={`${styles.features} ambient`}>
       <div className="container">
         <header className={`${styles.header} reveal-group`}>
-          <h2 className="section-title reveal reveal-fast cursor-distort">
+          <h2 className="section-title reveal reveal-fast">
             <RevealText text="Product Quality" />
           </h2>
-          <p className="section-subtitle reveal reveal-delay-1 cursor-distort">
+          <p className="section-subtitle reveal reveal-delay-1">
             Engineered for strength, hygiene, and repeatable performance.
           </p>
           <div className="section-divider reveal reveal-delay-2" />
