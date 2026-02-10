@@ -98,12 +98,12 @@ export default function Manufacturing() {
               <li>Cycle time optimization for consistent finish</li>
               <li>Batch traceability and hygiene compliance</li>
             </ul>
-            <div className={`${styles.machinePlaceholder} parallax-slow`}>Machine Image</div>
             <div className={styles.badges}>
               <span>ISO Standards</span>
               <span>HACCP Ready</span>
               <span>Recyclable Materials</span>
             </div>
+            <div className={`${styles.machinePlaceholder} parallax-slow`}>Machine Image</div>
           </div>
         </div>
       </div>
