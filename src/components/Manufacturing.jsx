@@ -105,14 +105,14 @@ export default function Manufacturing() {
             </div>
           </div>
         </div>
+
+      </div>
                 {/* Supporting visual — below both cards */}
         <div className={`${styles.machineWrap} reveal reveal-delay-2`}>
           <div className={`${styles.machinePlaceholder} parallax-slow`}>
             Machine Image
           </div>
         </div>
-
-      </div>
     </section>
   );
 }
