@@ -68,7 +68,7 @@ export default function Manufacturing() {
           <div className="section-divider reveal reveal-delay-2" />
         </header>
 
-        <div className={`${styles.layout} reveal-group`}>
+        <div className={`${styles.layout} ${styles.cards} reveal-group`}>
           <div className={`${styles.panel} reveal`}>
             <h3>Production Capability</h3>
             <p>
@@ -105,8 +105,10 @@ export default function Manufacturing() {
             </div>
           </div>
         </div>
+        <div className={`${styles.machinePlaceholder} ${styles.machineWide} parallax-slow`}>
+          Machine Image
+        </div>
       </div>
-      <div className={`${styles.machinePlaceholder} parallax-slow`}>Machine Image</div>
     </section>
   );
 }
