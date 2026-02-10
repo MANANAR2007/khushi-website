@@ -35,6 +35,10 @@
   scroll-behavior: smooth;
 }
 
+.roundScroll {
+  padding-left: 2.5rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .scroll {
     scroll-behavior: auto;
@@ -224,6 +228,10 @@
 @media (max-width: 768px) {
   .track {
     padding: 0 1.5rem;
+  }
+
+  .roundScroll {
+    padding-left: 1.5rem;
   }
 
   .card {
