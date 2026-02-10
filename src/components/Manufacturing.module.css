@@ -125,8 +125,7 @@
 }
 
 .machinePlaceholder {
-  margin-top: 2rem;
-  min-height: 220px;
+  min-height: 260px;
   border-radius: var(--radius-md);
   border: 1px dashed var(--color-border);
   background:
@@ -145,9 +144,7 @@
   box-shadow: 0 18px 40px rgba(10, 20, 30, 0.08);
 }
 
-.machineWide {
-  width: 100%;
-}
+
 
 @media (max-width: 980px) {
   .layout {
@@ -157,4 +154,8 @@
   .statsGrid {
     grid-template-columns: 1fr;
   }
+}
+/* Wrapper to separate machine image from cards */
+.machineWrap {
+  margin-top: clamp(2.5rem, 6vw, 4rem);
 }
