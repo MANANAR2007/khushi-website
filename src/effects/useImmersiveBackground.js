@@ -18,6 +18,7 @@ uniform vec2 uCursor;
 uniform vec2 uFlow;
 uniform float uTime;
 uniform float uScroll;
+uniform float uScrollVelocity;
 uniform float uState;
 uniform float uTurbulence;
 uniform float uDepth;
@@ -35,7 +36,7 @@ float noise(vec2 p) {
   vec2 f = fract(p);
   vec2 u = f * f * (3.0 - 2.0 * f);
 
-  float a = hash(i + vec2(0.0, 0.0));
+  float a = hash(i);
   float b = hash(i + vec2(1.0, 0.0));
   float c = hash(i + vec2(0.0, 1.0));
   float d = hash(i + vec2(1.0, 1.0));
@@ -44,68 +45,80 @@ float noise(vec2 p) {
 }
 
 float fbm(vec2 p) {
-  float value = 0.0;
-  float amplitude = 0.55;
-  float frequency = 1.0;
+  float v = 0.0;
+  float a = 0.5;
+  float f = 1.0;
 
-  for (int i = 0; i < 5; i++) {
-    value += amplitude * noise(p * frequency);
-    frequency *= 2.02;
-    amplitude *= 0.5;
+  for (int i = 0; i < 6; i++) {
+    v += a * noise(p * f);
+    f *= 2.03;
+    a *= 0.54;
   }
 
-  return value;
+  return v;
 }
 
 void main() {
   vec2 uv = vUv;
-  float aspect = uResolution.x / max(uResolution.y, 1.0);
-  vec2 centered = (uv - 0.5) * vec2(aspect, 1.0);
-
-  float scrollWave = sin((uv.y + uScroll * 1.35) * 8.5 + uTime * 0.32);
-  float scrollShear = cos((uv.x - uScroll * 0.75) * 7.0 - uTime * 0.24);
-
-  vec2 flow = vec2(scrollWave, scrollShear) * (0.018 + uTurbulence * 0.035);
-  flow += uFlow * 0.08;
-  vec2 warpedUv = uv + flow;
-
-  float lowBand = fbm(warpedUv * 2.6 + vec2(0.0, uTime * 0.05));
-  float hiBand = fbm(warpedUv * 6.4 + vec2(uTime * 0.03, -uTime * 0.04));
-  float fluid = mix(lowBand, hiBand, 0.5 + uState * 0.2);
-  float depth = smoothstep(-0.7, 1.0, fluid + uDepth * 0.28);
-
-  vec3 industrialBase = vec3(0.04, 0.08, 0.13);
-  vec3 metalMid = vec3(0.20, 0.29, 0.37);
-  vec3 chromeSheen = vec3(0.64, 0.73, 0.82);
-  vec3 refractiveBlue = vec3(0.46, 0.66, 0.95);
-
-  vec3 color = mix(industrialBase, metalMid, depth);
-  float sheen = pow(smoothstep(0.25, 0.95, fluid), 1.2);
-  color = mix(color, chromeSheen, sheen * (0.45 + uLight * 0.45));
-
   vec2 cursorUv = vec2(uCursor.x * 0.5 + 0.5, uCursor.y * 0.5 + 0.5);
-  float cursorDistance = distance(uv, cursorUv);
-  float cursorField = exp(-cursorDistance * 8.5);
-  color += refractiveBlue * cursorField * 0.18;
+  vec2 cursorDelta = uv - cursorUv;
+  float cursorDistance = length(cursorDelta);
+  float cursorField = exp(-cursorDistance * 7.5);
 
-  float vignette = smoothstep(1.05, 0.15, length(centered));
-  float statePulse = 0.35 + uState * 0.35;
-  float alpha = (0.22 + vignette * 0.46) * statePulse;
+  float swayA = sin((uv.y + uScroll * 1.8) * 13.0 + uTime * 1.2);
+  float swayB = cos((uv.x - uScroll * 1.4) * 11.0 - uTime * 0.95);
+  vec2 baseFlow = vec2(swayA, swayB) * (0.028 + uTurbulence * 0.075);
 
+  float sweepA = sin((uv.x * 22.0) + uScroll * 40.0 + uTime * 0.42);
+  float sweepB = cos((uv.y * 20.0) - uScroll * 36.0 - uTime * 0.36);
+  vec2 scrollFlow = vec2(sweepA, sweepB) * (0.02 + uScrollVelocity * 0.09);
+
+  vec2 cursorDir = normalize(cursorDelta + vec2(0.0001));
+  vec2 cursorFlow = -cursorDir * cursorField * (0.15 + uState * 0.08);
+
+  vec2 warped = uv + baseFlow + scrollFlow + cursorFlow + uFlow * 0.12;
+
+  float n1 = fbm(warped * 3.4 + vec2(uTime * 0.2, -uTime * 0.17));
+  float n2 = fbm(warped * 8.2 + vec2(-uTime * 0.14, uTime * 0.22));
+  float fluid = mix(n1, n2, 0.55 + uState * 0.25);
+  float ridge = abs(fract(fluid * 2.6 + uScroll * 0.8) - 0.5);
+  float depth = smoothstep(-0.8, 1.0, fluid + uDepth * 0.38 + cursorField * 0.15);
+
+  vec3 darkBase = vec3(0.01, 0.05, 0.12);
+  vec3 blueCore = vec3(0.04, 0.34, 0.78);
+  vec3 cyanGlow = vec3(0.10, 0.85, 1.0);
+  vec3 orangeHit = vec3(1.0, 0.54, 0.16);
+  vec3 chrome = vec3(0.92, 0.96, 1.0);
+
+  vec3 color = mix(darkBase, blueCore, depth);
+  color = mix(color, cyanGlow, smoothstep(0.2, 0.95, fluid + uLight * 0.25));
+  color = mix(color, orangeHit, smoothstep(0.55, 1.0, fluid + uScroll * 0.38 + uScrollVelocity * 0.45));
+
+  float spec = pow(1.0 - ridge * 2.0, 7.0) * (0.35 + uLight * 0.9);
+  color += chrome * spec;
+  color += vec3(0.32, 0.52, 1.0) * cursorField * (0.5 + uState * 0.4);
+
+  // Brighten and increase contrast for intentionally visible output.
+  color = pow(max(color, vec3(0.0)), vec3(0.78));
+  color *= 1.14 + uLight * 0.36;
+
+  float alpha = clamp(0.56 + depth * 0.32 + cursorField * 0.22, 0.42, 0.96);
   gl_FragColor = vec4(color, alpha);
 }
 `;
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
-const SECTION_PROFILES = {
-  home: { state: 0.24, turbulence: 0.18, depth: 0.28, light: 0.33 },
-  about: { state: 0.56, turbulence: 0.22, depth: 0.36, light: 0.48 },
-  products: { state: 0.92, turbulence: 0.4, depth: 0.55, light: 0.72 },
-  manufacturing: { state: 0.88, turbulence: 0.36, depth: 0.52, light: 0.68 },
-  sustainability: { state: 0.58, turbulence: 0.24, depth: 0.4, light: 0.52 },
-  contact: { state: 0.34, turbulence: 0.2, depth: 0.32, light: 0.4 },
-  default: { state: 0.4, turbulence: 0.22, depth: 0.35, light: 0.45 }
+const STAGE_PROFILES = {
+  calm: { state: 0.3, turbulence: 0.26, depth: 0.34, light: 0.42 },
+  active: { state: 0.9, turbulence: 0.72, depth: 0.68, light: 0.88 },
+  stabilized: { state: 0.56, turbulence: 0.4, depth: 0.5, light: 0.62 }
+};
+
+const inferStageByIndex = (index, total) => {
+  if (index < total / 3) return 'calm';
+  if (index < (total * 2) / 3) return 'active';
+  return 'stabilized';
 };
 
 export default function useImmersiveBackground(activeSection) {
@@ -113,8 +126,6 @@ export default function useImmersiveBackground(activeSection) {
   activeSectionRef.current = activeSection;
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     const existingCanvas = document.querySelector('.immersive-webgl-canvas');
     if (existingCanvas) {
       existingCanvas.remove();
@@ -140,10 +151,11 @@ export default function useImmersiveBackground(activeSection) {
       uFlow: { value: new THREE.Vector2(0, 0) },
       uTime: { value: 0 },
       uScroll: { value: 0 },
-      uState: { value: 0.24 },
-      uTurbulence: { value: 0.18 },
-      uDepth: { value: 0.28 },
-      uLight: { value: 0.33 }
+      uScrollVelocity: { value: 0 },
+      uState: { value: STAGE_PROFILES.calm.state },
+      uTurbulence: { value: STAGE_PROFILES.calm.turbulence },
+      uDepth: { value: STAGE_PROFILES.calm.depth },
+      uLight: { value: STAGE_PROFILES.calm.light }
     };
 
     const material = new THREE.ShaderMaterial({
@@ -160,45 +172,33 @@ export default function useImmersiveBackground(activeSection) {
     const maxScroll = () =>
       Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
 
-    const sectionProfile =
-      SECTION_PROFILES[activeSectionRef.current] || SECTION_PROFILES.default;
-
-    const target = {
-      scroll: clamp(window.scrollY / maxScroll(), 0, 1),
+    const current = {
+      scroll: 0,
+      scrollVelocity: 0,
       cursorX: 0,
       cursorY: 0,
       flowX: 0,
       flowY: 0,
-      state: sectionProfile.state,
-      depth: sectionProfile.depth,
-      light: sectionProfile.light,
-      baseTurbulence: sectionProfile.turbulence,
-      turbulence: sectionProfile.turbulence
+      state: STAGE_PROFILES.calm.state,
+      turbulence: STAGE_PROFILES.calm.turbulence,
+      depth: STAGE_PROFILES.calm.depth,
+      light: STAGE_PROFILES.calm.light
     };
 
-    const current = { ...target };
-    let activeSectionLocal = activeSectionRef.current;
-    let sectionObserver;
+    const target = { ...current };
     let lastScrollY = window.scrollY;
     let lastScrollTime = performance.now();
     let rafId = 0;
+    let sectionObserver;
+    let stageKey = 'calm';
 
-    const applySectionProfile = (sectionKey) => {
-      const profile = SECTION_PROFILES[sectionKey] || SECTION_PROFILES.default;
+    const applyStage = (nextStage) => {
+      stageKey = nextStage;
+      const profile = STAGE_PROFILES[nextStage] || STAGE_PROFILES.calm;
       target.state = profile.state;
+      target.turbulence = profile.turbulence;
       target.depth = profile.depth;
       target.light = profile.light;
-      target.baseTurbulence = profile.turbulence;
-      target.turbulence = Math.max(target.turbulence, profile.turbulence);
-    };
-
-    const inferProfileKeyByIndex = (index, total) => {
-      if (index <= 0) return 'home';
-      if (index === 1) return 'about';
-      if (index === 2) return 'products';
-      if (index === 3) return 'manufacturing';
-      if (index >= total - 1) return 'contact';
-      return 'sustainability';
     };
 
     const sectionElements = Array.from(document.querySelectorAll('main section'));
@@ -212,28 +212,22 @@ export default function useImmersiveBackground(activeSection) {
             sectionRatios.set(entry.target, entry.isIntersecting ? entry.intersectionRatio : 0);
           });
 
-          let bestSection = null;
+          let bestIndex = 0;
           let bestRatio = 0;
-          sectionElements.forEach((el) => {
+          sectionElements.forEach((el, index) => {
             const ratio = sectionRatios.get(el) || 0;
             if (ratio > bestRatio) {
               bestRatio = ratio;
-              bestSection = el;
+              bestIndex = index;
             }
           });
 
-          if (!bestSection) return;
-
-          const index = sectionElements.indexOf(bestSection);
-          const sectionKey =
-            SECTION_PROFILES[bestSection.id] ? bestSection.id : inferProfileKeyByIndex(index, sectionElements.length);
-
-          if (sectionKey !== activeSectionLocal) {
-            activeSectionLocal = sectionKey;
-            applySectionProfile(sectionKey);
+          const inferred = inferStageByIndex(bestIndex, sectionElements.length || 1);
+          if (inferred !== stageKey) {
+            applyStage(inferred);
           }
         },
-        { threshold: [0, 0.2, 0.4, 0.6, 0.8, 1] }
+        { threshold: [0, 0.25, 0.5, 0.75, 1] }
       );
 
       sectionElements.forEach((el) => sectionObserver.observe(el));
@@ -243,17 +237,14 @@ export default function useImmersiveBackground(activeSection) {
       const now = performance.now();
       const deltaY = Math.abs(window.scrollY - lastScrollY);
       const deltaT = Math.max(now - lastScrollTime, 16);
-      const velocity = deltaY / deltaT;
+      const velocity = clamp(deltaY / deltaT, 0, 2.5);
 
       target.scroll = clamp(window.scrollY / maxScroll(), 0, 1);
-      const velocityBoost = clamp(velocity * 0.18, 0, 0.65);
-      target.turbulence = clamp(
-        target.baseTurbulence + velocityBoost,
-        target.baseTurbulence,
-        1.1
-      );
-      target.depth = clamp(target.depth + target.scroll * 0.08, 0.1, 1);
-      target.light = clamp(target.light + target.scroll * 0.12, 0.2, 1);
+      target.scrollVelocity = velocity;
+      // Scroll drives dramatic turbulence and lighting shifts.
+      target.turbulence = clamp(target.turbulence + velocity * 0.15, 0.2, 1.45);
+      target.light = clamp(target.light + target.scroll * 0.25 + velocity * 0.08, 0.35, 1.45);
+      target.depth = clamp(target.depth + target.scroll * 0.18, 0.24, 1.25);
 
       lastScrollY = window.scrollY;
       lastScrollTime = now;
@@ -264,8 +255,8 @@ export default function useImmersiveBackground(activeSection) {
       const ny = 1 - (event.clientY / window.innerHeight) * 2;
       target.cursorX = clamp(nx, -1, 1);
       target.cursorY = clamp(ny, -1, 1);
-      target.flowX = target.cursorX * 0.8;
-      target.flowY = target.cursorY * 0.8;
+      target.flowX = target.cursorX;
+      target.flowY = target.cursorY;
     };
 
     const onPointerLeave = () => {
@@ -283,13 +274,9 @@ export default function useImmersiveBackground(activeSection) {
     };
 
     const animate = () => {
-      if (!sectionObserver && activeSectionRef.current !== activeSectionLocal) {
-        activeSectionLocal = activeSectionRef.current;
-        applySectionProfile(activeSectionLocal);
-      }
-
-      const smooth = prefersReducedMotion ? 0.035 : 0.075;
-      const turbulenceSmooth = prefersReducedMotion ? 0.02 : 0.055;
+      // Low smoothing so state changes are obvious immediately.
+      const smooth = 0.26;
+      const velocitySmooth = 0.34;
 
       current.scroll += (target.scroll - current.scroll) * smooth;
       current.cursorX += (target.cursorX - current.cursorX) * smooth;
@@ -297,14 +284,20 @@ export default function useImmersiveBackground(activeSection) {
       current.flowX += (target.flowX - current.flowX) * smooth;
       current.flowY += (target.flowY - current.flowY) * smooth;
       current.state += (target.state - current.state) * smooth;
+      current.turbulence += (target.turbulence - current.turbulence) * smooth;
       current.depth += (target.depth - current.depth) * smooth;
       current.light += (target.light - current.light) * smooth;
-      current.turbulence += (target.turbulence - current.turbulence) * turbulenceSmooth;
+      current.scrollVelocity +=
+        (target.scrollVelocity - current.scrollVelocity) * velocitySmooth;
 
-      target.turbulence += (target.baseTurbulence - target.turbulence) * 0.02;
+      target.turbulence += (STAGE_PROFILES[stageKey].turbulence - target.turbulence) * 0.1;
+      target.depth += (STAGE_PROFILES[stageKey].depth - target.depth) * 0.08;
+      target.light += (STAGE_PROFILES[stageKey].light - target.light) * 0.08;
+      target.scrollVelocity *= 0.9;
 
       uniforms.uTime.value = performance.now() * 0.001;
       uniforms.uScroll.value = current.scroll;
+      uniforms.uScrollVelocity.value = current.scrollVelocity;
       uniforms.uCursor.value.set(current.cursorX, current.cursorY);
       uniforms.uFlow.value.set(current.flowX, current.flowY);
       uniforms.uState.value = current.state;
@@ -316,7 +309,7 @@ export default function useImmersiveBackground(activeSection) {
       rafId = window.requestAnimationFrame(animate);
     };
 
-    applySectionProfile(activeSectionRef.current);
+    applyStage('calm');
     onScroll();
     onResize();
 
@@ -332,13 +325,12 @@ export default function useImmersiveBackground(activeSection) {
       window.removeEventListener('resize', onResize);
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointerleave', onPointerLeave);
-      if (rafId) {
-        window.cancelAnimationFrame(rafId);
-      }
       if (sectionObserver) {
         sectionObserver.disconnect();
       }
-      scene.clear();
+      if (rafId) {
+        window.cancelAnimationFrame(rafId);
+      }
       geometry.dispose();
       material.dispose();
       renderer.dispose();
