@@ -83,34 +83,6 @@ footer {
   will-change: transform, filter, opacity;
 }
 
-.liquid-accent {
-  position: fixed;
-  top: 20%;
-  left: -120px;
-  width: 320px;
-  height: 320px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 30% 30%,
-    rgba(120, 120, 255, 0.45),
-    rgba(80, 80, 180, 0.25),
-    rgba(0, 0, 0, 0)
-  );
-  filter: blur(60px);
-  pointer-events: none;
-  z-index: 0;
-  animation: liquidFloat 12s ease-in-out infinite alternate;
-}
-
-@keyframes liquidFloat {
-  0% {
-    transform: translateY(-40px) scale(0.9);
-  }
-  100% {
-    transform: translateY(40px) scale(1.1);
-  }
-}
-
 .liquid-orb::after {
   content: '';
   position: absolute;
@@ -138,10 +110,6 @@ footer {
 
 @media (prefers-reduced-motion: reduce) {
   .liquid-orb {
-    animation: none;
-  }
-
-  .liquid-accent {
     animation: none;
   }
 }
@@ -216,15 +184,6 @@ section {
 
 .reveal-group > .reveal:nth-child(8) {
   --reveal-delay: 700ms;
-}
-
-.round-scroller {
-  display: flex;
-  gap: 24px;
-  overflow-x: auto;
-  padding-left: clamp(24px, 6vw, 96px);
-  padding-right: 24px;
-  scroll-behavior: smooth;
 }
 
 .reveal-fast {
