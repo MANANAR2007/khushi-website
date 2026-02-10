@@ -1,13 +1,33 @@
 .features {
+  position: relative;
   padding: var(--section-space) 0;
-  background: var(--color-surface-alt);
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(242, 245, 248, 0.96), rgba(242, 245, 248, 0.99)),
+    var(--color-surface-alt);
+}
+
+.features::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.48)),
+    url('https://images.unsplash.com/photo-1581093806997-124204d9fa9d?auto=format&fit=crop&w=1800&q=80')
+      center / cover no-repeat;
+  opacity: 0.08;
+  pointer-events: none;
 }
 
 .header {
+  position: relative;
+  z-index: 1;
   margin-bottom: 2.2rem;
 }
 
 .grid {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1.2rem;
@@ -16,7 +36,7 @@
 .card {
   padding: 1.45rem;
   border-radius: var(--radius-md);
-  background: var(--color-surface);
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.97), rgba(255, 255, 255, 0.9));
   border: 1px solid var(--color-border);
   box-shadow: 0 14px 28px rgba(15, 33, 48, 0.1);
   display: grid;

@@ -1,18 +1,51 @@
 .section {
-  padding: var(--section-space) 0;
-  background: var(--color-surface-alt);
-}
-.section {
   position: relative;
+  padding: var(--section-space) 0;
+  background:
+    linear-gradient(180deg, rgba(238, 242, 245, 0.95), rgba(238, 242, 245, 0.98)),
+    var(--color-surface-alt);
   overflow: hidden;
 }
 
+.section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(110deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.48)),
+    url('https://images.unsplash.com/photo-1565715101847-8f0b7d86ab12?auto=format&fit=crop&w=2000&q=80')
+      center / cover no-repeat;
+  opacity: 0.11;
+  pointer-events: none;
+}
+
+.section::after {
+  content: '';
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  top: 0;
+  height: 200px;
+  background: linear-gradient(
+    90deg,
+    rgba(29, 111, 119, 0),
+    rgba(29, 111, 119, 0.12),
+    rgba(29, 111, 119, 0)
+  );
+  transform: translateX(-24%);
+  animation: manufacturingSweep 20s ease-in-out infinite;
+  pointer-events: none;
+}
 
 .header {
+  position: relative;
+  z-index: 1;
   margin-bottom: 2.2rem;
 }
 
 .layout {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   gap: 1.4rem;
@@ -27,7 +60,8 @@
   padding: clamp(1.4rem, 2.4vw, 2rem);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border);
-  background: var(--color-surface);
+  background:
+    linear-gradient(170deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.9));
   box-shadow: 0 14px 28px rgba(15, 33, 48, 0.1);
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
@@ -163,12 +197,11 @@
 }
 /* Wrapper to separate machine image from cards */
 .machineWrap {
+  position: relative;
+  z-index: 1;
   margin-top: clamp(2.5rem, 6vw, 4rem);
 }
-.machineWrap {
-  position: relative;
-  isolation: isolate;
-}
+
 .machineWrap .machinePlaceholder {
   position: relative;
   transform: none !important;
@@ -177,4 +210,22 @@
 
 .cards {
   margin-bottom: clamp(2.5rem, 6vw, 4rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section::after {
+    animation: none;
+  }
+}
+
+@keyframes manufacturingSweep {
+  0% {
+    transform: translateX(-24%);
+  }
+  50% {
+    transform: translateX(10%);
+  }
+  100% {
+    transform: translateX(-24%);
+  }
 }
