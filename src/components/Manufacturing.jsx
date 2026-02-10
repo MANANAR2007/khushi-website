@@ -105,8 +105,8 @@ export default function Manufacturing() {
             </div>
           </div>
         </div>
-        <div className={`${styles.machinePlaceholder} parallax-slow`}>Machine Image</div>
       </div>
+      <div className={`${styles.machinePlaceholder} parallax-slow`}>Machine Image</div>
     </section>
   );
 }
