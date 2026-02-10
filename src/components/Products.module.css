@@ -36,7 +36,7 @@
 }
 
 .roundScroll {
-  padding-left: 2.5rem;
+  padding-left: var(--container-gutter);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -64,6 +64,10 @@
   gap: 1.5rem;
   padding: 0 2.5rem;
   min-width: max-content;
+}
+
+.roundTrack {
+  padding-left: 0;
 }
 
 .card {
@@ -231,7 +235,11 @@
   }
 
   .roundScroll {
-    padding-left: 1.5rem;
+    padding-left: var(--container-gutter);
+  }
+
+  .roundTrack {
+    padding-left: 0;
   }
 
   .card {

@@ -152,7 +152,11 @@ export default function Products({ onOpen }) {
           <div className={styles.category} key={category.title}>
             <h3 className={styles.categoryTitle}>{category.title}</h3>
             <div className={`${styles.scroll} ${category.title === 'ROUND CONTAINERS' ? styles.roundScroll : ''}`}>
-              <div className={`${styles.track} reveal-group`}>
+              <div
+                className={`${styles.track} reveal-group ${
+                  category.title === 'ROUND CONTAINERS' ? styles.roundTrack : ''
+                }`}
+              >
                 {category.items.map((item) => (
                   <ProductCard
                     key={`${category.title}-${item.size}`}
