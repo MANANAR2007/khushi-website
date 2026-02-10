@@ -103,9 +103,9 @@ export default function Manufacturing() {
               <span>HACCP Ready</span>
               <span>Recyclable Materials</span>
             </div>
-            <div className={`${styles.machinePlaceholder} parallax-slow`}>Machine Image</div>
           </div>
         </div>
+        <div className={`${styles.machinePlaceholder} parallax-slow`}>Machine Image</div>
       </div>
     </section>
   );
