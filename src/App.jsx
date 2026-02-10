@@ -8,6 +8,7 @@ import Features from './components/Features.jsx';
 import Sustainability from './components/Sustainability.jsx';
 import Contact from './components/Contact.jsx';
 import Footer from './components/Footer.jsx';
+import useImmersiveBackground from './effects/useImmersiveBackground.js';
 
 const sections = ['home', 'about', 'products', 'manufacturing', 'sustainability', 'contact'];
 
@@ -20,6 +21,8 @@ export default function App() {
   });
 
   const [lightbox, setLightbox] = useState({ open: false, src: '', caption: '' });
+
+  useImmersiveBackground(activeSection);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
