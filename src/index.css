@@ -52,6 +52,54 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+header,
+main,
+footer {
+  position: relative;
+  z-index: 2;
+}
+
+.liquid-orb {
+  position: fixed;
+  width: clamp(320px, 42vw, 520px);
+  height: clamp(320px, 42vw, 520px);
+  border-radius: 50%;
+  top: var(--orb-top, 8%);
+  left: var(--orb-left, -12%);
+  transform: translate3d(0, 0, 0);
+  pointer-events: none;
+  z-index: 1;
+  filter: blur(18px) saturate(1.2);
+  opacity: 0.55;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.7), rgba(180, 190, 200, 0.25), rgba(40, 52, 64, 0.12)),
+    radial-gradient(circle at 70% 60%, rgba(240, 122, 43, 0.18), rgba(40, 52, 64, 0));
+  mix-blend-mode: screen;
+  animation: orbMorph 28s ease-in-out infinite;
+  will-change: transform, filter, opacity;
+}
+
+@keyframes orbMorph {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(18px) saturate(1.2);
+  }
+  50% {
+    transform: translate3d(14px, -10px, 0) scale(1.04);
+    filter: blur(22px) saturate(1.35);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(18px) saturate(1.2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .liquid-orb {
+    animation: none;
+  }
+}
+
 
 
 a {

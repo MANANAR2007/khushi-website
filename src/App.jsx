@@ -27,6 +27,62 @@ export default function App() {
   }, [theme]);
 
   useEffect(() => {
+    const orb = document.querySelector('.liquid-orb');
+    if (!orb) return undefined;
+
+    const positions = {
+      home: { top: '6%', left: '-12%' },
+      about: { top: '12%', left: '-8%' },
+      products: { top: '18%', left: '-10%' },
+      manufacturing: { top: '24%', left: '-6%' },
+      sustainability: { top: '30%', left: '-9%' },
+      contact: { top: '36%', left: '-12%' }
+    };
+
+    const target = positions[activeSection] || positions.home;
+    orb.style.setProperty('--orb-top', target.top);
+    orb.style.setProperty('--orb-left', target.left);
+    const softSections = new Set(['manufacturing', 'contact']);
+    orb.style.opacity = softSections.has(activeSection) ? '0.38' : '0.55';
+  }, [activeSection]);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const orb = document.querySelector('.liquid-orb');
+    if (!orb || prefersReducedMotion) return undefined;
+
+    let targetX = window.innerWidth / 2;
+    let targetY = window.innerHeight / 2;
+    let currentX = targetX;
+    let currentY = targetY;
+    let rafId;
+
+    const onMove = (event) => {
+      targetX = event.clientX;
+      targetY = event.clientY;
+    };
+
+    const tick = () => {
+      currentX += (targetX - currentX) * 0.08;
+      currentY += (targetY - currentY) * 0.08;
+      const offsetX = (currentX - window.innerWidth / 2) * 0.02;
+      const offsetY = (currentY - window.innerHeight / 2) * 0.02;
+      orb.style.transform = `translate3d(${offsetX.toFixed(2)}px, ${offsetY.toFixed(
+        2
+      )}px, 0)`;
+      rafId = requestAnimationFrame(tick);
+    };
+
+    window.addEventListener('pointermove', onMove, { passive: true });
+    rafId = requestAnimationFrame(tick);
+
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, []);
+
+  useEffect(() => {
     // Single IntersectionObserver for scroll reveals + section highlighting.
     const animatedElements = document.querySelectorAll('.reveal');
     const textElements = document.querySelectorAll('.reveal-text');
@@ -142,6 +198,7 @@ export default function App() {
 
   return (
     <>
+      <div className="liquid-orb" aria-hidden="true" />
       <Header activeSection={activeSection} theme={theme} onToggleTheme={handleToggleTheme} />
       <main>
         <Hero />
