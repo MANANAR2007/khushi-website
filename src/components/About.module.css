@@ -1,24 +1,24 @@
 .about {
-  padding: clamp(4rem, 8vw, 6rem) 0;
+  padding: var(--section-space) 0;
   background: var(--color-surface);
 }
 
 .header {
-  margin-bottom: 2.5rem;
+  margin-bottom: 2.2rem;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2.5rem;
+  gap: 1.25rem;
+  margin-bottom: 2.2rem;
 }
 
 .card {
-  padding: 1.6rem;
+  padding: 1.7rem;
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
-  background: var(--color-surface-alt);
+  background: color-mix(in srgb, var(--color-surface-alt) 82%, var(--color-surface) 18%);
   box-shadow: var(--shadow-soft);
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
@@ -29,18 +29,21 @@
 }
 
 .card h3 {
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.7rem;
+  font-size: 1.06rem;
+  letter-spacing: -0.01em;
 }
 
 .card p {
   color: var(--color-muted);
+  line-height: 1.72;
 }
 
 .values {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 2rem;
-  padding: 2rem;
+  gap: 1.8rem;
+  padding: clamp(1.4rem, 2.4vw, 2rem);
   border-radius: var(--radius-lg);
   background: var(--color-surface-alt);
   border: 1px solid var(--color-border);
@@ -49,7 +52,8 @@
 
 .values p {
   color: var(--color-muted);
-  margin-top: 0.8rem;
+  margin-top: 0.7rem;
+  line-height: 1.72;
 }
 
 .valuesGrid {

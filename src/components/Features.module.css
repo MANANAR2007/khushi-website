@@ -1,24 +1,24 @@
 .features {
-  padding: clamp(4rem, 8vw, 6rem) 0;
+  padding: var(--section-space) 0;
   background: var(--color-surface-alt);
 }
 
 .header {
-  margin-bottom: 2.5rem;
+  margin-bottom: 2.2rem;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
+  gap: 1.2rem;
 }
 
 .card {
-  padding: 1.6rem;
+  padding: 1.45rem;
   border-radius: var(--radius-md);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-soft);
+  box-shadow: 0 14px 28px rgba(15, 33, 48, 0.1);
   display: grid;
   gap: 0.6rem;
   transition: transform 180ms ease, box-shadow 180ms ease;
@@ -26,11 +26,12 @@
 
 .card:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 18px 34px rgba(15, 33, 48, 0.14);
 }
 
 .card h3 {
-  font-size: 1rem;
+  font-size: 1.02rem;
+  line-height: 1.45;
 }
 
 .check {
