@@ -1,33 +1,13 @@
 .contact {
-  position: relative;
   padding: var(--section-space) 0;
-  overflow: hidden;
-  background:
-    linear-gradient(180deg, rgba(238, 242, 245, 0.96), rgba(238, 242, 245, 0.99)),
-    var(--color-surface-alt);
-}
-
-.contact::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(112deg, rgba(255, 255, 255, 0.84), rgba(255, 255, 255, 0.54)),
-    url('https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&w=2000&q=80')
-      center / cover no-repeat;
-  opacity: 0.08;
-  pointer-events: none;
+  background: var(--color-surface-alt);
 }
 
 .header {
-  position: relative;
-  z-index: 1;
   margin-bottom: 2.2rem;
 }
 
 .grid {
-  position: relative;
-  z-index: 1;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.4rem;
@@ -41,7 +21,7 @@
   padding: 1.1rem;
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9));
+  background: color-mix(in srgb, var(--color-surface) 84%, var(--color-surface-alt) 16%);
   box-shadow: 0 12px 24px rgba(15, 33, 48, 0.08);
 }
 

@@ -50,9 +50,8 @@ body {
   font-family: var(--font-body);
   color: var(--color-text);
   background:
-    linear-gradient(180deg, rgba(245, 247, 249, 0.98), rgba(241, 245, 248, 0.98)),
-    radial-gradient(circle at 20% 20%, rgba(20, 30, 38, 0.1), transparent 52%),
-    radial-gradient(circle at 82% 10%, rgba(240, 122, 43, 0.09), transparent 45%),
+    radial-gradient(circle at 20% 20%, rgba(20, 30, 38, 0.08), transparent 50%),
+    radial-gradient(circle at 80% 10%, rgba(240, 122, 43, 0.08), transparent 45%),
     var(--color-bg);
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
@@ -214,13 +213,13 @@ section + section {
 .ambient::after {
   content: '';
   position: absolute;
-  width: 320px;
-  height: 220px;
-  border-radius: 999px;
-  background: linear-gradient(120deg, rgba(122, 138, 143, 0.12), rgba(122, 138, 143, 0));
-  filter: blur(36px);
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: rgba(122, 138, 143, 0.08);
+  filter: blur(30px);
   pointer-events: none;
-  animation: floatSlow 16s ease-in-out infinite;
+  animation: floatSlow 28s ease-in-out infinite;
 }
 
 .ambient::before {
@@ -231,7 +230,7 @@ section + section {
 .ambient::after {
   bottom: -140px;
   right: -140px;
-  animation-duration: 20s;
+  animation-duration: 34s;
 }
 
 .parallax-slow {
@@ -316,12 +315,6 @@ section + section {
 @media (max-width: 900px) {
   main {
     padding-top: 0;
-  }
-
-  .ambient::before,
-  .ambient::after {
-    opacity: 0.45;
-    animation: none;
   }
 }
 
