@@ -96,24 +96,38 @@ varying vec3 vNormal;
 varying vec3 vWorldPos;
 varying float vBand;
 
+vec3 iridescence(float f) {
+  float r = 0.55 + 0.45 * sin(6.2831 * (f + 0.02));
+  float g = 0.55 + 0.45 * sin(6.2831 * (f + 0.36));
+  float b = 0.55 + 0.45 * sin(6.2831 * (f + 0.68));
+  return vec3(r, g, b);
+}
+
 void main() {
   vec3 N = normalize(vNormal);
   vec3 V = normalize(cameraPosition - vWorldPos);
   vec3 L = normalize(vec3(0.32, 0.74, 0.56));
+  vec3 H = normalize(L + V);
 
   float diffuse = max(dot(N, L), 0.0);
-  float fresnel = pow(1.0 - max(dot(N, V), 0.0), 2.1);
-  float spec = pow(max(dot(reflect(-L, N), V), 0.0), 36.0);
+  float fresnel = pow(1.0 - max(dot(N, V), 0.0), 2.4);
+  float spec = pow(max(dot(N, H), 0.0), 58.0);
+  float glint = pow(max(dot(reflect(-L, N), V), 0.0), 88.0);
 
   float band = smoothstep(-0.2, 0.95, vBand);
   vec3 base = mix(uColorA, uColorB, band);
   base = mix(base, uColorC, smoothstep(0.25, 0.9, abs(vBand)) * 0.24);
 
-  vec3 color = base * (0.42 + diffuse * (0.56 + uLight * 0.24));
-  color += vec3(0.92, 0.95, 1.0) * spec * (0.08 + uLight * 0.22);
-  color += vec3(0.70, 0.76, 0.83) * fresnel * 0.14;
+  float thinFilm = fresnel * (0.7 + band * 0.3);
+  vec3 film = iridescence(thinFilm + vBand * 0.07);
 
-  float alpha = clamp(uOpacity * uHeroVisibility * (0.48 + fresnel * 0.2 + band * 0.14), 0.0, 0.5);
+  vec3 color = base * (0.42 + diffuse * (0.52 + uLight * 0.22));
+  color += vec3(0.93, 0.95, 0.98) * spec * (0.18 + uLight * 0.3);
+  color += vec3(0.98, 0.99, 1.0) * glint * 0.18;
+  color += film * fresnel * 0.16;
+  color += vec3(0.66, 0.72, 0.79) * fresnel * 0.16;
+
+  float alpha = clamp(uOpacity * uHeroVisibility * (0.5 + fresnel * 0.22 + band * 0.12), 0.0, 0.56);
   gl_FragColor = vec4(color, alpha);
 }
 `;
@@ -125,19 +139,19 @@ const BLOB_CONFIG = [
     position: [-6.2, 2.7, -5.3],
     offscreenPosition: [-8.8, 3.8, -6.6],
     scale: 2.25,
-    colors: ['#1a374a', '#315e73', '#7f95a4']
+    colors: ['#626c76', '#8a959f', '#c1c8cf']
   },
   {
     position: [6.0, -2.6, -6.0],
     offscreenPosition: [8.5, -4.1, -7.2],
     scale: 1.95,
-    colors: ['#1d394c', '#345e73', '#8599a6']
+    colors: ['#59656f', '#828e99', '#bac2ca']
   },
   {
     position: [5.2, 2.8, -6.8],
     offscreenPosition: [7.6, 4.0, -7.9],
     scale: 1.35,
-    colors: ['#203d4f', '#3a6278', '#8c9ca8']
+    colors: ['#555f68', '#7b8792', '#b2bac2']
   }
 ];
 
@@ -180,7 +194,7 @@ export default function useImmersiveBackground() {
         uColorB: { value: toColor(config.colors[1]) },
         uColorC: { value: toColor(config.colors[2]) },
         uLight: { value: 0.4 },
-        uOpacity: { value: 0.42 }
+        uOpacity: { value: 0.5 }
       };
 
       const material = new THREE.ShaderMaterial({
