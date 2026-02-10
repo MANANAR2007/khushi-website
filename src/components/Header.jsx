@@ -3,14 +3,13 @@ import styles from './Header.module.css';
 import logoUrl from '../assets/khushi_logo.svg';
 
 const navLinks = [
-  { href: '#home', label: 'Home' },
-  { href: '#about', label: 'About' },
   { href: '#products', label: 'Products' },
   { href: '#manufacturing', label: 'Manufacturing' },
+  { href: '#quality', label: 'Quality' },
   { href: '#contact', label: 'Contact' }
 ];
 
-export default function Header({ activeSection, theme, onToggleTheme }) {
+export default function Header({ activeSection, theme, onToggleTheme, scrollProgress }) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -45,6 +44,9 @@ export default function Header({ activeSection, theme, onToggleTheme }) {
         </nav>
 
         <div className={styles.actions}>
+          <a href="#contact" className={styles.cta}>
+            Get Quote
+          </a>
           <button
             type="button"
             className={styles.themeToggle}
@@ -65,6 +67,9 @@ export default function Header({ activeSection, theme, onToggleTheme }) {
             <span />
           </button>
         </div>
+      </div>
+      <div className={styles.progressTrack} aria-hidden="true">
+        <span className={styles.progressValue} style={{ width: `${scrollProgress}%` }} />
       </div>
       {open && (
         <button
