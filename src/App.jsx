@@ -8,12 +8,12 @@ import Features from './components/Features.jsx';
 import Sustainability from './components/Sustainability.jsx';
 import Contact from './components/Contact.jsx';
 import Footer from './components/Footer.jsx';
+import useImmersiveBackground from './effects/useImmersiveBackground.js';
 
-const sections = ['home', 'about', 'products', 'manufacturing', 'quality', 'sustainability', 'contact'];
+const sections = ['home', 'about', 'products', 'manufacturing', 'sustainability', 'contact'];
 
 export default function App() {
   const [activeSection, setActiveSection] = useState('home');
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem('khushi-theme');
     if (saved) return saved;
@@ -22,10 +22,68 @@ export default function App() {
 
   const [lightbox, setLightbox] = useState({ open: false, src: '', caption: '' });
 
+  useImmersiveBackground(activeSection);
+
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('khushi-theme', theme);
   }, [theme]);
+
+  useEffect(() => {
+    const orb = document.querySelector('.liquid-orb');
+    if (!orb) return undefined;
+
+    const positions = {
+      home: { top: '6%', left: '-12%' },
+      about: { top: '12%', left: '-8%' },
+      products: { top: '18%', left: '-10%' },
+      manufacturing: { top: '24%', left: '-6%' },
+      sustainability: { top: '30%', left: '-9%' },
+      contact: { top: '36%', left: '-12%' }
+    };
+
+    const target = positions[activeSection] || positions.home;
+    orb.style.setProperty('--orb-top', target.top);
+    orb.style.setProperty('--orb-left', target.left);
+    const softSections = new Set(['manufacturing', 'contact']);
+    orb.style.opacity = softSections.has(activeSection) ? '0.38' : '0.55';
+  }, [activeSection]);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const orb = document.querySelector('.liquid-orb');
+    if (!orb || prefersReducedMotion) return undefined;
+
+    let targetX = window.innerWidth / 2;
+    let targetY = window.innerHeight / 2;
+    let currentX = targetX;
+    let currentY = targetY;
+    let rafId;
+
+    const onMove = (event) => {
+      targetX = event.clientX;
+      targetY = event.clientY;
+    };
+
+    const tick = () => {
+      currentX += (targetX - currentX) * 0.08;
+      currentY += (targetY - currentY) * 0.08;
+      const offsetX = (currentX - window.innerWidth / 2) * 0.02;
+      const offsetY = (currentY - window.innerHeight / 2) * 0.02;
+      orb.style.transform = `translate3d(${offsetX.toFixed(2)}px, ${offsetY.toFixed(
+        2
+      )}px, 0)`;
+      rafId = requestAnimationFrame(tick);
+    };
+
+    window.addEventListener('pointermove', onMove, { passive: true });
+    rafId = requestAnimationFrame(tick);
+
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, []);
 
   useEffect(() => {
     // Single IntersectionObserver for scroll reveals + section highlighting.
@@ -115,23 +173,6 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const updateProgress = () => {
-      const maxScrollable = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-      const progress = Math.min(100, Math.max(0, (window.scrollY / maxScrollable) * 100));
-      setScrollProgress(progress);
-    };
-
-    updateProgress();
-    window.addEventListener('scroll', updateProgress, { passive: true });
-    window.addEventListener('resize', updateProgress);
-
-    return () => {
-      window.removeEventListener('scroll', updateProgress);
-      window.removeEventListener('resize', updateProgress);
-    };
-  }, []);
-
-  useEffect(() => {
     const onKey = (event) => {
       if (event.key === 'Escape') {
         setLightbox({ open: false, src: '', caption: '' });
@@ -160,44 +201,16 @@ export default function App() {
 
   return (
     <>
-      <Header
-        activeSection={activeSection}
-        theme={theme}
-        onToggleTheme={handleToggleTheme}
-        scrollProgress={scrollProgress}
-      />
+      <div className="liquid-orb" aria-hidden="true" />
+      <Header activeSection={activeSection} theme={theme} onToggleTheme={handleToggleTheme} />
       <main>
         <Hero />
-        <section className="cta-band" aria-label="Quick quote">
-          <div className="container cta-band-inner">
-            <p>Need fast pricing for your next production run?</p>
-            <a href="#contact" className="cta-primary">Get Quote</a>
-          </div>
-        </section>
         <About />
         <Products onOpen={handleOpenLightbox} />
-        <section className="cta-band cta-band-soft" aria-label="Product enquiry">
-          <div className="container cta-band-inner">
-            <p>Discuss sizing, colors, and custom branding for bulk orders.</p>
-            <a href="#contact" className="cta-primary">Request Product Quote</a>
-          </div>
-        </section>
         <Manufacturing />
         <Features />
-        <section className="cta-band cta-band-soft" aria-label="Quality enquiry">
-          <div className="container cta-band-inner">
-            <p>Looking for certified, reliable output at production scale?</p>
-            <a href="#contact" className="cta-primary">Talk to Manufacturing Team</a>
-          </div>
-        </section>
         <Sustainability />
         <Contact />
-        <section className="cta-band" aria-label="Final enquiry prompt">
-          <div className="container cta-band-inner">
-            <p>Share your requirement and receive a response with lead time and pricing.</p>
-            <a href="#contact" className="cta-primary">Contact Us</a>
-          </div>
-        </section>
       </main>
       <Footer />
 

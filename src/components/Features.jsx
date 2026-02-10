@@ -5,7 +5,7 @@ import RevealText from './RevealText.jsx';
 
 export default function Features() {
   return (
-    <section className={`${styles.features} ambient`} id="quality">
+    <section className={`${styles.features} ambient`}>
       <div className="container">
         <header className={`${styles.header} reveal-group`}>
           <h2 className="section-title reveal reveal-fast">

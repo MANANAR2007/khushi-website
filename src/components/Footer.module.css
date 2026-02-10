@@ -1,76 +1,17 @@
 .footer {
-  padding: 4rem 0 3rem;
+  padding: 3rem 0;
   background: var(--color-primary);
   color: #ffffff;
-  border-top: 1px solid rgba(255, 255, 255, 0.16);
 }
 
-.grid {
+.inner {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) repeat(3, minmax(0, 1fr));
-  gap: 1.8rem;
-  align-items: start;
+  gap: 1rem;
+  justify-items: center;
+  text-align: center;
 }
 
 .logo {
   height: 46px;
   filter: invert(1);
-}
-
-.brandBlock {
-  display: grid;
-  gap: 0.9rem;
-}
-
-.descriptor {
-  color: rgba(255, 255, 255, 0.8);
-  max-width: 46ch;
-}
-
-.copy {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.88rem;
-}
-
-.block {
-  display: grid;
-  gap: 0.5rem;
-}
-
-.block h3 {
-  font-family: var(--font-heading);
-  font-size: 0.95rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 0.45rem;
-}
-
-.block a,
-.block p {
-  color: rgba(255, 255, 255, 0.82);
-}
-
-.block a:hover {
-  color: #ffffff;
-  text-decoration: underline;
-  text-decoration-color: rgba(255, 255, 255, 0.6);
-}
-
-.legal {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-  margin-top: 0.6rem;
-}
-
-@media (max-width: 980px) {
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 720px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
 }
