@@ -3,13 +3,14 @@
   --color-secondary: #1d6f77;
   --color-accent: #f07a2b;
   --color-accent-soft: #f4b690;
-  --color-bg: #f5f7f9;
+  /* Slightly translucent page backgrounds let the WebGL layer bleed through. */
+  --color-bg: rgba(245, 247, 249, 0.88);
   --color-surface: #ffffff;
-  --color-surface-alt: #eef2f5;
+  --color-surface-alt: rgba(238, 242, 245, 0.9);
   --color-text: #0f202d;
   --color-muted: #5b6c7d;
   --color-border: #d6dde4;
-  --color-header-bg: rgba(255, 255, 255, 0.92);
+  --color-header-bg: rgba(255, 255, 255, 0.86);
   --color-glass: rgba(255, 255, 255, 0.7);
   --shadow-soft: 0 18px 40px rgba(15, 33, 48, 0.12);
   --shadow-card: 0 24px 60px rgba(15, 33, 48, 0.16);
@@ -23,13 +24,13 @@
 }
 
 [data-theme="dark"] {
-  --color-bg: #0c151d;
+  --color-bg: rgba(12, 21, 29, 0.88);
   --color-surface: #121f2b;
-  --color-surface-alt: #172837;
+  --color-surface-alt: rgba(23, 40, 55, 0.9);
   --color-text: #f2f5f8;
   --color-muted: #b5c0cc;
   --color-border: rgba(255, 255, 255, 0.12);
-  --color-header-bg: rgba(12, 18, 26, 0.92);
+  --color-header-bg: rgba(12, 18, 26, 0.86);
   --color-glass: rgba(18, 30, 43, 0.78);
   --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.35);
   --shadow-card: 0 24px 60px rgba(0, 0, 0, 0.4);
@@ -60,10 +61,12 @@ header,
 main,
 footer {
   position: relative;
-  z-index: 2;
+  /* Content always stays above the WebGL canvas. */
+  z-index: 1;
 }
 
 .immersive-webgl-canvas {
+  /* Global background canvas remains fixed and non-interactive. */
   position: fixed;
   inset: 0;
   width: 100vw;
