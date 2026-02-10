@@ -2,6 +2,11 @@
   padding: clamp(4rem, 8vw, 6rem) 0;
   background: var(--color-surface-alt);
 }
+.section {
+  position: relative;
+  overflow: hidden;
+}
+
 
 .header {
   margin-bottom: 2.5rem;
@@ -158,4 +163,17 @@
 /* Wrapper to separate machine image from cards */
 .machineWrap {
   margin-top: clamp(2.5rem, 6vw, 4rem);
+}
+.machineWrap {
+  position: relative;
+  isolation: isolate;
+}
+.machineWrap .machinePlaceholder {
+  position: relative;
+  transform: none !important;
+  top: auto;
+}
+
+.cards {
+  margin-bottom: clamp(2.5rem, 6vw, 4rem);
 }
