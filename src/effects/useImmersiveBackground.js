@@ -1,17 +1,19 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 const VERTEX_SHADER = `
 uniform float uTime;
+uniform float uScroll;
 uniform float uMorph;
-uniform float uFlow;
-uniform float uCursorInfluence;
+uniform float uTurbulence;
+uniform float uBlobId;
 uniform vec2 uCursor;
-uniform float uHeroVisibility;
+uniform float uCursorInfluence;
 
 varying vec3 vNormal;
 varying vec3 vWorldPos;
-varying float vBand;
+varying float vFlow;
+varying float vRidge;
 
 float hash(vec3 p) {
   return fract(sin(dot(p, vec3(127.1, 311.7, 74.7))) * 43758.5453123);
@@ -42,41 +44,45 @@ float noise(vec3 p) {
 
 float fbm(vec3 p) {
   float value = 0.0;
-  float amplitude = 0.55;
+  float amplitude = 0.54;
   float frequency = 1.0;
+
   for (int i = 0; i < 5; i++) {
     value += amplitude * noise(p * frequency);
-    frequency *= 2.03;
+    frequency *= 2.06;
     amplitude *= 0.52;
   }
+
   return value;
 }
 
 void main() {
   vec3 p = position;
-  float t = uTime * 0.12;
+  float t = uTime * (0.12 + uBlobId * 0.03);
 
-  vec3 flowAxis = normalize(vec3(0.9, 0.2, -0.32));
-  float striation = sin(dot(position, flowAxis) * 8.0 + t * 2.8);
-  float body = fbm(normal * 2.5 + vec3(t * 0.7, -t * 0.5, t * 0.3));
-  float pressure = fbm(position * 1.6 + flowAxis * t);
+  // Directional flow creates injection-mould style striations.
+  vec3 flowAxis = normalize(vec3(0.85, 0.2, -0.3 + uBlobId * 0.07));
+  float band = sin(dot(position, flowAxis) * 8.5 + t * 3.2 + uScroll * 5.5);
+  float bodyNoise = fbm(normal * 2.4 + vec3(t * 0.6, -t * 0.45, t * 0.25));
+  float pressure = fbm(position * 1.5 + flowAxis * (uScroll * 2.2 + t));
 
   vec4 worldBase = modelMatrix * vec4(position, 1.0);
-  vec2 delta = worldBase.xy - uCursor;
-  float cursorField = exp(-dot(delta, delta) * 0.46) * uCursorInfluence;
+  vec2 cursorDelta = worldBase.xy - uCursor;
+  float cursorField = exp(-dot(cursorDelta, cursorDelta) * 0.42) * uCursorInfluence;
 
-  float displacement = (pressure * 0.16 + body * 0.1 + striation * 0.05) *
-    (0.22 + uMorph * 0.45 + uFlow * 0.28);
-  displacement += cursorField * 0.07;
-  displacement *= uHeroVisibility;
+  // Viscous deformation: compression/release with restrained amplitude.
+  float displacement = (pressure * 0.18 + bodyNoise * 0.12 + band * 0.06) *
+    (0.28 + uMorph * 0.44 + uTurbulence * 0.24);
+  displacement += cursorField * 0.08;
 
   p += normal * displacement;
-  p += flowAxis * striation * 0.02 * (0.2 + uFlow);
+  p += flowAxis * band * 0.03 * (0.35 + uTurbulence);
 
   vec4 world = modelMatrix * vec4(p, 1.0);
   vWorldPos = world.xyz;
   vNormal = normalize(mat3(modelMatrix) * normal);
-  vBand = body + pressure * 0.7 + striation * 0.28;
+  vFlow = bodyNoise + pressure * 0.7 + band * 0.3;
+  vRidge = band;
 
   gl_Position = projectionMatrix * viewMatrix * world;
 }
@@ -85,65 +91,128 @@ void main() {
 const FRAGMENT_SHADER = `
 precision highp float;
 
+uniform float uLight;
+uniform float uOpacity;
 uniform vec3 uColorA;
 uniform vec3 uColorB;
 uniform vec3 uColorC;
-uniform float uLight;
-uniform float uOpacity;
-uniform float uHeroVisibility;
 
 varying vec3 vNormal;
 varying vec3 vWorldPos;
-varying float vBand;
+varying float vFlow;
+varying float vRidge;
 
 void main() {
   vec3 N = normalize(vNormal);
   vec3 V = normalize(cameraPosition - vWorldPos);
-  vec3 L = normalize(vec3(0.32, 0.74, 0.56));
+  vec3 L = normalize(vec3(0.34, 0.72, 0.55));
 
   float diffuse = max(dot(N, L), 0.0);
-  float fresnel = pow(1.0 - max(dot(N, V), 0.0), 2.1);
-  float spec = pow(max(dot(reflect(-L, N), V), 0.0), 36.0);
+  float fresnel = pow(1.0 - max(dot(N, V), 0.0), 2.0);
+  float spec = pow(max(dot(reflect(-L, N), V), 0.0), 34.0);
 
-  float band = smoothstep(-0.2, 0.95, vBand);
-  vec3 base = mix(uColorA, uColorB, band);
-  base = mix(base, uColorC, smoothstep(0.25, 0.9, abs(vBand)) * 0.24);
+  float flowMask = smoothstep(-0.2, 0.95, vFlow);
+  float striation = abs(vRidge);
+  striation = smoothstep(0.25, 0.85, striation);
 
-  vec3 color = base * (0.42 + diffuse * (0.56 + uLight * 0.24));
-  color += vec3(0.92, 0.95, 1.0) * spec * (0.08 + uLight * 0.22);
-  color += vec3(0.70, 0.76, 0.83) * fresnel * 0.14;
+  vec3 base = mix(uColorA, uColorB, flowMask);
+  base = mix(base, uColorC, striation * 0.28);
 
-  float alpha = clamp(uOpacity * uHeroVisibility * (0.48 + fresnel * 0.2 + band * 0.14), 0.0, 0.5);
+  vec3 color = base * (0.4 + diffuse * (0.64 + uLight * 0.28));
+  color += vec3(0.90, 0.95, 1.0) * spec * (0.08 + uLight * 0.24);
+  color += vec3(0.72, 0.79, 0.86) * fresnel * 0.16;
+
+  float alpha = clamp(uOpacity * (0.46 + fresnel * 0.22 + flowMask * 0.16), 0.1, 0.56);
   gl_FragColor = vec4(color, alpha);
 }
 `;
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
-const BLOB_CONFIG = [
-  {
-    position: [-6.2, 2.7, -5.3],
-    offscreenPosition: [-8.8, 3.8, -6.6],
-    scale: 2.25,
-    colors: ['#1a374a', '#315e73', '#7f95a4']
+const STAGES = {
+  calm: {
+    light: 0.4,
+    turbulence: 0.18,
+    morph: 0.3,
+    opacity: 0.38,
+    positions: [
+      [-5.2, 2.9, -5.6],
+      [5.4, 1.3, -6.2],
+      [-4.6, -3.1, -7.0],
+      [4.8, -2.7, -7.6]
+    ],
+    scales: [1.8, 1.45, 1.6, 1.35]
   },
-  {
-    position: [6.0, -2.6, -6.0],
-    offscreenPosition: [8.5, -4.1, -7.2],
-    scale: 1.95,
-    colors: ['#1d394c', '#345e73', '#8599a6']
+  products: {
+    light: 0.52,
+    turbulence: 0.24,
+    morph: 0.4,
+    opacity: 0.42,
+    positions: [
+      [-4.8, 2.5, -4.9],
+      [5.0, 1.0, -5.4],
+      [-4.2, -2.7, -6.0],
+      [4.4, -2.3, -6.6]
+    ],
+    scales: [1.95, 1.5, 1.7, 1.4]
   },
-  {
-    position: [5.2, 2.8, -6.8],
-    offscreenPosition: [7.6, 4.0, -7.9],
-    scale: 1.35,
-    colors: ['#203d4f', '#3a6278', '#8c9ca8']
+  manufacturing: {
+    light: 0.46,
+    turbulence: 0.14,
+    morph: 0.24,
+    opacity: 0.4,
+    positions: [
+      [-5.4, 2.8, -5.2],
+      [5.6, 1.2, -5.9],
+      [-5.0, -3.2, -6.8],
+      [5.1, -2.5, -7.4]
+    ],
+    scales: [2.05, 1.56, 1.78, 1.42]
+  },
+  quality: {
+    light: 0.42,
+    turbulence: 0.1,
+    morph: 0.2,
+    opacity: 0.36,
+    positions: [
+      [-5.0, 2.6, -5.4],
+      [5.2, 1.1, -6.0],
+      [-4.7, -2.9, -6.9],
+      [4.9, -2.5, -7.4]
+    ],
+    scales: [1.92, 1.5, 1.72, 1.38]
   }
+};
+
+const SECTION_STAGE_BY_ID = {
+  home: 'calm',
+  about: 'calm',
+  products: 'products',
+  manufacturing: 'manufacturing',
+  sustainability: 'quality',
+  contact: 'quality'
+};
+
+const inferStageByIndex = (index, total) => {
+  if (index < total * 0.34) return 'calm';
+  if (index < total * 0.5) return 'products';
+  if (index < total * 0.74) return 'manufacturing';
+  return 'quality';
+};
+
+const BLOB_COLORS = [
+  ['#173a4d', '#2e6178', '#7f99a8'],
+  ['#1a3548', '#305b72', '#8ba0ad'],
+  ['#1b3d50', '#335f76', '#89a1ae'],
+  ['#1f3a4d', '#325970', '#8398a6']
 ];
 
 const toColor = (hex) => new THREE.Color(hex);
 
-export default function useImmersiveBackground() {
+export default function useImmersiveBackground(activeSection) {
+  const activeSectionRef = useRef(activeSection);
+  activeSectionRef.current = activeSection;
+
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -163,24 +232,26 @@ export default function useImmersiveBackground() {
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(44, window.innerWidth / window.innerHeight, 0.1, 100);
-    camera.position.set(0, 0, 8.8);
+    camera.position.set(0, 0, 8.5);
 
-    const geometry = new THREE.IcosahedronGeometry(1, 4);
+    const blobGeometry = new THREE.IcosahedronGeometry(1, 4);
     const blobs = [];
 
-    BLOB_CONFIG.forEach((config, index) => {
+    for (let i = 0; i < 4; i += 1) {
+      const [a, b, c] = BLOB_COLORS[i];
       const uniforms = {
         uTime: { value: 0 },
-        uMorph: { value: 0.28 },
-        uFlow: { value: 0.2 },
-        uCursorInfluence: { value: 0 },
+        uScroll: { value: 0 },
+        uMorph: { value: STAGES.calm.morph },
+        uTurbulence: { value: STAGES.calm.turbulence },
+        uBlobId: { value: i + 1 },
         uCursor: { value: new THREE.Vector2(0, 0) },
-        uHeroVisibility: { value: 1 },
-        uColorA: { value: toColor(config.colors[0]) },
-        uColorB: { value: toColor(config.colors[1]) },
-        uColorC: { value: toColor(config.colors[2]) },
-        uLight: { value: 0.4 },
-        uOpacity: { value: 0.42 }
+        uCursorInfluence: { value: 0 },
+        uLight: { value: STAGES.calm.light },
+        uOpacity: { value: STAGES.calm.opacity },
+        uColorA: { value: toColor(a) },
+        uColorB: { value: toColor(b) },
+        uColorC: { value: toColor(c) }
       };
 
       const material = new THREE.ShaderMaterial({
@@ -192,56 +263,109 @@ export default function useImmersiveBackground() {
         side: THREE.FrontSide
       });
 
-      const mesh = new THREE.Mesh(geometry, material);
-      mesh.position.set(...config.position);
-      mesh.scale.setScalar(config.scale);
+      const mesh = new THREE.Mesh(blobGeometry, material);
+      mesh.position.set(...STAGES.calm.positions[i]);
+      mesh.scale.setScalar(STAGES.calm.scales[i]);
       scene.add(mesh);
 
       blobs.push({
         mesh,
         uniforms,
-        phase: index * 1.58,
-        baseScale: config.scale,
+        phase: i * 1.37,
         current: {
-          position: new THREE.Vector3(...config.position),
-          scale: config.scale
+          position: new THREE.Vector3(...STAGES.calm.positions[i]),
+          scale: STAGES.calm.scales[i]
         },
-        anchor: new THREE.Vector3(...config.position),
-        retreat: new THREE.Vector3(...config.offscreenPosition)
+        target: {
+          position: new THREE.Vector3(...STAGES.calm.positions[i]),
+          scale: STAGES.calm.scales[i]
+        }
       });
-    });
+    }
 
-    let heroRatio = 1;
-    let rafId = 0;
-    let heroObserver;
+    const maxScroll = () => Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
 
     const target = {
-      scroll: 0,
-      heroVisibility: 1,
+      scroll: clamp(window.scrollY / maxScroll(), 0, 1),
+      scrollVelocity: 0,
       cursorNdcX: 0,
       cursorNdcY: 0,
       cursorWorldX: 0,
       cursorWorldY: 0,
       cursorInfluence: 0,
-      light: 0.42,
-      flow: 0.22,
-      morph: 0.3,
-      opacity: 0.42
+      light: STAGES.calm.light,
+      turbulence: STAGES.calm.turbulence,
+      morph: STAGES.calm.morph,
+      opacity: STAGES.calm.opacity
     };
 
     const current = { ...target };
+    let stage = SECTION_STAGE_BY_ID[activeSectionRef.current] || 'calm';
+    let sectionObserver;
+    let rafId = 0;
+    let lastScrollY = window.scrollY;
+    let lastScrollTime = performance.now();
+
+    const applyStage = (nextStage) => {
+      const profile = STAGES[nextStage] || STAGES.calm;
+      stage = nextStage;
+      target.light = profile.light;
+      target.turbulence = profile.turbulence;
+      target.morph = profile.morph;
+      target.opacity = profile.opacity;
+      blobs.forEach((blob, index) => {
+        blob.target.position.set(...profile.positions[index]);
+        blob.target.scale = profile.scales[index];
+      });
+    };
+
+    const sectionElements = Array.from(document.querySelectorAll('main section'));
+    const sectionRatios = new Map();
+    sectionElements.forEach((el) => sectionRatios.set(el, 0));
+
+    if (sectionElements.length) {
+      sectionObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            sectionRatios.set(entry.target, entry.isIntersecting ? entry.intersectionRatio : 0);
+          });
+
+          let bestSection = null;
+          let bestRatio = 0;
+          sectionElements.forEach((el) => {
+            const ratio = sectionRatios.get(el) || 0;
+            if (ratio > bestRatio) {
+              bestRatio = ratio;
+              bestSection = el;
+            }
+          });
+          if (!bestSection) return;
+
+          const byId = SECTION_STAGE_BY_ID[bestSection.id];
+          const byIndex = inferStageByIndex(sectionElements.indexOf(bestSection), sectionElements.length);
+          const nextStage = byId || byIndex;
+          if (nextStage !== stage) applyStage(nextStage);
+        },
+        { threshold: [0, 0.2, 0.4, 0.6, 0.8] }
+      );
+      sectionElements.forEach((el) => sectionObserver.observe(el));
+    }
 
     const onScroll = () => {
-      const hero = document.getElementById('home');
-      const heroHeight = hero ? hero.offsetHeight : window.innerHeight;
-      const progress = clamp(window.scrollY / Math.max(heroHeight, 1), 0, 1.4);
-      target.scroll = progress;
-      target.heroVisibility = clamp(1.0 - progress * 1.08, 0, 1);
+      const now = performance.now();
+      const deltaY = Math.abs(window.scrollY - lastScrollY);
+      const deltaT = Math.max(now - lastScrollTime, 16);
+      const velocity = clamp(deltaY / deltaT, 0, 1.8);
+      target.scroll = clamp(window.scrollY / maxScroll(), 0, 1);
+      target.scrollVelocity = velocity;
 
-      target.flow = clamp(0.22 + progress * 0.08, 0.18, 0.36);
-      target.morph = clamp(0.3 + progress * 0.05, 0.26, 0.45);
-      target.light = clamp(0.42 - progress * 0.05, 0.32, 0.46);
-      target.opacity = clamp(0.42 - progress * 0.18, 0.0, 0.42);
+      const profile = STAGES[stage];
+      target.turbulence = clamp(profile.turbulence + velocity * 0.12 + target.scroll * 0.05, 0.08, 0.7);
+      target.morph = clamp(profile.morph + target.scroll * 0.08 + velocity * 0.05, 0.16, 0.9);
+      target.light = clamp(profile.light + target.scroll * 0.08 + velocity * 0.05, 0.2, 1.0);
+
+      lastScrollY = window.scrollY;
+      lastScrollTime = now;
     };
 
     const onPointerMove = (event) => {
@@ -249,9 +373,9 @@ export default function useImmersiveBackground() {
       const ndcY = 1 - (event.clientY / window.innerHeight) * 2;
       target.cursorNdcX = clamp(ndcX, -1, 1);
       target.cursorNdcY = clamp(ndcY, -1, 1);
-      target.cursorWorldX = target.cursorNdcX * 3.6;
-      target.cursorWorldY = target.cursorNdcY * 2.3;
-      target.cursorInfluence = target.heroVisibility > 0.02 ? 1 : 0;
+      target.cursorWorldX = target.cursorNdcX * 3.4;
+      target.cursorWorldY = target.cursorNdcY * 2.2;
+      target.cursorInfluence = 1;
     };
 
     const onPointerLeave = () => {
@@ -270,72 +394,61 @@ export default function useImmersiveBackground() {
       onScroll();
     };
 
-    const heroSection = document.getElementById('home');
-    if (heroSection) {
-      heroObserver = new IntersectionObserver(
-        (entries) => {
-          const entry = entries[0];
-          if (!entry) return;
-          heroRatio = entry.intersectionRatio;
-          target.heroVisibility = clamp(heroRatio, 0, 1);
-        },
-        { threshold: [0, 0.15, 0.3, 0.5, 0.75, 1] }
-      );
-      heroObserver.observe(heroSection);
-    }
-
     const animate = () => {
-      const smooth = prefersReducedMotion ? 0.02 : 0.07;
+      if (!sectionObserver) {
+        const fallback = SECTION_STAGE_BY_ID[activeSectionRef.current] || 'calm';
+        if (fallback !== stage) applyStage(fallback);
+      }
+
+      const smooth = prefersReducedMotion ? 0.02 : 0.065;
       const cursorSmooth = prefersReducedMotion ? 0.018 : 0.095;
 
       current.scroll += (target.scroll - current.scroll) * smooth;
-      current.heroVisibility += (target.heroVisibility - current.heroVisibility) * smooth;
+      current.scrollVelocity += (target.scrollVelocity - current.scrollVelocity) * cursorSmooth;
       current.cursorNdcX += (target.cursorNdcX - current.cursorNdcX) * cursorSmooth;
       current.cursorNdcY += (target.cursorNdcY - current.cursorNdcY) * cursorSmooth;
       current.cursorWorldX += (target.cursorWorldX - current.cursorWorldX) * cursorSmooth;
       current.cursorWorldY += (target.cursorWorldY - current.cursorWorldY) * cursorSmooth;
       current.cursorInfluence += (target.cursorInfluence - current.cursorInfluence) * cursorSmooth;
       current.light += (target.light - current.light) * smooth;
-      current.flow += (target.flow - current.flow) * smooth;
+      current.turbulence += (target.turbulence - current.turbulence) * smooth;
       current.morph += (target.morph - current.morph) * smooth;
       current.opacity += (target.opacity - current.opacity) * smooth;
 
-      target.cursorInfluence *= 0.985;
+      target.scrollVelocity *= 0.9;
+      target.cursorInfluence *= 0.986;
 
       const time = performance.now() * 0.001;
+      const depthShift = current.scroll * 0.55;
 
       blobs.forEach((blob, index) => {
-        const heaviness = 0.06 + current.flow * 0.08;
-        const driftX = Math.sin(time * (0.08 + index * 0.015) + blob.phase) * heaviness;
-        const driftY = Math.cos(time * (0.07 + index * 0.012) + blob.phase * 1.2) * heaviness;
-        const driftZ = Math.sin(time * (0.05 + index * 0.01) + blob.phase * 1.7) * 0.12;
+        const driftBase = 0.14 + current.turbulence * 0.1;
+        const driftX = Math.sin(time * (0.11 + index * 0.03) + blob.phase) * driftBase;
+        const driftY = Math.cos(time * (0.09 + index * 0.025) + blob.phase * 1.2) * driftBase;
+        const driftZ = Math.sin(time * (0.07 + index * 0.02) + blob.phase * 1.8) * 0.22;
 
-        const visibility = clamp(current.heroVisibility, 0, 1);
-        const retreatMix = 1 - visibility;
-        const base = blob.anchor.clone().lerp(blob.retreat, retreatMix);
+        const compress = 1.0 + Math.sin(time * (0.17 + index * 0.04) + blob.phase) * (0.02 + current.morph * 0.035);
 
-        const tx = base.x + driftX + current.cursorNdcX * 0.06;
-        const ty = base.y + driftY + current.cursorNdcY * 0.05;
-        const tz = base.z + driftZ + current.scroll * 0.25;
+        const targetX = blob.target.position.x + driftX + current.cursorNdcX * (0.08 + index * 0.015);
+        const targetY = blob.target.position.y + driftY + current.cursorNdcY * (0.06 + index * 0.014);
+        const targetZ = blob.target.position.z + driftZ + depthShift;
 
-        blob.current.position.x += (tx - blob.current.position.x) * smooth;
-        blob.current.position.y += (ty - blob.current.position.y) * smooth;
-        blob.current.position.z += (tz - blob.current.position.z) * smooth;
-        const settle = 1.0 + Math.sin(time * (0.11 + index * 0.016) + blob.phase) * (0.01 + current.flow * 0.016);
-        const targetScale = blob.baseScale * settle * (0.88 + visibility * 0.12);
-        blob.current.scale += (targetScale - blob.current.scale) * smooth;
+        blob.current.position.x += (targetX - blob.current.position.x) * smooth;
+        blob.current.position.y += (targetY - blob.current.position.y) * smooth;
+        blob.current.position.z += (targetZ - blob.current.position.z) * smooth;
+        blob.current.scale += ((blob.target.scale * compress) - blob.current.scale) * smooth;
 
         blob.mesh.position.copy(blob.current.position);
         blob.mesh.scale.setScalar(blob.current.scale);
-        blob.mesh.rotation.y += 0.00055 + index * 0.00011;
-        blob.mesh.rotation.x += 0.00028 + index * 0.00008;
+        blob.mesh.rotation.y += 0.0009 + index * 0.00016;
+        blob.mesh.rotation.x += 0.00045 + index * 0.0001;
 
         blob.uniforms.uTime.value = time;
+        blob.uniforms.uScroll.value = current.scroll;
         blob.uniforms.uMorph.value = current.morph;
-        blob.uniforms.uFlow.value = current.flow;
+        blob.uniforms.uTurbulence.value = current.turbulence;
         blob.uniforms.uCursor.value.set(current.cursorWorldX, current.cursorWorldY);
-        blob.uniforms.uCursorInfluence.value = current.cursorInfluence * visibility;
-        blob.uniforms.uHeroVisibility.value = visibility;
+        blob.uniforms.uCursorInfluence.value = current.cursorInfluence;
         blob.uniforms.uLight.value = current.light;
         blob.uniforms.uOpacity.value = current.opacity;
       });
@@ -344,8 +457,10 @@ export default function useImmersiveBackground() {
       rafId = window.requestAnimationFrame(animate);
     };
 
+    applyStage(stage);
     onScroll();
     onResize();
+
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onResize);
     window.addEventListener('pointermove', onPointerMove, { passive: true });
@@ -358,13 +473,13 @@ export default function useImmersiveBackground() {
       window.removeEventListener('resize', onResize);
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointerleave', onPointerLeave);
-      if (heroObserver) heroObserver.disconnect();
+      if (sectionObserver) sectionObserver.disconnect();
       if (rafId) window.cancelAnimationFrame(rafId);
 
       blobs.forEach((blob) => {
         blob.mesh.material.dispose();
       });
-      geometry.dispose();
+      blobGeometry.dispose();
       renderer.dispose();
       if (renderer.domElement.parentNode) {
         renderer.domElement.parentNode.removeChild(renderer.domElement);
