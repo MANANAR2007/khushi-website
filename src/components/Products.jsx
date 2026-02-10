@@ -155,7 +155,7 @@ export default function Products({ onOpen }) {
               <div
                 className={`${styles.track} reveal-group ${
                   category.title === 'ROUND CONTAINERS' ? styles.roundTrack : ''
-                }`}
+                } ${category.title === 'ROUND CONTAINERS' ? 'round-scroller' : ''}`}
               >
                 {category.items.map((item) => (
                   <ProductCard

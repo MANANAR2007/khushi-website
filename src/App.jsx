@@ -198,6 +198,7 @@ export default function App() {
 
   return (
     <>
+      <div className="liquid-accent" />
       <div className="liquid-orb" aria-hidden="true" />
       <Header activeSection={activeSection} theme={theme} onToggleTheme={handleToggleTheme} />
       <main>
