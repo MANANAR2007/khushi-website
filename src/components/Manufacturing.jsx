@@ -107,9 +107,12 @@ export default function Manufacturing() {
         </div>
                 {/* Supporting visual — below both cards */}
         <div className={`${styles.machineWrap} reveal reveal-delay-2`}>
-          <div className={`${styles.machinePlaceholder} parallax-slow`}>
-            Machine Image
-          </div>
+          <img
+            className={`${styles.machinePlaceholder} parallax-slow`}
+            src="/assets/machine.png"
+            alt="Injection moulding machine at Khushi Enterprises"
+            loading="lazy"
+          />
         </div>
 
       </div>
