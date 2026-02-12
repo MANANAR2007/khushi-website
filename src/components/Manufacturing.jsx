@@ -3,6 +3,8 @@ import styles from './Manufacturing.module.css';
 import { stats } from '../data.js';
 import RevealText from './RevealText.jsx';
 
+const machineImageUrl = `${import.meta.env.BASE_URL}assets/machine.png`;
+
 export default function Manufacturing() {
   const gridRef = useRef(null);
   const [counts, setCounts] = useState(stats.map(() => 0));
@@ -109,7 +111,7 @@ export default function Manufacturing() {
         <div className={`${styles.machineWrap} reveal reveal-delay-2`}>
           <img
             className={`${styles.machinePlaceholder} parallax-slow`}
-            src="/assets/machine.png"
+            src={machineImageUrl}
             alt="Injection moulding machine at Khushi Enterprises"
             loading="lazy"
           />
