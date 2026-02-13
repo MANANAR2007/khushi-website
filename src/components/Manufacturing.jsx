@@ -3,7 +3,7 @@ import styles from './Manufacturing.module.css';
 import { stats } from '../data.js';
 import RevealText from './RevealText.jsx';
 
-const machineImageUrl = `${import.meta.env.BASE_URL}assets/machine.svg`;
+const machineImageUrl = `${import.meta.env.BASE_URL}assets/machine.png`;
 
 export default function Manufacturing() {
   const gridRef = useRef(null);

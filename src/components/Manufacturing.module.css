@@ -131,15 +131,14 @@
 }
 
 .machinePlaceholder {
+  min-height: 260px;
   width: 100%;
   display: block;
-  aspect-ratio: 619 / 207;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
   border-radius: var(--radius-lg);
-  border: 1px solid color-mix(in srgb, #252a2d 78%, white 22%);
-  background: #252a2d;
-  box-shadow: 0 14px 30px rgba(10, 20, 30, 0.18);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 14px 30px rgba(10, 20, 30, 0.1);
 }
 
 
