@@ -1,151 +1,72 @@
 import React, { useEffect, useState } from 'react';
-import Header from './components/Header.jsx';
-import Hero from './components/Hero.jsx';
-import About from './components/About.jsx';
-import Products from './components/Products.jsx';
-import Manufacturing from './components/Manufacturing.jsx';
-import Features from './components/Features.jsx';
-import Sustainability from './components/Sustainability.jsx';
-import Contact from './components/Contact.jsx';
-import Footer from './components/Footer.jsx';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 
-const sections = ['home', 'about', 'products', 'manufacturing', 'sustainability', 'contact'];
+import Layout from './components/Layout.jsx';
+import Home from './pages/Home.jsx';
+import Products from './pages/Products.jsx';
+import ProductDetail from './pages/ProductDetail.jsx';
+import About from './pages/About.jsx';
+import Contact from './pages/Contact.jsx';
 
 export default function App() {
-  const [activeSection, setActiveSection] = useState('home');
+  const location = useLocation();
   const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem('khushi-theme');
     if (saved) return saved;
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   });
 
-  const [lightbox, setLightbox] = useState({ open: false, src: '', caption: '' });
-
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.classList.toggle('dark', theme === 'dark'); // Tailwind dark mode
     localStorage.setItem('khushi-theme', theme);
   }, [theme]);
 
-
-  useEffect(() => {
-    // Single IntersectionObserver for scroll reveals + section highlighting.
-    const animatedElements = document.querySelectorAll('.reveal');
-    const textElements = document.querySelectorAll('.reveal-text');
-    const sectionElements = sections
-      .map((id) => document.getElementById(id))
-      .filter(Boolean);
-
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) {
-      animatedElements.forEach((el) => el.classList.add('in-view'));
-      textElements.forEach((el) => el.classList.add('in-view'));
-      document.documentElement.classList.add('hero-loaded');
-    } else {
-      requestAnimationFrame(() => {
-        document.documentElement.classList.add('hero-loaded');
-      });
-    }
-
-    const sectionRatios = new Map();
-    sectionElements.forEach((el) => sectionRatios.set(el.id, 0));
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const target = entry.target;
-          const isAnimated = target.classList.contains('reveal');
-          const isText = target.classList.contains('reveal-text');
-
-          if (isAnimated && entry.isIntersecting) {
-            target.classList.add('in-view');
-            observer.unobserve(target);
-          }
-          if (isText && entry.isIntersecting) {
-            target.classList.add('in-view');
-            observer.unobserve(target);
-          }
-
-          if (target.tagName === 'SECTION') {
-            sectionRatios.set(target.id, entry.isIntersecting ? entry.intersectionRatio : 0);
-          }
-        });
-
-        let bestId = 'home';
-        let bestRatio = 0;
-        sectionRatios.forEach((ratio, id) => {
-          if (ratio > bestRatio) {
-            bestRatio = ratio;
-            bestId = id;
-          }
-        });
-        if (bestRatio > 0) {
-          setActiveSection(bestId);
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    sectionElements.forEach((el) => observer.observe(el));
-    if (!prefersReducedMotion) {
-      animatedElements.forEach((el) => observer.observe(el));
-      textElements.forEach((el) => observer.observe(el));
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const onKey = (event) => {
-      if (event.key === 'Escape') {
-        setLightbox({ open: false, src: '', caption: '' });
-        document.body.style.overflow = '';
-      }
-    };
-    if (lightbox.open) {
-      document.addEventListener('keydown', onKey);
-    }
-    return () => document.removeEventListener('keydown', onKey);
-  }, [lightbox.open]);
-
   const handleToggleTheme = () => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
-  };
-
-  const handleOpenLightbox = (src, caption) => {
-    setLightbox({ open: true, src, caption });
-    document.body.style.overflow = 'hidden';
-  };
-
-  const handleCloseLightbox = () => {
-    setLightbox({ open: false, src: '', caption: '' });
-    document.body.style.overflow = '';
+    const scrollY = window.scrollY;
+    
+    setTheme((prev) => {
+      const next = prev === 'dark' ? 'light' : 'dark';
+      
+      // Proactively update DOM to prevent flash or jump before React commits
+      document.documentElement.setAttribute('data-theme', next);
+      document.documentElement.classList.toggle('dark', next === 'dark');
+      localStorage.setItem('khushi-theme', next);
+      
+      // Force frame-level scroll restoration
+      requestAnimationFrame(() => {
+        window.scrollTo(0, scrollY);
+      });
+      
+      return next;
+    });
   };
 
   return (
-    <>
-      <Header activeSection={activeSection} theme={theme} onToggleTheme={handleToggleTheme} />
-      <main>
-        <Hero />
-        <About />
-        <Products onOpen={handleOpenLightbox} />
-        <Manufacturing />
-        <Features />
-        <Sustainability />
-        <Contact />
-      </main>
-      <Footer />
+    <Layout theme={theme} onToggleTheme={handleToggleTheme}>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<MotionWrapper><Home /></MotionWrapper>} />
+          <Route path="/products" element={<MotionWrapper><Products /></MotionWrapper>} />
+          <Route path="/products/:id" element={<MotionWrapper><ProductDetail /></MotionWrapper>} />
+          <Route path="/about" element={<MotionWrapper><About /></MotionWrapper>} />
+          <Route path="/contact" element={<MotionWrapper><Contact /></MotionWrapper>} />
+        </Routes>
+      </AnimatePresence>
+    </Layout>
+  );
+}
 
-      {lightbox.open && (
-        <div className="lightbox" onClick={handleCloseLightbox} role="dialog" aria-modal="true">
-          <button className="lightbox-close" aria-label="Close" onClick={handleCloseLightbox}>
-            &times;
-          </button>
-          <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
-            <img src={lightbox.src} alt={lightbox.caption} className="lightbox-img" />
-            <p className="lightbox-caption">{lightbox.caption}</p>
-          </div>
-        </div>
-      )}
-    </>
+function MotionWrapper({ children }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -15 }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+    >
+      {children}
+    </motion.div>
   );
 }

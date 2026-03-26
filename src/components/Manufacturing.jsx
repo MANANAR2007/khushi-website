@@ -74,7 +74,7 @@ export default function Manufacturing() {
           <div className={`${styles.panel} reveal`}>
             <h3>Production Capability</h3>
             <p>
-              Our facility runs 7 Toshiba injection moulding machines (125T–180T) to deliver thin-wall packaging with tight tolerances and consistent output.
+              Our facility is equipped with 7 Toshiba injection moulding machines (125T–180T) to deliver thin-wall packaging with tight tolerances and consistent output.
             </p>
             <div className={styles.statsGrid} ref={gridRef}>
               {stats.map((stat, index) => {
