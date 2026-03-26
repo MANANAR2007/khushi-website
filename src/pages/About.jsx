@@ -7,7 +7,8 @@ const productionStats = [
   { value: 80, decimals: 0, prefix: '', label: 'Metric Tonnes/Month' },
   { value: 0.38, decimals: 2, prefix: '', label: 'mm Wall Thickness' },
   { value: 5, decimals: 0, prefix: '~', label: 'Second Cycle Time' },
-  { value: 7, decimals: 0, prefix: '', label: 'Toshiba Machines' }
+  { value: 7, decimals: 0, prefix: '', label: 'Toshiba Machines' },
+  { value: 25, decimals: 0, prefix: '', label: 'Multi-cavity Moulds' }
 ];
 
 const qualityPoints = [
@@ -26,7 +27,7 @@ const values = [
   { icon: Truck, title: 'Efficient Logistics' }
 ];
 
-function AnimatedStat({ value, decimals, prefix, label, active }) {
+function AnimatedStat({ value, decimals, prefix, label, active, className = '' }) {
   const [display, setDisplay] = useState(0);
 
   useEffect(() => {
@@ -49,7 +50,7 @@ function AnimatedStat({ value, decimals, prefix, label, active }) {
   }, [active, value]);
 
   return (
-    <div className="flex flex-col text-center bg-slate-100 dark:bg-slate-800/60 p-5 rounded-2xl shadow-sm ring-1 ring-slate-200/50 dark:ring-slate-700/50">
+    <div className={`flex flex-col text-center bg-slate-100 dark:bg-slate-800/60 p-5 rounded-2xl shadow-sm ring-1 ring-slate-200/50 dark:ring-slate-700/50 ${className}`}>
       <p className="text-3xl font-black tracking-tighter text-slate-900 dark:text-slate-100">
         {prefix}{display.toFixed(decimals)}
       </p>
@@ -79,7 +80,7 @@ export default function About() {
 
   return (
     <div className="bg-surface-50 dark:bg-surface-950 font-sans text-slate-900 dark:text-slate-200 min-h-screen">
-      <div className="max-w-6xl mx-auto px-6 space-y-3">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
         
         {/* 1. INTRO (COMPACT HERO) */}
         <section className="py-12 lg:py-14 text-center max-w-3xl mx-auto">
@@ -132,7 +133,7 @@ export default function About() {
         </section>
 
         {/* 4. MANUFACTURING & QUALITY */}
-        <section className="py-14 border-t border-slate-200 dark:border-slate-800">
+        <section className="py-12 border-t border-slate-200 dark:border-slate-800">
           <div className="mb-10 max-w-4xl space-y-3">
             <h2 className="text-3xl font-extrabold tracking-tight">
               Manufacturing & Quality
@@ -142,7 +143,7 @@ export default function About() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 mb-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-10">
             <div className="space-y-4">
               <h3 className="text-lg font-bold">Production Capability</h3>
               <p className="text-[15px] leading-relaxed text-slate-600 dark:text-slate-400">
@@ -174,9 +175,14 @@ export default function About() {
           </div>
 
           <div className="space-y-8" ref={statsRef}>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="flex flex-wrap justify-center gap-4">
               {productionStats.map((stat) => (
-                <AnimatedStat key={stat.label} {...stat} active={statsVisible} />
+                <AnimatedStat
+                  key={stat.label}
+                  {...stat}
+                  active={statsVisible}
+                  className="w-[calc(50%-0.5rem)] md:w-[calc(33.333%-0.75rem)] lg:w-[calc(20%-0.8rem)]"
+                />
               ))}
             </div>
             
@@ -243,11 +249,11 @@ export default function About() {
         </section>
 
         {/* 7. VALUES */}
-        <section className="py-12 pb-20 border-t border-slate-200 dark:border-slate-800">
+        <section className="py-12 border-t border-slate-200 dark:border-slate-800">
           <div className="space-y-6">
             <h2 className="text-2xl font-extrabold tracking-tight">Our Values</h2>
             
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
               {values.map((item) => {
                 const Icon = item.icon;
                 return (

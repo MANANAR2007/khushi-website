@@ -168,7 +168,7 @@ export default function Home() {
                 <Users size={28} className="text-accent-light" />
               </div>
               <div>
-                <p className="text-2xl font-black text-primary">500+</p>
+                <p className="text-2xl font-black text-primary">50+</p>
                 <p className="text-[11px] font-bold text-secondary uppercase tracking-widest mt-1">B2B Clients</p>
               </div>
             </div>
@@ -269,8 +269,8 @@ export default function Home() {
       <section className="bg-section py-16 border-t border-border">
         <div className="mx-auto flex w-full max-w-7xl flex-col items-start justify-between gap-6 px-4 sm:px-6 lg:flex-row lg:items-center lg:px-8">
           <div className="space-y-3">
-            <p className="text-xs font-semibold uppercase tracking-wide text-accent-light">Custom Manufacturing</p>
-            <h2 className="text-4xl font-bold tracking-tight text-primary">Looking for reliable manufacturing?</h2>
+            
+            <h2 className="text-4xl font-bold tracking-tight text-primary">Looking for reliable manufacturers?</h2>
           </div>
           <Link
             to="/about"
