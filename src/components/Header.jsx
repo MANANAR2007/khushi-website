@@ -28,7 +28,6 @@ export default function Header({ theme, onToggleTheme }) {
 
   useEffect(() => {
     setOpen(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [location.pathname]);
 
   const handleNavClick = () => {

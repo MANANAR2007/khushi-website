@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import { productCategories } from '../data.js';
 
 const orderedColors = ['black', 'white', 'transparent'];
+const PRODUCTS_SCROLL_KEY = 'productsScroll';
 
-function ProductCard({ product }) {
+function ProductCard({ product, onOpenProduct }) {
   const colorKeys = useMemo(() => Object.keys(product.colors), [product.colors]);
   const [selectedColor, setSelectedColor] = useState('black');
 
@@ -26,7 +27,11 @@ function ProductCard({ product }) {
     <article className="rounded-2xl p-5 shadow-md hover:shadow-xl transition-all duration-300 bg-surface-50 dark:bg-surface-900 border border-slate-200/50 dark:border-surface-800">
       
       {/* IMAGE LINK */}
-      <Link to={`/products/${slug}`} className="flex items-center justify-center py-6 cursor-pointer group block">
+      <Link
+        to={`/products/${slug}`}
+        onClick={onOpenProduct}
+        className="flex items-center justify-center py-6 cursor-pointer group block"
+      >
         {image && (
           <img
             src={image.src}
@@ -78,6 +83,7 @@ function ProductCard({ product }) {
         {/* CTA */}
         <Link
           to={`/products/${slug}`}
+          onClick={onOpenProduct}
           className="mt-6 block w-full text-center px-5 py-3.5 rounded-xl font-bold text-[15px] bg-brand-800 text-white dark:bg-brand-600 dark:text-white dark:hover:bg-brand-500 hover:bg-brand-700 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg shadow-md"
           style={{ color: 'white' }}
         >
@@ -91,6 +97,24 @@ function ProductCard({ product }) {
 
 export default function Products() {
   const [activeFilter, setActiveFilter] = useState('ALL');
+
+  useEffect(() => {
+    const savedScroll = sessionStorage.getItem(PRODUCTS_SCROLL_KEY);
+    if (!savedScroll) return;
+
+    const scrollY = Number.parseInt(savedScroll, 10);
+    if (Number.isFinite(scrollY)) {
+      requestAnimationFrame(() => {
+        window.scrollTo(0, scrollY);
+      });
+    }
+
+    sessionStorage.removeItem(PRODUCTS_SCROLL_KEY);
+  }, []);
+
+  const handleProductOpen = () => {
+    sessionStorage.setItem(PRODUCTS_SCROLL_KEY, String(window.scrollY));
+  };
 
   const allProducts = useMemo(
     () =>
@@ -160,6 +184,7 @@ export default function Products() {
             <ProductCard
               key={`${product.category}-${product.size}`}
               product={product}
+              onOpenProduct={handleProductOpen}
             />
           ))}
         </div>
