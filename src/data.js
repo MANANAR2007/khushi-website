@@ -109,6 +109,14 @@ export const productCategories = [
         }
       },
       {
+        size: '650ml',
+        colors: {
+          white: productImage('assets/containers/rectangle/650ml_rect_white.jpg'),
+          black: productImage('assets/containers/rectangle/650ml_rect_black.jpg'),
+          transparent: productImage('assets/containers/rectangle/650ml_rect_transparent.jpg')
+        }
+      },
+      {
         size: '750ml',
         colors: {
           white: productImage('assets/containers/rectangle/750ml_rect_white.jpg'),
@@ -236,7 +244,7 @@ export const productSpecifications = {
     dimensions: '175 x 121 x 46 mm',
     weight: '26.5 grams',
     packaging: '750 pcs / box',
-    colors: 'Black, White'
+    colors: 'Black, White, Transparent'
   },
   'rectangle-750ml': {
     capacity: '750 ML',

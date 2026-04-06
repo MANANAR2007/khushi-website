@@ -1,9 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Factory, ShieldCheck, Truck, Users, Award } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, Factory, ShieldCheck, Truck, Users, Award } from 'lucide-react';
 
-const heroVisual = `${import.meta.env.BASE_URL}assets/hero-manufacturing.jpg`;
 const machineImage = `${import.meta.env.BASE_URL}assets/machine.png`;
+const heroImages = [
+  `${import.meta.env.BASE_URL}assets/hero-carousel-new-1.png`,
+  `${import.meta.env.BASE_URL}assets/hero-carousel-new-2.png`,
+  `${import.meta.env.BASE_URL}assets/hero-carousel-new-3.png`,
+  `${import.meta.env.BASE_URL}assets/hero-carousel-new-4.png`
+];
 
 const valuePoints = [
   {
@@ -60,6 +65,26 @@ function HomeStat({ label, value, active }) {
 export default function Home() {
   const statsRef = useRef(null);
   const [statsVisible, setStatsVisible] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(true);
+  const extendedImages = [...heroImages, heroImages[0]];
+
+  const handleNextHero = () => {
+    if (currentIndex === heroImages.length) return;
+    setCurrentIndex((prev) => prev + 1);
+  };
+
+  const handlePrevHero = () => {
+    if (currentIndex === 0) {
+      setCurrentIndex(heroImages.length - 1);
+      return;
+    }
+    if (currentIndex === heroImages.length) {
+      setCurrentIndex(heroImages.length - 1);
+      return;
+    }
+    setCurrentIndex((prev) => prev - 1);
+  };
 
   useEffect(() => {
     const node = statsRef.current;
@@ -79,10 +104,34 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => prev + 1);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (currentIndex === heroImages.length) {
+      const timeout = setTimeout(() => {
+        setIsTransitioning(false);
+        setCurrentIndex(0);
+      }, 700);
+      return () => clearTimeout(timeout);
+    }
+    if (!isTransitioning) {
+      const raf = requestAnimationFrame(() => {
+        setIsTransitioning(true);
+      });
+      return () => cancelAnimationFrame(raf);
+    }
+  }, [currentIndex, isTransitioning]);
+
   return (
     <div>
       {/* HERO SECTION */}
-      <section className="relative overflow-hidden bg-section py-28 lg:py-32">
+      <section className="relative overflow-hidden bg-section pt-16 pb-20 lg:pt-20 lg:pb-24">
         {/* Subtle Industrial Background Pattern & Depth */}
         <div
           className="absolute inset-0 opacity-25 [background-size:20px_20px]"
@@ -97,14 +146,27 @@ export default function Home() {
               Premium B2B Manufacturing
             </p>
 
-            <h1 className="max-w-2xl text-5xl font-extrabold tracking-tight leading-[1.15] text-primary md:text-6xl lg:text-[64px]">
-              Food-grade. Recyclable. Reliable.
+            <h1 className="max-w-xl text-2xl font-extrabold tracking-tight leading-[1.2] text-primary md:text-5xl lg:text-[56px]">
+              Strong, reliable, food-grade plastic food containers you can trust.
             </h1>
 
-            <p className="max-w-xl text-lg leading-relaxed text-secondary">
-              Strong, reliable food-grade plastic containers you can trust.
-            </p>
-
+            <div className="flex flex-wrap gap-3 mt-4">
+              {[
+                "Food-Grade",
+                "Recyclable-Reusable",
+                "Reliable"
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-300 bg-white border-gray-300 text-gray-800 shadow-sm dark:bg-white/5 dark:border-white/20 dark:text-white/80 dark:shadow-none backdrop-blur-sm"
+                >
+                  <div className="w-2 h-2 rounded-full bg-green-400"></div>
+                  <span className="text-sm font-medium text-gray-800 dark:text-white/80 tracking-wide">
+                    {item}
+                  </span>
+                </div>
+              ))}
+            </div>
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <Link
                 to="/products"
@@ -127,12 +189,39 @@ export default function Home() {
 
           <article className="relative animate-[fadeIn_1.2s_ease-out_forwards]">
             <div className="absolute inset-0 -z-10 rounded-[2rem] bg-accent/20 blur-3xl" />
-            <div className="rounded-2xl bg-card/80 p-3 shadow-2xl ring-1 ring-border/60 backdrop-blur-sm transition-transform duration-500 hover:scale-[1.02]">
-              <img
-                src={heroVisual}
-                alt="Khushi modern production line"
-                className="h-full w-full rounded-2xl object-cover"
-              />
+            <div className="relative rounded-2xl bg-card/80 p-3 shadow-2xl ring-1 ring-border/60 backdrop-blur-sm transition-transform duration-500 hover:scale-[1.02]">
+              <div className="overflow-hidden relative w-full h-full rounded-2xl aspect-[4/3]">
+                <div
+                  className={`flex h-full ${isTransitioning ? 'transition-transform duration-700 ease-in-out' : ''}`}
+                  style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+                >
+                  {extendedImages.map((img, index) => (
+                    <img
+                      key={index}
+                      src={img}
+                      alt="Hero"
+                      className="w-full h-full flex-shrink-0 object-contain"
+                    />
+                  ))}
+                </div>
+                <div className="absolute inset-0 bg-black/20 pointer-events-none" />
+              </div>
+              <button
+                type="button"
+                onClick={handlePrevHero}
+                className="absolute -left-4 top-1/2 z-20 -translate-y-1/2 grid h-9 w-9 place-items-center rounded-full bg-card/90 text-primary shadow-md ring-1 ring-border/60 transition hover:bg-card"
+                aria-label="Previous hero image"
+              >
+                <ChevronLeft size={18} />
+              </button>
+              <button
+                type="button"
+                onClick={handleNextHero}
+                className="absolute -right-4 top-1/2 z-20 -translate-y-1/2 grid h-9 w-9 place-items-center rounded-full bg-card/90 text-primary shadow-md ring-1 ring-border/60 transition hover:bg-card"
+                aria-label="Next hero image"
+              >
+                <ChevronRight size={18} />
+              </button>
             </div>
           </article>
         </div>
@@ -189,14 +278,21 @@ export default function Home() {
 
       <section className="py-24 bg-main">
         <div className="mx-auto w-full max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-wide text-accent-light">About Khushi Containers</p>
+          <p className="text-xl font-semibold uppercase tracking-wide text-accent-light">About Khushi Containers</p>
           <h2 className="mt-4 text-3xl font-bold tracking-tight text-primary md:text-4xl">
-            Manufacturing-grade packaging engineered for repeatability.
+            We manufacture food-grade plastic containers
           </h2>
           <p className="mt-6 text-base leading-relaxed text-secondary">
-            We manufacture food-grade plastic containers with consistent wall thickness, high-strength performance, and reliable
-            delivery schedules.
+            of different sizes, of round and rectangle shapes mainly available in three colours (black, white and transparent) with consistent wall thickness, high-strength performance, and reliable delivery schedules.
           </p>
+          <div className="mt-8 flex justify-center">
+            <Link
+              to="/about"
+              className="inline-flex items-center gap-2 rounded-xl bg-accent px-8 py-3 text-sm font-semibold tracking-wide !text-white shadow-md transition-all duration-300 hover:scale-105 hover:bg-accent/90 hover:shadow-lg"
+            >
+              Learn More <ArrowRight size={16} />
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -266,20 +362,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-section py-16 border-t border-border">
-        <div className="mx-auto flex w-full max-w-7xl flex-col items-start justify-between gap-6 px-4 sm:px-6 lg:flex-row lg:items-center lg:px-8">
-          <div className="space-y-3">
-            
-            <h2 className="text-4xl font-bold tracking-tight text-primary">Looking for reliable manufacturers?</h2>
-          </div>
-          <Link
-            to="/about"
-            className="inline-flex rounded-xl bg-accent px-6 py-3 text-sm font-semibold tracking-wide text-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl hover:bg-accent/90"
-          >
-            Learn More
-          </Link>
-        </div>
-      </section>
     </div>
   );
 }

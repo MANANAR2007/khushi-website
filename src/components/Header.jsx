@@ -36,7 +36,7 @@ export default function Header({ theme, onToggleTheme }) {
   };
 
   return (
-    <header className="sticky top-0 z-50 px-4 py-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 pt-2">
       <div
         className={`mx-auto flex w-full max-w-7xl items-center justify-between rounded-2xl px-4 py-3 backdrop-blur-xl transition-all duration-300 ${
           scrolled

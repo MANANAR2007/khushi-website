@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { BadgeCheck, CheckCircle2, Clock3, Truck, Users2, Shield, Factory } from 'lucide-react';
 
 const machineImage = `${import.meta.env.BASE_URL}assets/machine.png`;
@@ -62,8 +63,13 @@ function AnimatedStat({ value, decimals, prefix, label, active, className = '' }
 }
 
 export default function About() {
+  const location = useLocation();
   const statsRef = useRef(null);
   const [statsVisible, setStatsVisible] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   useEffect(() => {
     const node = statsRef.current;
@@ -84,14 +90,14 @@ export default function About() {
         
         {/* 1. INTRO (COMPACT HERO) */}
         <section className="py-12 lg:py-14 text-center max-w-3xl mx-auto">
-          <p className="mb-3 text-[11px] font-extrabold uppercase tracking-[0.2em] text-accent-light dark:text-accent-light">
+          <p className="mb-3 text-[16px] font-extrabold uppercase tracking-[0.2em] text-accent-light dark:text-accent-light">
             About Khushi Containers
           </p>
           <h1 className="text-4xl md:text-5xl font-black tracking-tight leading-[1.1]">
             We manufacture food-grade plastic containers
           </h1>
           <p className="mt-4 text-lg md:text-xl font-medium text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto">
-            with consistent wall thickness, high-strength performance, and reliable delivery schedules.
+            of different sizes, of round and rectangle shapes mainly available in three colours (black, white and transparent) with consistent wall thickness, high-strength performance, and reliable delivery schedules.
           </p>
         </section>
 

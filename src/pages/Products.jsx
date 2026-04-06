@@ -4,6 +4,11 @@ import { productCategories } from '../data.js';
 
 const orderedColors = ['black', 'white', 'transparent'];
 const PRODUCTS_SCROLL_KEY = 'productsScroll';
+const colorSwatchValues = {
+  black: '#111827',
+  white: '#E5E7EB',
+  transparent: '#D1D5DB'
+};
 
 function ProductCard({ product, onOpenProduct }) {
   const colorKeys = useMemo(() => Object.keys(product.colors), [product.colors]);
@@ -63,17 +68,19 @@ function ProductCard({ product, onOpenProduct }) {
           <div className="flex gap-3">
             {colorOrder.map((color) => {
               const active = color === selectedColor;
+              const swatchColor = colorSwatchValues[color] || '#9CA3AF';
+              const isLightSwatch = color === 'white' || color === 'transparent';
               return (
                 <button
                   key={color}
+                  type="button"
                   onClick={() => setSelectedColor(color)}
+                  title={color}
+                  aria-label={`Select ${color} color`}
                   className={`w-8 h-8 rounded-full border-2 transition-all duration-300 hover:scale-110 ${
-                    color === 'black'
-                      ? 'bg-primary border-primary'
-                      : color === 'white'
-                      ? 'bg-card border-border'
-                      : 'bg-section border-border'
+                    isLightSwatch ? 'border-slate-400/80' : 'border-slate-700/80'
                   } ${active ? 'ring-2 ring-offset-2 ring-brand-500 ring-offset-main scale-110' : ''}`}
+                  style={{ backgroundColor: swatchColor }}
                 />
               );
             })}
