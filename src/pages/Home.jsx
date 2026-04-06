@@ -141,16 +141,16 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 translate-y-1/3 -translate-x-1/3 w-[600px] h-[600px] bg-accent/15 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="relative mx-auto grid w-full max-w-7xl items-center gap-16 px-4 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8">
-          <article className="space-y-8 animate-[fadeInUp_0.8s_ease-out_forwards]">
-            <p className="inline-flex rounded-full bg-card/60 border border-border/80 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-accent-light backdrop-blur-sm shadow-sm">
+          <article className="contents lg:block lg:space-y-8 lg:animate-[fadeInUp_0.8s_ease-out_forwards]">
+            <p className="inline-flex w-fit self-start rounded-full bg-card/60 border border-border/80 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-accent-light backdrop-blur-sm shadow-sm">
               Premium B2B Manufacturing
             </p>
 
-            <h1 className="max-w-xl text-2xl font-extrabold tracking-tight leading-[1.2] text-primary md:text-5xl lg:text-[56px]">
+            <h1 className="order-1 max-w-2xl text-2xl font-extrabold tracking-tight leading-[1.2] text-primary md:text-5xl lg:text-[56px]">
               Strong, reliable, food-grade plastic food containers you can trust.
             </h1>
 
-            <div className="flex flex-wrap gap-3 mt-4">
+            <div className="flex flex-wrap gap-3 mt-4 order-3 lg:order-none">
               {[
                 "Food-Grade",
                 "Recyclable-Reusable",
@@ -167,7 +167,7 @@ export default function Home() {
                 </div>
               ))}
             </div>
-            <div className="flex flex-wrap items-center gap-4 pt-2">
+            <div className="flex flex-wrap items-center gap-4 pt-2 order-4 lg:order-none">
               <Link
                 to="/products"
                 className="inline-flex items-center gap-2 rounded-xl bg-accent px-8 py-4 text-base font-bold tracking-wide !text-white shadow-md transition-all duration-300 hover:scale-105 hover:bg-accent/90 hover:shadow-lg"
@@ -182,12 +182,12 @@ export default function Home() {
               </Link>
             </div>
             
-            <p className="text-sm font-medium text-secondary flex items-center gap-2 mt-4">
+            <p className="text-sm font-medium text-secondary flex items-center gap-2 mt-4 order-5 lg:order-none">
               <ShieldCheck size={16} className="text-accent-light" /> Proudly serving FMCG, Dairy & Cloud Kitchens
             </p>
           </article>
 
-          <article className="relative animate-[fadeIn_1.2s_ease-out_forwards]">
+          <article className="relative order-2 lg:order-none animate-[fadeIn_1.2s_ease-out_forwards]">
             <div className="absolute inset-0 -z-10 rounded-[2rem] bg-accent/20 blur-3xl" />
             <div className="relative rounded-2xl bg-card/80 p-3 shadow-2xl ring-1 ring-border/60 backdrop-blur-sm transition-transform duration-500 hover:scale-[1.02]">
               <div className="overflow-hidden relative w-full h-full rounded-2xl aspect-[4/3]">

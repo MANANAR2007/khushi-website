@@ -19,7 +19,13 @@ export default function Footer({ theme }) {
 
         <div className="flex flex-col items-start md:items-end gap-6">
           <div className="flex flex-wrap items-center gap-5 text-sm font-bold tracking-wide text-secondary">
-            <Link to="/products" className="transition-colors duration-300 hover:text-accent-light">Products</Link>
+            <Link
+              to="/products"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="transition-colors duration-300 hover:text-accent-light"
+            >
+              Products
+            </Link>
             <Link to="/about" className="transition-colors duration-300 hover:text-accent-light">About</Link>
             <Link to="/contact" className="transition-colors duration-300 hover:text-accent-light">Contact</Link>
             <span className="text-secondary/80">© {year}</span>

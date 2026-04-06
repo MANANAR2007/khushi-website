@@ -6,7 +6,7 @@ const orderedColors = ['black', 'white', 'transparent'];
 const PRODUCTS_SCROLL_KEY = 'productsScroll';
 const colorSwatchValues = {
   black: '#111827',
-  white: '#E5E7EB',
+  white: '#ffffff',
   transparent: '#D1D5DB'
 };
 
