@@ -3,6 +3,12 @@ import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { productCategories, productSpecifications } from '../data.js';
 
+const colorSwatchValues = {
+  black: '#111827',
+  white: '#ffffff',
+  transparent: '#D1D5DB'
+};
+
 export default function ProductDetail() {
   const { id } = useParams();
   const [selectedColor, setSelectedColor] = useState('black');
@@ -68,7 +74,7 @@ export default function ProductDetail() {
         <div>
           <Link
             to="/products"
-            className="inline-flex items-center gap-2 text-xs font-bold tracking-wide text-slate-500 hover:text-accent-light dark:text-slate-400 dark:hover:text-accent-light transition-colors uppercase"
+            className="inline-flex items-center gap-2 text-sm font-bold tracking-wide text-slate-500 hover:text-accent-light dark:text-slate-400 dark:hover:text-accent-light transition-colors uppercase"
           >
             <ArrowLeft size={16} /> Back to Catalog
           </Link>
@@ -79,7 +85,7 @@ export default function ProductDetail() {
           <div className="w-full lg:w-1/2 flex justify-center">
             <div className="w-full flex flex-col bg-surface-50 dark:bg-surface-900 p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-200/50 dark:border-surface-800 group">
               <div className="mb-6 text-left">
-                <span className="inline-flex text-[10px] font-bold uppercase tracking-wider bg-brand-100 dark:bg-brand-900/40 text-accent-light dark:text-accent-light px-3 py-1 rounded-full shadow-sm break-words">
+                <span className="inline-flex text-[11px] font-bold uppercase tracking-wider bg-brand-100 dark:bg-brand-900/40 text-accent-light dark:text-accent-light px-3 py-1 rounded-full shadow-sm break-words">
                   {product.category}
                 </span>
               </div>
@@ -106,21 +112,21 @@ export default function ProductDetail() {
             <div className="space-y-4">
               <div className="flex flex-wrap justify-between items-start gap-3">
                 <div className="break-words">
-                  <p className="text-[10px] uppercase font-extrabold tracking-widest text-accent-light dark:text-accent-light mb-1">
+                  <p className="text-[11px] uppercase font-extrabold tracking-widest text-accent-light dark:text-accent-light mb-1">
                     {product.category}
                   </p>
                   <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100 break-words">
                     {product.size} Container
                   </h1>
                 </div>
-                <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 bg-surface-100 dark:bg-surface-950 px-2.5 py-1 rounded-md border border-slate-200 dark:border-surface-800">
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 bg-surface-100 dark:bg-surface-950 px-2.5 py-1 rounded-md border border-slate-200 dark:border-surface-800">
                   MOQ: 10k+
                 </span>
               </div>
 
               <div className="flex flex-wrap gap-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-accent-light dark:text-accent-light bg-brand-50 dark:bg-brand-900/30 px-2 py-1 rounded">Food & FMCG</span>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-accent-light dark:text-accent-light bg-brand-50 dark:bg-brand-900/30 px-2 py-1 rounded">Logistics</span>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-accent-light dark:text-accent-light bg-brand-50 dark:bg-brand-900/30 px-2 py-1 rounded">Food & FMCG</span>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-accent-light dark:text-accent-light bg-brand-50 dark:bg-brand-900/30 px-2 py-1 rounded">Logistics</span>
               </div>
             </div>
 
@@ -133,17 +139,19 @@ export default function ProductDetail() {
               <div className="flex flex-wrap gap-2">
                 {colorOrder.map((color) => {
                   const active = color === selectedColor;
+                  const swatchColor = colorSwatchValues[color] || '#9CA3AF';
+                  const isLightSwatch = color === 'white' || color === 'transparent';
                   return (
                     <button
                       key={color}
+                      type="button"
                       onClick={() => setSelectedColor(color)}
-                      className={`h-8 w-8 rounded-full border-2 transition-all duration-300 ${
-                        color === 'black'
-                          ? 'bg-primary border-primary'
-                          : color === 'white'
-                          ? 'bg-card border-border'
-                          : 'bg-section border-border'
+                      title={color}
+                      aria-label={`Select ${color} color`}
+                      className={`h-11 w-11 rounded-full border-2 transition-all duration-300 ${
+                        isLightSwatch ? 'border-slate-400/80' : 'border-slate-700/80'
                       } ${active ? 'ring-2 ring-brand-500 ring-offset-2 ring-offset-main scale-110' : 'hover:scale-105 shadow-sm'}`}
+                      style={{ backgroundColor: swatchColor }}
                     />
                   );
                 })}
@@ -155,32 +163,32 @@ export default function ProductDetail() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {specs.capacity && (
                     <div className="bg-surface-100 dark:bg-surface-950 rounded-xl p-3 border border-slate-200/50 dark:border-surface-800 flex flex-col justify-center break-words">
-                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Capacity</p>
-                      <p className="text-[13px] font-semibold text-slate-900 dark:text-slate-100 break-words">{specs.capacity}</p>
+                      <p className="text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-wider mb-1">Capacity</p>
+                      <p className="text-sm sm:text-base font-semibold text-slate-900 dark:text-slate-100 break-words">{specs.capacity}</p>
                     </div>
                   )}
                   {specs.dimensions && (
                     <div className="bg-surface-100 dark:bg-surface-950 rounded-xl p-3 border border-slate-200/50 dark:border-surface-800 flex flex-col justify-center break-words">
-                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Dimensions</p>
-                      <p className="text-[13px] font-semibold text-slate-900 dark:text-slate-100 break-words">{specs.dimensions}</p>
+                      <p className="text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-wider mb-1">Dimensions</p>
+                      <p className="text-sm sm:text-base font-semibold text-slate-900 dark:text-slate-100 break-words">{specs.dimensions}</p>
                     </div>
                   )}
                   {specs.weight && (
                     <div className="bg-surface-100 dark:bg-surface-950 rounded-xl p-3 border border-slate-200/50 dark:border-surface-800 flex flex-col justify-center break-words">
-                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Weight</p>
-                      <p className="text-[13px] font-semibold text-slate-900 dark:text-slate-100 break-words">{specs.weight}</p>
+                      <p className="text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-wider mb-1">Weight</p>
+                      <p className="text-sm sm:text-base font-semibold text-slate-900 dark:text-slate-100 break-words">{specs.weight}</p>
                     </div>
                   )}
                   {specs.packaging && (
                     <div className="bg-surface-100 dark:bg-surface-950 rounded-xl p-3 border border-slate-200/50 dark:border-surface-800 flex flex-col justify-center gap-1 break-words">
-                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Packaging</p>
-                      <p className="text-[13px] font-semibold text-slate-900 dark:text-slate-100 leading-tight break-words">{specs.packaging}</p>
+                      <p className="text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-wider mb-0.5">Packaging</p>
+                      <p className="text-sm sm:text-base font-semibold text-slate-900 dark:text-slate-100 leading-tight break-words">{specs.packaging}</p>
                     </div>
                   )}
                   {specs.colors && (
                     <div className="bg-surface-100 dark:bg-surface-950 rounded-xl p-3 border border-slate-200/50 dark:border-surface-800 sm:col-span-2 flex flex-col justify-center break-words">
-                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Available Colors</p>
-                      <p className="text-[13px] font-semibold text-slate-900 dark:text-slate-100 break-words">{specs.colors}</p>
+                      <p className="text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-wider mb-1">Available Colors</p>
+                      <p className="text-sm sm:text-base font-semibold text-slate-900 dark:text-slate-100 break-words">{specs.colors}</p>
                     </div>
                   )}
                 </div>

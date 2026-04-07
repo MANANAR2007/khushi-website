@@ -51,8 +51,8 @@ function AnimatedStat({ value, decimals, prefix, label, active, className = '' }
   }, [active, value]);
 
   return (
-    <div className={`flex flex-col text-center bg-slate-100 dark:bg-slate-800/60 p-5 rounded-2xl shadow-sm ring-1 ring-slate-200/50 dark:ring-slate-700/50 ${className}`}>
-      <p className="text-3xl font-black tracking-tighter text-slate-900 dark:text-slate-100">
+    <div className={`flex flex-col text-center bg-slate-100 dark:bg-slate-800/60 p-4 sm:p-5 rounded-2xl shadow-sm ring-1 ring-slate-200/50 dark:ring-slate-700/50 ${className}`}>
+      <p className="text-2xl font-black tracking-tighter text-slate-900 dark:text-slate-100 sm:text-3xl">
         {prefix}{display.toFixed(decimals)}
       </p>
       <p className="mt-1.5 text-[11px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
@@ -86,25 +86,25 @@ export default function About() {
 
   return (
     <div className="bg-surface-50 dark:bg-surface-950 font-sans text-slate-900 dark:text-slate-200 min-h-screen">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-0">
         
         {/* 1. INTRO (COMPACT HERO) */}
         <section className="py-12 lg:py-14 text-center max-w-3xl mx-auto">
           <p className="mb-3 text-[16px] font-extrabold uppercase tracking-[0.2em] text-accent-light dark:text-accent-light">
             About Khushi Containers
           </p>
-          <h1 className="text-4xl md:text-5xl font-black tracking-tight leading-[1.1]">
+          <h1 className="text-3xl font-black tracking-tight leading-[1.1] sm:text-4xl md:text-5xl">
             We manufacture food-grade plastic containers
           </h1>
-          <p className="mt-4 text-lg md:text-xl font-medium text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto">
+          <p className="mt-4 text-base font-medium text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto sm:text-lg md:text-xl">
             of different sizes, of round and rectangle shapes mainly available in three colours (black, white and transparent) with consistent wall thickness, high-strength performance, and reliable delivery schedules.
           </p>
         </section>
 
         {/* 2. WHO WE SERVE */}
         <section className="py-12 border-t border-slate-200 dark:border-slate-800">
-          <h2 className="text-2xl font-black tracking-tight mb-3">Who We Serve</h2>
-          <p className="text-lg leading-relaxed text-slate-600 dark:text-slate-400 max-w-4xl">
+          <h2 className="text-xl font-black tracking-tight mb-3 sm:text-2xl">Who We Serve</h2>
+          <p className="text-base leading-relaxed text-slate-600 dark:text-slate-400 max-w-4xl sm:text-lg">
             Our packaging supports QSRs, dairies, dessert brands, catering services, and FMCG manufacturers looking for dependable, scalable food packaging.
           </p>
         </section>
@@ -140,11 +140,11 @@ export default function About() {
 
         {/* 4. MANUFACTURING & QUALITY */}
         <section className="py-12 border-t border-slate-200 dark:border-slate-800">
-          <div className="mb-10 max-w-4xl space-y-3">
-            <h2 className="text-3xl font-extrabold tracking-tight">
+          <div className="mb-8 max-w-4xl space-y-3 md:mb-10">
+            <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">
               Manufacturing & Quality
             </h2>
-            <p className="text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+            <p className="text-base leading-relaxed text-slate-600 dark:text-slate-400 sm:text-lg">
               Precision injection moulding, ISO-aligned processes, and rigorous QC ensure reliable performance for every batch.
             </p>
           </div>
@@ -172,7 +172,7 @@ export default function About() {
             </div>
           </div>
 
-          <div className="py-8 bg-card dark:bg-surface-900/50 rounded-4xl border border-slate-200 dark:border-slate-800 shadow-sm flex justify-center mb-10">
+          <div className="mb-8 flex justify-center rounded-3xl border border-slate-200 bg-card py-6 shadow-sm dark:border-slate-800 dark:bg-surface-900/50 md:mb-10 md:py-8">
             <img 
               src={machineImage} 
               alt="Manufacturing Machine" 
@@ -181,13 +181,13 @@ export default function About() {
           </div>
 
           <div className="space-y-8" ref={statsRef}>
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
               {productionStats.map((stat) => (
                 <AnimatedStat
                   key={stat.label}
                   {...stat}
                   active={statsVisible}
-                  className="w-[calc(50%-0.5rem)] md:w-[calc(33.333%-0.75rem)] lg:w-[calc(20%-0.8rem)]"
+                  className="w-full"
                 />
               ))}
             </div>
@@ -205,9 +205,9 @@ export default function About() {
 
         {/* 5. PRODUCT QUALITY */}
         <section className="py-12 border-t border-slate-200 dark:border-slate-800">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-start">
             <div className="space-y-3">
-              <h2 className="text-2xl font-extrabold tracking-tight">Product Quality</h2>
+              <h2 className="text-xl font-extrabold tracking-tight sm:text-2xl">Product Quality</h2>
               <p className="text-[15px] leading-relaxed text-slate-600 dark:text-slate-400 max-w-sm">
                 Engineered for strength, hygiene, and repeatable performance.
               </p>
@@ -229,7 +229,7 @@ export default function About() {
           <div className="space-y-6">
             <h2 className="text-2xl font-extrabold tracking-tight">Sustainability</h2>
             
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               <article className="bg-surface-100 dark:bg-surface-900 p-5 lg:p-6 rounded-2xl border border-slate-200/60 dark:border-slate-800 shadow-sm flex flex-col h-full">
                 <h4 className="text-[15px] font-bold mb-2">Food-Grade Safe</h4>
                 <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
@@ -257,9 +257,9 @@ export default function About() {
         {/* 7. VALUES */}
         <section className="py-12 border-t border-slate-200 dark:border-slate-800">
           <div className="space-y-6">
-            <h2 className="text-2xl font-extrabold tracking-tight">Our Values</h2>
+            <h2 className="text-xl font-extrabold tracking-tight sm:text-2xl">Our Values</h2>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {values.map((item) => {
                 const Icon = item.icon;
                 return (

@@ -10,7 +10,7 @@ export default function Layout({ theme, onToggleTheme, children }) {
   return (
     <div className="min-h-screen flex flex-col bg-main text-primary transition-colors duration-300">
       <Header theme={theme} onToggleTheme={onToggleTheme} />
-      <main className={isProductDetail ? 'flex-1 overflow-y-auto' : 'flex-1'}>
+      <main className="flex-1">
         {children ?? <Outlet />}
       </main>
       {!isProductDetail && <Footer theme={theme} />}

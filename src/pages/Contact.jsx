@@ -22,18 +22,18 @@ export default function Contact() {
 
   return (
     <div className="bg-surface-50 dark:bg-surface-950 font-sans min-h-screen">
-      <section className="py-20">
+      <section className="py-12 md:py-16 lg:py-20">
         <div className="mx-auto w-full max-w-5xl px-4 text-center sm:px-6 lg:px-8">
           <p className="text-xs font-semibold uppercase tracking-wide text-accent-light dark:text-accent-light">Business Enquiries</p>
-          <h1 className="mt-4 text-5xl font-bold tracking-tight text-slate-900 dark:text-slate-100 md:text-6xl">Contact Us</h1>
+          <h1 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl md:text-5xl lg:text-6xl">Contact Us</h1>
           <p className="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300">
             Get in touch with us for custom manufacturing and business inquiries.
           </p>
         </div>
       </section>
 
-      <section className="border-y border-slate-200/50 bg-surface-100 py-20 dark:border-surface-800 dark:bg-surface-900/40">
-        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
+      <section className="border-y border-slate-200/50 bg-surface-100 py-12 dark:border-surface-800 dark:bg-surface-900/40 md:py-16 lg:py-20">
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-6 px-4 sm:px-6 md:gap-8 lg:grid-cols-2 lg:px-8">
           <article className="space-y-6">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide text-accent-light dark:text-accent-light">Contact Details</p>
@@ -95,16 +95,16 @@ export default function Contact() {
               </p>
             )}
 
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row">
               <a
                 href="tel:+919448376318"
-                className="inline-flex rounded-xl bg-brand-800 px-6 py-3 text-sm font-semibold tracking-wide !text-white shadow-md transition-all duration-300 hover:scale-105 hover:bg-brand-700 hover:shadow-xl dark:bg-brand-600 dark:hover:bg-brand-500"
+                className="inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-brand-800 px-6 py-3 text-sm font-semibold tracking-wide !text-white shadow-md transition-all duration-300 hover:scale-105 hover:bg-brand-700 hover:shadow-xl dark:bg-brand-600 dark:hover:bg-brand-500 sm:w-auto"
               >
                 Call Now
               </a>
               <a
                 href={`mailto:${email}`}
-                className="inline-flex rounded-xl bg-surface-50 px-6 py-3 text-sm font-semibold tracking-wide text-slate-700 shadow-sm border border-slate-200 transition-all duration-300 hover:scale-105 hover:bg-surface-100 dark:border-surface-800 dark:bg-surface-950 dark:text-slate-300 dark:hover:bg-surface-900"
+                className="inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-slate-200 bg-surface-50 px-6 py-3 text-sm font-semibold tracking-wide text-slate-700 shadow-sm transition-all duration-300 hover:scale-105 hover:bg-surface-100 dark:border-surface-800 dark:bg-surface-950 dark:text-slate-300 dark:hover:bg-surface-900 sm:w-auto"
               >
                 Send Email
               </a>
@@ -116,7 +116,7 @@ export default function Contact() {
               title="Khushi Containers location map"
               src={mapEmbedUrl}
               loading="lazy"
-              className="h-[360px] w-full md:h-full md:min-h-[460px]"
+              className="h-[320px] w-full sm:h-[360px] md:h-full md:min-h-[460px]"
               referrerPolicy="no-referrer-when-downgrade"
             />
             <a
@@ -131,7 +131,7 @@ export default function Contact() {
         </div>
       </section>
 
-      <section className="py-16">
+      <section className="py-10 md:py-14 lg:py-16">
         <div className="mx-auto w-full max-w-7xl px-4 text-center sm:px-6 lg:px-8">
           <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">Manufacturing Support</h3>
           <p className="text-sm text-slate-600 dark:text-slate-400">

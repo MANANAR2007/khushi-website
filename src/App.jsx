@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 
 import Layout from './components/Layout.jsx';
 import Home from './pages/Home.jsx';
@@ -11,15 +11,14 @@ import Contact from './pages/Contact.jsx';
 
 export default function App() {
   const location = useLocation();
-  const [theme, setTheme] = useState(() => {
-    const saved = localStorage.getItem('khushi-theme');
-    if (saved) return saved;
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  });
+  const [theme, setTheme] = useState(() => localStorage.getItem('khushi-theme') || 'light');
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     document.documentElement.classList.toggle('dark', theme === 'dark'); // Tailwind dark mode
+  }, [theme]);
+
+  useEffect(() => {
     localStorage.setItem('khushi-theme', theme);
   }, [theme]);
 
@@ -59,6 +58,12 @@ export default function App() {
 }
 
 function MotionWrapper({ children }) {
+  const shouldReduceMotion = useReducedMotion();
+
+  if (shouldReduceMotion) {
+    return <div>{children}</div>;
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}

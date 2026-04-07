@@ -52,7 +52,7 @@ function ProductCard({ product, onOpenProduct }) {
           <p className="text-xs font-extrabold uppercase tracking-widest text-accent-light dark:text-accent-light mb-1">
             {product.category}
           </p>
-          <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
+          <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100 sm:text-2xl md:text-3xl">
             {product.size} Container
           </h3>
           <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -77,7 +77,7 @@ function ProductCard({ product, onOpenProduct }) {
                   onClick={() => setSelectedColor(color)}
                   title={color}
                   aria-label={`Select ${color} color`}
-                  className={`w-8 h-8 rounded-full border-2 transition-all duration-300 hover:scale-110 ${
+                  className={`h-11 w-11 rounded-full border-2 transition-all duration-300 hover:scale-110 ${
                     isLightSwatch ? 'border-slate-400/80' : 'border-slate-700/80'
                   } ${active ? 'ring-2 ring-offset-2 ring-brand-500 ring-offset-main scale-110' : ''}`}
                   style={{ backgroundColor: swatchColor }}
@@ -140,14 +140,14 @@ export default function Products() {
       : allProducts.filter((product) => product.category === activeFilter);
 
   return (
-    <div className="px-4 bg-surface-50 dark:bg-surface-950 sm:px-6 lg:px-8 py-8 min-h-screen">
+    <div className="min-h-screen bg-surface-50 px-4 py-8 dark:bg-surface-950 sm:px-6 md:py-10 lg:px-8">
       
       {/* HERO */}
-      <section className="mx-auto mt-4 w-full max-w-7xl rounded-2xl bg-surface-100 dark:bg-surface-900 border border-slate-200/50 dark:border-surface-800 p-8 shadow-sm">
+      <section className="mx-auto mt-2 w-full max-w-7xl rounded-2xl border border-slate-200/50 bg-surface-100 p-5 shadow-sm dark:border-surface-800 dark:bg-surface-900 sm:p-6 lg:mt-4 lg:p-8">
         <p className="text-xs font-semibold uppercase tracking-wide text-accent-light dark:text-accent-light">
           Product Catalog
         </p>
-        <h1 className="mt-3 text-4xl font-extrabold text-slate-900 dark:text-slate-100 md:text-5xl">
+        <h1 className="mt-3 text-3xl font-extrabold text-slate-900 dark:text-slate-100 sm:text-4xl md:text-5xl">
           Explore our container range.
         </h1>
         <p className="mt-4 max-w-3xl text-base text-slate-600 dark:text-slate-400">
@@ -156,12 +156,12 @@ export default function Products() {
       </section>
 
       {/* FILTERS */}
-      <section className="mx-auto mt-8 w-full max-w-7xl">
+      <section className="mx-auto mt-6 w-full max-w-7xl md:mt-8">
         <div className="mb-6 flex flex-wrap gap-2">
           
           <button
             onClick={() => setActiveFilter('ALL')}
-            className={`rounded-full px-4 py-2 text-sm font-semibold transition border ${
+            className={`min-h-11 rounded-full px-4 py-2 text-sm font-semibold transition border ${
               activeFilter === 'ALL'
                 ? 'bg-brand-800 border-brand-800 text-white dark:bg-brand-600'
                 : 'bg-surface-50 border-slate-200 dark:border-surface-800 dark:bg-surface-950 text-slate-600 dark:text-slate-300 hover:bg-surface-100 dark:hover:bg-surface-900'
@@ -174,7 +174,7 @@ export default function Products() {
             <button
               key={category.title}
               onClick={() => setActiveFilter(category.title)}
-              className={`rounded-full px-4 py-2 text-sm font-semibold transition border ${
+              className={`min-h-11 rounded-full px-4 py-2 text-sm font-semibold transition border ${
                 activeFilter === category.title
                   ? 'bg-brand-800 border-brand-800 text-white dark:bg-brand-600'
                   : 'bg-surface-50 border-slate-200 dark:border-surface-800 dark:bg-surface-950 text-slate-600 dark:text-slate-300 hover:bg-surface-100 dark:hover:bg-surface-900'

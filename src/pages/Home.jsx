@@ -67,6 +67,7 @@ export default function Home() {
   const [statsVisible, setStatsVisible] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(true);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const extendedImages = [...heroImages, heroImages[0]];
 
   const handleNextHero = () => {
@@ -87,6 +88,15 @@ export default function Home() {
   };
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const updatePreference = () => setPrefersReducedMotion(mediaQuery.matches);
+
+    updatePreference();
+    mediaQuery.addEventListener('change', updatePreference);
+    return () => mediaQuery.removeEventListener('change', updatePreference);
+  }, []);
+
+  useEffect(() => {
     const node = statsRef.current;
     if (!node) return;
 
@@ -105,19 +115,22 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    if (prefersReducedMotion) return undefined;
+
     const interval = setInterval(() => {
       setCurrentIndex((prev) => prev + 1);
     }, 3000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [prefersReducedMotion]);
 
   useEffect(() => {
     if (currentIndex === heroImages.length) {
+      const resetDelay = prefersReducedMotion ? 0 : 700;
       const timeout = setTimeout(() => {
         setIsTransitioning(false);
         setCurrentIndex(0);
-      }, 700);
+      }, resetDelay);
       return () => clearTimeout(timeout);
     }
     if (!isTransitioning) {
@@ -126,73 +139,37 @@ export default function Home() {
       });
       return () => cancelAnimationFrame(raf);
     }
-  }, [currentIndex, isTransitioning]);
+  }, [currentIndex, isTransitioning, prefersReducedMotion]);
 
   return (
     <div>
       {/* HERO SECTION */}
-      <section className="relative overflow-hidden bg-section pt-16 pb-20 lg:pt-20 lg:pb-24">
+      <section className="relative overflow-hidden bg-section pt-12 pb-12 md:pt-16 md:pb-16 lg:pt-20 lg:pb-24">
         {/* Subtle Industrial Background Pattern & Depth */}
         <div
           className="absolute inset-0 opacity-25 [background-size:20px_20px]"
           style={{ backgroundImage: 'radial-gradient(var(--color-border) 1px, transparent 1px)' }}
         />
-        <div className="absolute top-0 right-0 -translate-y-12 translate-x-1/3 w-[800px] h-[800px] bg-accent/25 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-0 left-0 translate-y-1/3 -translate-x-1/3 w-[600px] h-[600px] bg-accent/15 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute top-0 right-0 -translate-y-12 translate-x-1/3 w-[420px] h-[420px] md:w-[800px] md:h-[800px] bg-accent/25 rounded-full blur-[80px] md:blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-0 left-0 translate-y-1/3 -translate-x-1/3 w-[320px] h-[320px] md:w-[600px] md:h-[600px] bg-accent/15 rounded-full blur-[60px] md:blur-[100px] pointer-events-none" />
 
-        <div className="relative mx-auto grid w-full max-w-7xl items-center gap-16 px-4 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8">
-          <article className="contents lg:block lg:space-y-8 lg:animate-[fadeInUp_0.8s_ease-out_forwards]">
-            <p className="inline-flex w-fit self-start rounded-full bg-card/60 border border-border/80 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-accent-light backdrop-blur-sm shadow-sm">
+        <div className="relative mx-auto grid w-full max-w-7xl items-center gap-8 px-4 sm:px-6 md:gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 lg:px-8">
+          <article className={`order-1 space-y-6 lg:col-start-1 lg:row-start-1 lg:space-y-8 ${prefersReducedMotion ? '' : 'lg:animate-[fadeInUp_0.8s_ease-out_forwards]'}`}>
+            <p className="inline-flex w-fit rounded-full bg-card/60 border border-border/80 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-accent-light backdrop-blur-sm shadow-sm">
               Premium B2B Manufacturing
             </p>
 
-            <h1 className="order-1 max-w-2xl text-2xl font-extrabold tracking-tight leading-[1.2] text-primary md:text-5xl lg:text-[56px]">
+            <h1 className="max-w-2xl text-3xl font-extrabold tracking-tight leading-[1.2] text-primary sm:text-4xl md:text-5xl lg:text-[56px]">
               Strong, reliable, food-grade plastic food containers you can trust.
             </h1>
-
-            <div className="flex flex-wrap gap-3 mt-4 order-3 lg:order-none">
-              {[
-                "Food-Grade",
-                "Recyclable-Reusable",
-                "Reliable"
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-300 bg-white border-gray-300 text-gray-800 shadow-sm dark:bg-white/5 dark:border-white/20 dark:text-white/80 dark:shadow-none backdrop-blur-sm"
-                >
-                  <div className="w-2 h-2 rounded-full bg-green-400"></div>
-                  <span className="text-sm font-medium text-gray-800 dark:text-white/80 tracking-wide">
-                    {item}
-                  </span>
-                </div>
-              ))}
-            </div>
-            <div className="flex flex-wrap items-center gap-4 pt-2 order-4 lg:order-none">
-              <Link
-                to="/products"
-                className="inline-flex items-center gap-2 rounded-xl bg-accent px-8 py-4 text-base font-bold tracking-wide !text-white shadow-md transition-all duration-300 hover:scale-105 hover:bg-accent/90 hover:shadow-lg"
-              >
-                View Products <ArrowRight size={18} />
-              </Link>
-              <Link
-                to="/contact"
-                className="inline-flex items-center gap-2 rounded-xl bg-section/70 backdrop-blur-md border border-border px-8 py-4 text-base font-bold tracking-wide text-primary transition-all duration-300 hover:bg-section hover:scale-105"
-              >
-                Contact Us
-              </Link>
-            </div>
-            
-            <p className="text-sm font-medium text-secondary flex items-center gap-2 mt-4 order-5 lg:order-none">
-              <ShieldCheck size={16} className="text-accent-light" /> Proudly serving FMCG, Dairy & Cloud Kitchens
-            </p>
           </article>
 
-          <article className="relative order-2 lg:order-none animate-[fadeIn_1.2s_ease-out_forwards]">
-            <div className="absolute inset-0 -z-10 rounded-[2rem] bg-accent/20 blur-3xl" />
+          <article className={`relative order-2 lg:col-start-2 lg:row-span-2 ${prefersReducedMotion ? '' : 'animate-[fadeIn_1.2s_ease-out_forwards]'}`}>
+            <div className="absolute inset-0 -z-10 rounded-[2rem] bg-accent/20 blur-2xl md:blur-3xl" />
             <div className="relative rounded-2xl bg-card/80 p-3 shadow-2xl ring-1 ring-border/60 backdrop-blur-sm transition-transform duration-500 hover:scale-[1.02]">
               <div className="overflow-hidden relative w-full h-full rounded-2xl aspect-[4/3]">
                 <div
-                  className={`flex h-full ${isTransitioning ? 'transition-transform duration-700 ease-in-out' : ''}`}
+                  className={`flex h-full ${isTransitioning && !prefersReducedMotion ? 'transition-transform duration-700 ease-in-out' : ''}`}
                   style={{ transform: `translateX(-${currentIndex * 100}%)` }}
                 >
                   {extendedImages.map((img, index) => (
@@ -209,7 +186,7 @@ export default function Home() {
               <button
                 type="button"
                 onClick={handlePrevHero}
-                className="absolute -left-4 top-1/2 z-20 -translate-y-1/2 grid h-9 w-9 place-items-center rounded-full bg-card/90 text-primary shadow-md ring-1 ring-border/60 transition hover:bg-card"
+                className="absolute left-2 top-1/2 z-20 -translate-y-1/2 grid h-10 w-10 place-items-center rounded-full bg-card/90 text-primary shadow-md ring-1 ring-border/60 transition hover:bg-card sm:-left-4 sm:h-9 sm:w-9"
                 aria-label="Previous hero image"
               >
                 <ChevronLeft size={18} />
@@ -217,12 +194,50 @@ export default function Home() {
               <button
                 type="button"
                 onClick={handleNextHero}
-                className="absolute -right-4 top-1/2 z-20 -translate-y-1/2 grid h-9 w-9 place-items-center rounded-full bg-card/90 text-primary shadow-md ring-1 ring-border/60 transition hover:bg-card"
+                className="absolute right-2 top-1/2 z-20 -translate-y-1/2 grid h-10 w-10 place-items-center rounded-full bg-card/90 text-primary shadow-md ring-1 ring-border/60 transition hover:bg-card sm:-right-4 sm:h-9 sm:w-9"
                 aria-label="Next hero image"
               >
                 <ChevronRight size={18} />
               </button>
             </div>
+          </article>
+
+          <article className="order-3 mt-4 space-y-4 lg:col-start-1 lg:row-start-2 lg:mt-0 lg:space-y-6">
+            <div className="flex flex-wrap gap-3">
+              {[
+                "Food-Grade",
+                "Recyclable-Reusable",
+                "Reliable"
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-300 bg-white border-gray-300 text-gray-800 shadow-sm dark:bg-white/5 dark:border-white/20 dark:text-white/80 dark:shadow-none backdrop-blur-sm"
+                >
+                  <div className="w-2 h-2 rounded-full bg-green-400"></div>
+                  <span className="text-sm font-medium text-gray-800 dark:text-white/80 tracking-wide">
+                    {item}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-col items-stretch gap-3 pt-2 sm:flex-row sm:items-center sm:gap-4">
+              <Link
+                to="/products"
+                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-accent px-6 py-3.5 text-base font-bold tracking-wide !text-white shadow-md transition-all duration-300 hover:scale-105 hover:bg-accent/90 hover:shadow-lg sm:w-auto sm:px-8"
+              >
+                View Products <ArrowRight size={18} />
+              </Link>
+              <Link
+                to="/contact"
+                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-border bg-section/70 px-6 py-3.5 text-base font-bold tracking-wide text-primary backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-section sm:w-auto sm:px-8"
+              >
+                Contact Us
+              </Link>
+            </div>
+            
+            <p className="text-sm font-medium text-secondary flex items-center gap-2 mt-4">
+              <ShieldCheck size={16} className="text-accent-light" /> Proudly serving FMCG, Dairy & Cloud Kitchens
+            </p>
           </article>
         </div>
       </section>
@@ -230,7 +245,7 @@ export default function Home() {
       {/* TRUST SIGNALS SECTION */}
       <section className="bg-main py-12 border-b border-border">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-border">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4 lg:gap-8">
             
             <div className="flex sm:flex-row flex-col items-center gap-4 px-2 sm:px-4 text-center sm:text-left">
               <div className="h-14 w-14 shrink-0 rounded-full bg-brand-100 flex items-center justify-center">
@@ -276,7 +291,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-24 bg-main">
+      <section className="bg-main py-12 md:py-16 lg:py-20">
         <div className="mx-auto w-full max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <p className="text-xl font-semibold uppercase tracking-wide text-accent-light">About Khushi Containers</p>
           <h2 className="mt-4 text-3xl font-bold tracking-tight text-primary md:text-4xl">
@@ -296,8 +311,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="border-y border-border/80 bg-section py-24">
-        <div className="mx-auto grid w-full max-w-7xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
+      <section className="border-y border-border/80 bg-section py-12 md:py-16 lg:py-20">
+        <div className="mx-auto grid w-full max-w-7xl items-center gap-8 px-4 sm:px-6 md:gap-10 lg:grid-cols-2 lg:gap-14 lg:px-8">
           <article className="space-y-6">
             <p className="text-xs font-semibold uppercase tracking-wide text-accent-light">Manufacturing</p>
             <h2 className="text-3xl font-bold tracking-tight text-primary md:text-4xl">
@@ -324,7 +339,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section ref={statsRef} className="bg-gradient-to-br from-main to-section py-24">
+      <section ref={statsRef} className="bg-gradient-to-br from-main to-section py-12 md:py-16 lg:py-20">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-wide text-accent-light">Production Snapshot</p>
@@ -339,7 +354,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="border-y border-border/80 bg-main py-24">
+      <section className="border-y border-border/80 bg-main py-12 md:py-16 lg:py-20">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-wide text-accent-light">Core Strengths</p>

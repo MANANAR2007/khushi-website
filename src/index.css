@@ -136,6 +136,11 @@ a {
   color: inherit;
 }
 
+:where(a, button, input, select, textarea, [role='button']):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-accent), 0 0 0 4px rgba(0,0,0,0.05);
+}
+
 img {
   display: block;
   max-width: 100%;
@@ -158,5 +163,15 @@ img {
   }
   to {
     opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  * {
+    transition: none !important;
   }
 }

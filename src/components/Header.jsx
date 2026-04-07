@@ -36,9 +36,9 @@ export default function Header({ theme, onToggleTheme }) {
   };
 
   return (
-    <header className="sticky top-0 z-50 pt-2">
+    <header className="sticky top-0 z-50 px-4 pt-2 sm:px-6 lg:px-8">
       <div
-        className={`mx-auto flex w-full max-w-7xl items-center justify-between rounded-2xl px-4 py-3 backdrop-blur-xl transition-all duration-300 ${
+        className={`mx-auto flex w-full max-w-7xl items-center justify-between rounded-2xl px-3 py-2.5 backdrop-blur-xl transition-all duration-300 sm:px-4 sm:py-3 ${
           scrolled
             ? 'bg-card/90 border border-border/70 shadow-xl backdrop-blur-md'
             : 'bg-card/80 border border-border/60 shadow-md backdrop-blur-md'
@@ -72,7 +72,7 @@ export default function Header({ theme, onToggleTheme }) {
           <button
             type="button"
             onClick={onToggleTheme}
-            className="grid h-9 w-9 place-items-center rounded-full bg-section text-primary shadow-sm transition-all duration-300 hover:scale-105 hover:bg-card"
+            className="grid h-11 w-11 place-items-center rounded-full bg-section text-primary shadow-sm transition-all duration-300 hover:scale-105 hover:bg-card md:h-9 md:w-9"
             aria-label="Toggle theme"
           >
             {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
@@ -89,7 +89,7 @@ export default function Header({ theme, onToggleTheme }) {
           <button
             type="button"
             onClick={() => setOpen((prev) => !prev)}
-            className="grid h-9 w-9 place-items-center rounded-full bg-section text-primary shadow-sm transition-all duration-300 hover:scale-105 hover:bg-card md:hidden"
+            className="grid h-11 w-11 place-items-center rounded-full bg-section text-primary shadow-sm transition-all duration-300 hover:scale-105 hover:bg-card md:hidden"
             aria-label="Toggle menu"
             aria-expanded={open}
           >
@@ -99,11 +99,13 @@ export default function Header({ theme, onToggleTheme }) {
       </div>
 
       <div
-        className={`mx-auto mt-3 w-full max-w-7xl overflow-hidden rounded-2xl bg-card/95 border border-border/70 shadow-md backdrop-blur-md transition-all duration-300 md:hidden ${
-          open ? 'max-h-80 translate-y-0 opacity-100' : 'pointer-events-none max-h-0 -translate-y-2 opacity-0'
+        className={`mx-auto mt-2 w-full max-w-7xl rounded-2xl bg-card/95 border border-border/70 shadow-md backdrop-blur-md transition-all duration-300 md:hidden ${
+          open
+            ? 'max-h-[calc(100svh-6rem)] overflow-y-auto translate-y-0 opacity-100'
+            : 'pointer-events-none max-h-0 overflow-hidden -translate-y-2 opacity-0'
         }`}
       >
-        <div className="flex flex-col gap-2 p-3">
+        <div className="flex flex-col gap-2 p-3 sm:p-4">
           {links.map((item) => {
             const active = location.pathname === item.to;
             return (
@@ -111,9 +113,9 @@ export default function Header({ theme, onToggleTheme }) {
                 key={item.to}
                 to={item.to}
                 onClick={handleNavClick}
-                className={`rounded-xl px-4 py-3 text-sm font-medium tracking-wide transition-all duration-300 ${
+                className={`rounded-xl px-4 py-3.5 text-base font-medium tracking-wide transition-all duration-300 ${
                   active
-                    ? 'bg-accent font-semibold text-white shadow-md'
+                    ? 'bg-accent font-semibold !text-white shadow-md'
                     : 'text-primary hover:text-accent-light'
                 }`}
               >
